@@ -6,7 +6,6 @@ class MdService extends Service {
   // 将md => html
   async marked (path) {
     let md = await readFile(path)
-    console.log(md)
     let html = render(md)
     return html
   }

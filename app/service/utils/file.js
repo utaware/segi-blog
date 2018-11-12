@@ -9,7 +9,6 @@ module.exports = {
         if (err) {
           return reject(err)
         }
-        console.log(data)
         return resolve(data)
       })
     })

@@ -6,34 +6,6 @@ const Chain = require('markdown-it-chain')
 
 const config = new Chain()
 
-const render = function (data) {
-  config.options   
-  .html(true) // equal to .set('html', true)
-  .linkify(true)
-  .end()
-  // emoji
-  .plugin('emoji')
-  .use(emoji)
-  .end()
-  // toc
-  .plugin('toc')
-  .use(toc, [{
-    includeLevel: [2, 3],
-    // format: parseHeaders
-  }])
-  .end()
-  // anchor
-  .plugin('anchor')
-  .use(anchor, [{
-    permalink: true,
-    permalinkBefore: true,
-    permalinkSymbol: '#'
-  }])
-  .before('toc')
-  console.log(data)
-  return config.toMd().render(data)
-}
-
 module.exports = {
   render (data) {
     config.options   
@@ -59,7 +31,6 @@ module.exports = {
         permalinkSymbol: '#'
       }])
       .before('toc')
-    console.log(data)
     return config.toMd().render(data)
   }
 }

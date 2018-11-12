@@ -135,3 +135,14 @@ __字体加粗__
 ## 删除线
 
 ~~hello world~~
+
+```shell
+npm install
+```
+
+:tada: :100:
+
+
+::: danger STOP
+Danger zone, do not proceed
+:::
