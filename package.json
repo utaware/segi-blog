@@ -1,0 +1,53 @@
+{
+  "name": "segi-blog",
+  "version": "1.0.0",
+  "description": "none",
+  "private": true,
+  "dependencies": {
+    "egg": "^2.2.1",
+    "egg-scripts": "^2.5.0"
+  },
+  "devDependencies": {
+    "@vuepress/shared-utils": "^1.0.0-alpha.0",
+    "autod": "^3.0.1",
+    "autod-egg": "^1.0.0",
+    "diacritics": "^1.3.0",
+    "egg-bin": "^4.3.5",
+    "egg-ci": "^1.8.0",
+    "egg-mock": "^3.14.0",
+    "eslint": "^4.11.0",
+    "eslint-config-egg": "^6.0.0",
+    "markdown-it": "^8.4.2",
+    "markdown-it-anchor": "^5.0.2",
+    "markdown-it-chain": "^1.2.1",
+    "markdown-it-container": "^2.0.0",
+    "markdown-it-emoji": "^1.4.0",
+    "markdown-it-table-of-contents": "^0.4.3",
+    "prismjs": "^1.15.0",
+    "webstorm-disable-index": "^1.2.0"
+  },
+  "engines": {
+    "node": ">=8.9.0"
+  },
+  "scripts": {
+    "start": "egg-scripts start --daemon --title=egg-server-segi-blog",
+    "stop": "egg-scripts stop --title=egg-server-segi-blog",
+    "dev": "egg-bin dev",
+    "debug": "egg-bin debug",
+    "test": "npm run lint -- --fix && npm run test-local",
+    "test-local": "egg-bin test",
+    "cov": "egg-bin cov",
+    "lint": "eslint .",
+    "ci": "npm run lint && npm run cov",
+    "autod": "autod"
+  },
+  "ci": {
+    "version": "8"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "utaware",
+  "license": "MIT"
+}
