@@ -101,6 +101,10 @@ ______
 单行可以用``包起来
 多行使用
 ```js
+const a = {}
+let b = function () {
+  return a
+}
 console.log('hello world')
 ```
 
