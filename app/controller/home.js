@@ -5,6 +5,7 @@ const Controller = require('egg').Controller;
 class HomeController extends Controller {
   // index
   async index () {
+    await this.ctx.service.ppt.parse()
     this.ctx.body = '小草莓是笨蛋';
   }
   // 以github style 为主要搭配的模板
