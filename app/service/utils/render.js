@@ -7,7 +7,7 @@ const Chain = require('markdown-it-chain')
 const config = new Chain()
 
 module.exports = {
-  render (data) {
+  base (data) {
     config.options   
       .html(true) // equal to .set('html', true)
       .linkify(true)
