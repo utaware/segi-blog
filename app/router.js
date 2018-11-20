@@ -8,5 +8,5 @@ module.exports = app => {
   router.get('/', controller.home.index)
   router.get('/github', controller.home.github);
   router.get('/vuepress', controller.home.vuepress);
-  router.get('/yaml', controller.home.yaml)
+  router.post('/api/identifyingCode', controller.support.checkCode)
 };

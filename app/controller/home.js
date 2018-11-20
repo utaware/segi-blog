@@ -19,12 +19,6 @@ class HomeController extends Controller {
     let data = await ctx.service.markdown.vuepressSupport('app/lib/md/mark.md')
     await ctx.render('vuepress.tpl', {data})
   }
-  // js-yaml page test
-  async yaml () {
-    let ctx = this.ctx
-    let data = await ctx.service.yaml.parse('app/lib/md/yaml.md')
-    await ctx.render('yaml.tpl', {data})
-  }
 }
 
 module.exports = HomeController;
