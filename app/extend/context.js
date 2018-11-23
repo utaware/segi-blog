@@ -35,7 +35,6 @@ module.exports = {
         if (!check) console.log('Data parameter error at End')
         data = check ? Object.assign({}, ...data) : null
     }
-
     this.body = { code, message, data }
   }
 }
