@@ -7,8 +7,13 @@ module.exports = (appInfo => {
   
   config.nunjucks  = {
     enable: true,
-    package: 'egg-view-nunjucks',
+    package: 'egg-view-nunjucks'
   };
+
+  config.mysql = {
+    enable: true,
+    package: 'egg-mysql'
+  }
 
   return config;
 })();
