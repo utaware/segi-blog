@@ -16,5 +16,7 @@ module.exports = {
   // 类型判断函数
   datatypes: require('./lib/datatypes'),
   // 转换文件头部变量语法
-  matter: require('gray-matter')
+  matter: require('gray-matter'),
+  // 时间转换
+  moment: require('moment')
 }
