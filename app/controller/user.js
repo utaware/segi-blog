@@ -5,7 +5,9 @@ const Controller = require('egg').Controller;
 class UserController extends Controller {
   // index
   async index () {
-    
+    let {ctx} = this
+    let result = await ctx.service.user.userLogin()
+    ctx.end(200, 'success', result)
   }
   // 新增用户
   async create () {
