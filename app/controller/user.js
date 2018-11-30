@@ -3,17 +3,17 @@
 const Controller = require('egg').Controller;       
 
 class UserController extends Controller {
-  // index
-  async index () {
-    let {ctx} = this
-    let result = await ctx.service.user.userLogin()
-    ctx.end(200, 'success', result)
-  }
-  // 新增用户
-  async create () {
+  // 新增用户 post
+  async register () {
     let { ctx } = this
     // 获取参数
-    let result = await ctx.service.user.createUser()
+    let result = await ctx.service.user.register()
+    ctx.end(200, 'success', result)
+  }
+  // 用户登录 post
+  async login () {
+    let {ctx} = this
+    let result = await ctx.service.user.login()
     ctx.end(200, 'success', result)
   }
 }

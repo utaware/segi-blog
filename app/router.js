@@ -12,5 +12,7 @@ module.exports = app => {
   router.get('/vuepress', controller.home.vuepress);
   router.post('/api/identifyingCode', controller.support.checkCode)
 
-  router.resources('user', '/api/user', controller.user)
+  // router.resources('user', '/api/user', controller.user)
+  router.post('/api/user/register', controller.user.register)
+  router.post('/api/user/login', controller.user.login)
 };

@@ -5,10 +5,12 @@ const bcrypt = require('bcrypt')
 const saltRounds = 10
 // user表
 const USER_TABLE = 'user_list'
+
 // service
 class UserService extends Service {
+
   // 新增用户
-  async createUser () {
+  async register () {
     // get params
     let { ctx, app } = this
     // 获取用户名、密码
@@ -26,18 +28,19 @@ class UserService extends Service {
       return console.log(err)
     })
   }
+
   // 用户登录
-  async userLogin () {
+  async login () {
     // get params
     let { ctx, app } = this
     // 获取用户名、密码
     let { password, username } = ctx.request.body
     // 数据库查询
     let query = await app.mysql.get(USER_TABLE, { username })
-    console.log(query)
     // bcrypt解密过程
-    return await bcrypt.compare(password, query.hash).then((res) => {
-      return res
+    return await bcrypt.compare(password, query.hash).then((result) => {
+      // 验证结果
+      return result
     })
   }
 }
