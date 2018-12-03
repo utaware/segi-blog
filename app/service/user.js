@@ -15,17 +15,35 @@ class UserService extends Service {
     let { ctx, app } = this
     // 获取用户名、密码
     let { password, username } = ctx.request.body
+    // 检查用户名是否存在
+    let usable = await app.mysql.get(USER_TABLE, {
+      username
+    })
+    // null(不存在) 数组(存在)
+    if (usable) {
+      return ctx.mergeRes('用户名不存在', 1)
+    }
     // 生成创建时间
     let create_time = ctx.helper.moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
     // bcrypt加密过程
     return await bcrypt.hash(password, saltRounds).then(async (hash) => {
-      return await app.mysql.insert(USER_TABLE, {
+      let query = await app.mysql.insert(USER_TABLE, {
         hash,
         username,
         create_time
-      }) 
+      });
+      return query ? { 
+        code: ctx.SUCCESS_CODE,
+        message: '注册成功',
+        data: null 
+      } : { 
+        code: ctx.FAIL_CODE,
+        message: '注册失败',
+        data: null
+      }
     }).catch((err) => {
-      return console.log(err)
+      console.log(err)
+      return { code: ctx.FAIL_CODE, message: '查询错误', data: null }
     })
   }
 
