@@ -5,12 +5,12 @@ class DocsController extends Controller {
   async index () {
     let { ctx, app } = this
     // 获取token
-    let jwt = ctx.service.jwt.decrypt()
-    let token = ctx.header.authorization.split(' ')[1]
-    let eggJwt = app.jwt.verify(token, app.config.jwt.secret)
-    ctx.log(jwt)
-    ctx.log(ctx.state.auth)
-    ctx.log(eggJwt)
+    // let jwt = ctx.service.jwt.decrypt()
+    // let token = ctx.header.authorization.split(' ')[1]
+    // let eggJwt = app.jwt.verify(token, app.config.jwt.secret)
+    // ctx.log(jwt)
+    ctx.log(ctx.state.user)
+    // ctx.log(eggJwt)
     ctx.body = 'docs'
   }
 }

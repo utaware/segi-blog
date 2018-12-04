@@ -16,7 +16,7 @@ module.exports = appInfo => {
   // }
   config.jwt = {
     secret: 'sign_text',
-    property: 'auth',
+    // property: 'auth',
     ignore: ['/api/user', '/public']
   }
   // 模板引擎
