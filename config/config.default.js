@@ -8,6 +8,17 @@ module.exports = appInfo => {
 
   // add your config here
   config.middleware = [];
+  // config.koaJwt = {
+  //   enable: true,
+  //   package: "koa-jwt",
+  //   ignore: ['/api/user', '/public'],
+  //   secret: 'sign_text'
+  // }
+  config.jwt = {
+    secret: 'sign_text',
+    property: 'auth',
+    ignore: ['/api/user', '/public']
+  }
   // 模板引擎
   config.view = {
     // 默认渲染引擎
@@ -23,7 +34,7 @@ module.exports = appInfo => {
       headerName: 'x-csrf-token', // 通过 header 传递 CSRF token 的默认字段为 x-csrf-token
     }
   }
-
+  // 数据库
   config.mysql = {
     // 单数据库信息配置
     client: {

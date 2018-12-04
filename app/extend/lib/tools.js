@@ -1,5 +1,3 @@
-let { success, fail } = require('./constant')
-
 module.exports = {
   // 对于response做数据整理
   mergeRes (...args) {
@@ -27,10 +25,12 @@ module.exports = {
     let result = container.result
     // response中删除
     delete container.result
-    // data默认为null
+    // 相关默认值
+    container.code = simple ? result ? 1 : 0 : container.code
+    container.message = simple ? result ? 'success' : 'fail' : container.message
     container.data = container.data || null
     // 返回response
-    return simple ? result ? success : fail : container
+    return container
   },
   // 日志打印方法
   log (msg, s = '-', n = 16) {

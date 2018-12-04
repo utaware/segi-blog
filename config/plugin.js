@@ -10,6 +10,11 @@ module.exports = (appInfo => {
     package: 'egg-view-nunjucks'
   };
 
+  config.jwt = {
+    enable: true,
+    package: 'egg-jwt'
+  }
+
   config.mysql = {
     enable: true,
     package: 'egg-mysql'
