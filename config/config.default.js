@@ -26,7 +26,17 @@ module.exports = appInfo => {
   // csrf
   config.security = {
     csrf: {
-      headerName: 'x-csrf-token', // 通过 header 传递 CSRF token 的默认字段为 x-csrf-token
+      ignore: ['/api/user/login'],
+      useSession: true, // 默认为 false，当设置为 true 时，将会把 csrf token 保存到 Session 中
+      cookieName: 'csrfToken', // Cookie 中的字段名，默认为 csrfToken
+      sessionName: 'csrfToken' // Session 中的字段名，默认为 csrfToken
+      // useSession: false,          // if useSession set to true, the secret will keep in session instead of cookie
+      // ignoreJSON: false,          // skip check JSON requests if ignoreJSON set to true
+      // cookieName: 'csrfToken',    // csrf token's cookie name
+      // sessionName: 'csrfToken',   // csrf token's session name
+      // headerName: 'x-csrf-token', // request csrf token's name in header
+      // bodyName: '_csrf',          // request csrf token's name in body
+      // queryName: '_csrf',         // request csrf token's name in query
     }
   }
   // 数据库

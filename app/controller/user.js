@@ -43,7 +43,7 @@ class UserController extends Controller {
     // jwt 主体
     const content = { username, user_id}
     // jwt token
-    const token = `Bearer ${ctx.service.jwt.encrypt(content, {expiresIn: '1d'})}`
+    const token = ctx.service.jwt.encrypt(content, {expiresIn: '1d'})
     // ctx.cookies.set('token', token, {maxAge:60*1000, httpOnly:false, overwrite:true, signed:false})
     // 返回结果
     result ? ctx.end(1, '登录成功', { token }) : ctx.end(0, '密码错误')
