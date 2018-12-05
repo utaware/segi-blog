@@ -7,17 +7,12 @@ module.exports = appInfo => {
   config.keys = appInfo.name + '_1541994609332_7211';
 
   // add your config here
-  config.middleware = [];
-  // config.koaJwt = {
-  //   enable: true,
-  //   package: "koa-jwt",
-  //   ignore: ['/api/user', '/public'],
-  //   secret: 'sign_text'
-  // }
+  config.middleware = ['jwt'];
   config.jwt = {
-    secret: 'sign_text',
-    // property: 'auth',
-    ignore: ['/api/user', '/public']
+    enable: true,
+    package: "koa-jwt",
+    ignore: ['/api/user', '/public'],
+    secret: 'sign_text'
   }
   // 模板引擎
   config.view = {

@@ -58,5 +58,5 @@
   * 楼中楼问题 => 层级、顺序 => floor, order_id排序
   
 ## 标准规范
-  * mysql-sequelize
-  * type-script
+  * mysql-sequelize 
+  * (type-script)[https://blog.csdn.net/Android_yyx/article/details/81385593]

@@ -14,8 +14,8 @@ class JwtService extends Service {
    * @param {object} o => options 设置
    * @returns {string} token
    */
-  encrypt (d, s, o) {
-    return `Bearer ${jwt.sign(d, s, o)}`
+  encrypt (d, o) {
+    return `Bearer ${jwt.sign(d, sign, o)}`
   }
   // 解密
   /**

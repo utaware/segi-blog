@@ -8,11 +8,6 @@ module.exports = (appInfo => {
   config.nunjucks  = {
     enable: true,
     package: 'egg-view-nunjucks'
-  };
-
-  config.jwt = {
-    enable: true,
-    package: 'egg-jwt'
   }
 
   config.mysql = {
