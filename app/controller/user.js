@@ -27,7 +27,7 @@ class UserController extends Controller {
   // 用户登录 post
   async login () {
     // get params
-    let { ctx, app } = this
+    let { ctx } = this
     // 获取用户名、密码
     let { password, username } = ctx.request.body
     // 数据库查询
@@ -44,6 +44,9 @@ class UserController extends Controller {
     const content = { username, user_id}
     // jwt token
     const token = ctx.service.jwt.encrypt(content, {expiresIn: '1d'})
+    // 刷新csrf token
+    let csrf = ctx.rotateCsrfSecret()
+    ctx.log(csrf)
     // ctx.cookies.set('token', token, {maxAge:60*1000, httpOnly:false, overwrite:true, signed:false})
     // 返回结果
     result ? ctx.end(1, '登录成功', { token }) : ctx.end(0, '密码错误')
@@ -51,12 +54,24 @@ class UserController extends Controller {
 
   // 修改密码 post
   async modify () {
+    let {ctx} = this
     ctx.body = 'modify'
   }
   
   // 忘记密码 post
   async forget () {
+    let {ctx} = this
     ctx.body = 'forget'
+  }
+
+  // 设置头像
+  async avatar () {
+    let { ctx } = this
+    // 上传成功获得文件对象
+    const files = ctx.request.files
+    // 重新分类调整位置
+    const result = await ctx.service.upload.files(files)
+    ctx.body = result
   }
 }
 

@@ -20,4 +20,7 @@ module.exports = app => {
 
   // docs => 文档相关
   router.post('/api/docs', controller.docs.index)
+
+  // info => 用户信息
+  router.post('/api/upload/avatar', controller.user.avatar)
 };

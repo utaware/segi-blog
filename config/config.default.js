@@ -1,4 +1,5 @@
 'use strict';
+const path = require('path')
 
 module.exports = appInfo => {
   const config = exports = {};
@@ -7,12 +8,23 @@ module.exports = appInfo => {
   config.keys = appInfo.name + '_1541994609332_7211';
 
   // add your config here
-  config.middleware = ['jwt'];
+  config.middleware = ['jwt', 'body'];
   config.jwt = {
     enable: true,
-    package: "koa-jwt",
     ignore: ['/api/user', '/public'],
     secret: 'sign_text'
+  }
+  // http://www.ptbird.cn/koa-body.html
+  // https://blog.csdn.net/simple__dream/article/details/80890696
+  config.body = {
+    enable: true,
+    multipart: true,
+    formidable: {
+      maxFieldsSize: 5 * 1024 * 1024,
+      // 默认存储位置
+      uploadDir: `${path.resolve(__dirname, '..', 'app/public/upload')}`,
+      keepExtensions: true
+    }
   }
   // 模板引擎
   config.view = {
@@ -26,10 +38,9 @@ module.exports = appInfo => {
   // csrf
   config.security = {
     csrf: {
-      ignore: ['/api/user/login'],
-      useSession: true, // 默认为 false，当设置为 true 时，将会把 csrf token 保存到 Session 中
-      cookieName: 'csrfToken', // Cookie 中的字段名，默认为 csrfToken
-      sessionName: 'csrfToken' // Session 中的字段名，默认为 csrfToken
+      enable: false
+      // ignore: ['/api/user/login'],
+      // cookieName: 'csrfToken', // Cookie 中的字段名，默认为 csrfToken
       // useSession: false,          // if useSession set to true, the secret will keep in session instead of cookie
       // ignoreJSON: false,          // skip check JSON requests if ignoreJSON set to true
       // cookieName: 'csrfToken',    // csrf token's cookie name
