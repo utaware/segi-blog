@@ -7,16 +7,18 @@ module.exports = app => {
   const { router, controller } = app;
   const parser = app.middleware.body
 
+  // 附加功能
   router.get('/', controller.home.index)
   router.get('/github', controller.home.github);
   router.get('/vuepress', controller.home.vuepress);
-  router.post('/api/identifyingCode', controller.support.checkCode)
+  router.post('/api/support/checkCode', controller.support.checkCode)
 
   // user => 用户相关
   router.post('/api/user/register', controller.user.register)
   router.post('/api/user/login', controller.user.login)
   router.post('/api/user/modify', controller.user.modify)
   router.post('/api/user/forget', controller.user.forget)
+  router.post('/api/user/email', controller.user.email)
 
   // docs => 文档相关
   router.post('/api/docs', controller.docs.index)

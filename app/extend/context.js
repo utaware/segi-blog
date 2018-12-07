@@ -9,9 +9,11 @@ module.exports = {
   // 响应的方法
   end (...args) {
     // 调用hepler utils方法
-    let res = tools.mergeRes(...args)
+    let { status, body } = tools.mergeRes(...args)
     // 返回结果
-    return this.body = res
+    this.status = status
+    this.body = body
+    return 
   }
   
 }

@@ -5,7 +5,7 @@ class SupportController extends Controller {
   async checkCode () {
     let code = await this.ctx.service.support.svgCheckCode()
     // this.ctx.body = Object.assign({ code: 200 }, code)
-    this.ctx.end(200, 'success', code)
+    this.ctx.end(true, code)
   }
   // 以github style 为主要搭配的模板
   async github () {

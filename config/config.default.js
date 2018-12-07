@@ -19,6 +19,9 @@ module.exports = appInfo => {
   config.body = {
     enable: true,
     multipart: true,
+    match: (ctx) => {
+      return ctx.request.method === 'POST' && ctx.request.header['content-type'].includes('multipart/form-data')
+    },
     formidable: {
       maxFieldsSize: 5 * 1024 * 1024,
       // 默认存储位置
@@ -69,6 +72,18 @@ module.exports = appInfo => {
     app: true,
     // 是否加载到 agent 上，默认关闭
     agent: false
+  }
+  // 错误处理
+  config.onerror = {
+    // 所有响应类型的错误处理方法
+    all (err, ctx) {
+      ctx.status = 500
+      ctx.log(err)
+      ctx.body = {
+        code: -1,
+        message: err.message || err
+      }
+    }
   }
 
   return config;

@@ -18,5 +18,7 @@ module.exports = {
   // 转换文件头部变量语法
   matter: require('gray-matter'),
   // 时间转换
-  moment: require('moment')
+  moment: require('moment'),
+  // tools
+  tools: require('./lib/tools')
 }

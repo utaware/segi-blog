@@ -1,6 +1,11 @@
-// Controller
+// module
 const Controller = require('egg').Controller
-// 包含的功能：用户注册, 登录, 修改密码, 忘记密码
+// validate rules
+const rule = {
+  username: 'string',
+  password: 'string'
+}
+// contoller
 class UserController extends Controller {
 
   // 新增用户 post
@@ -29,12 +34,26 @@ class UserController extends Controller {
     // get params
     let { ctx } = this
     // 获取用户名、密码
-    let { password, username } = ctx.request.body
+    let { password, username, email, type } = ctx.request.body
+    // 字段校验
+    let condition = type ? 'username' : 'email'
+    username = type ? username : email
+    // 校验待修改
+    try {
+      ctx.validate('string', [password, email, username])
+    } catch (err) {
+      return ctx.end(false, '用户名或密码校验未通过')
+    }
     // 数据库查询
-    let query = await ctx.service.user.find({ username })
-    // 用户名是否存在
+    let query
+    try {
+      query = await ctx.service.user.find({ [condition]: username })
+    } catch (err) {
+      return ctx.end(false, err.message)
+    }
+    // 检验用户信息是否获取
     if (!query) {
-      return ctx.end(0, '用户名不存在')
+      return ctx.end(false, '用户信息不存在')
     }
     // 密码是否正确
     let result = await ctx.service.bcrypt.compare(password, query.hash)
@@ -44,12 +63,8 @@ class UserController extends Controller {
     const content = { username, user_id}
     // jwt token
     const token = ctx.service.jwt.encrypt(content, {expiresIn: '1d'})
-    // 刷新csrf token
-    let csrf = ctx.rotateCsrfSecret()
-    ctx.log(csrf)
-    // ctx.cookies.set('token', token, {maxAge:60*1000, httpOnly:false, overwrite:true, signed:false})
     // 返回结果
-    result ? ctx.end(1, '登录成功', { token }) : ctx.end(0, '密码错误')
+    result ? ctx.end(true, '登录成功', { token }) : ctx.end(false, '密码错误')
   }
 
   // 修改密码 post
@@ -64,14 +79,33 @@ class UserController extends Controller {
     ctx.body = 'forget'
   }
 
+  // 绑定邮箱
+  async email () {
+    // ctx
+    let { ctx } = this
+    // jwt 中获取user_id
+    let { user_id } = ctx.service.jwt.decrypt()
+    // 获取email
+    let { email } = ctx.request.body
+    // 查询
+    let query = await ctx.service.user.find({ user_id })
+    if (!query) {
+      ctx.end(false, '未查找到改用户相关信息')
+    }
+    // 更新相关数据
+    let result = await ctx.service.user.update({ user_id, email })
+    // res
+    return ctx.end(result)
+  }
+
   // 设置头像
   async avatar () {
     let { ctx } = this
     // 上传成功获得文件对象
     const files = ctx.request.files
     // 重新分类调整位置
-    const result = await ctx.service.upload.files(files)
-    ctx.body = result
+    const result = await ctx.service.upload.files(files.avatar)
+    ctx.end(result)
   }
 }
 
