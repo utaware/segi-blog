@@ -1,5 +1,5 @@
-'use strict';
 const path = require('path')
+const sequelizeConfig = require('./sequelize')
 
 module.exports = appInfo => {
   const config = exports = {};
@@ -78,13 +78,14 @@ module.exports = appInfo => {
     // 所有响应类型的错误处理方法
     all (err, ctx) {
       ctx.status = 500
-      ctx.log(err)
       ctx.body = {
         code: -1,
         message: err.message || err
       }
     }
   }
-
+  // Sequelize
+  config.sequelize = sequelizeConfig;
+  // https://www.npmjs.com/package/egg-joi
   return config;
 };

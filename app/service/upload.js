@@ -25,10 +25,10 @@ class UploadService extends Service {
         // 成功返回相关信息
         return { path: dest, name, size, type, src }
       }).catch((err) => {
-        return ctx.log(err)
+        return ctx.throw(500, '文件删除错误')
       })
     }).catch((err) => {
-      return ctx.log(err)
+      return ctx.throw(500, '文件拷贝错误')
     })
   }
 }

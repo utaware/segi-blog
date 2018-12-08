@@ -28,13 +28,20 @@ class JwtService extends Service {
     let { ctx } = this
     // jwt-token => header
     const authorization = ctx.header.authorization
+    if (!authorization) {
+      return ctx.throw(401, 'header中未包含authorization')
+    }
     // authorization-check
-    if (!authorization || !authorization.includes(' ')) {
-      return 'jwt token error'
+    if (!authorization.startsWith('Bearer ')) {
+      return ctx.throw(401, 'authorization格式不符')
     }
     // token获取解密
-    const token = authorization.split(' ')[1]
-    return jwt.verify(token, sign);
+    try {
+      const token = authorization.split(' ')[1]
+      return jwt.verify(token, sign)
+    } catch (err) {
+      return ctx.throw(401, 'jwt token错误或已失效')
+    }
   }
 }
 

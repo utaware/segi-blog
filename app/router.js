@@ -5,7 +5,6 @@
  */
 module.exports = app => {
   const { router, controller } = app;
-  const parser = app.middleware.body
 
   // 附加功能
   router.get('/', controller.home.index)

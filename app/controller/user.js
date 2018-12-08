@@ -3,7 +3,8 @@ const Controller = require('egg').Controller
 // validate rules
 const rule = {
   username: 'string',
-  password: 'string'
+  password: 'string',
+  type: ['email', 'username']
 }
 // contoller
 class UserController extends Controller {
@@ -34,20 +35,17 @@ class UserController extends Controller {
     // get params
     let { ctx } = this
     // 获取用户名、密码
-    let { password, username, email, type } = ctx.request.body
-    // 字段校验
-    let condition = type ? 'username' : 'email'
-    username = type ? username : email
+    let { password, username, type } = ctx.request.body
     // 校验待修改
     try {
-      ctx.validate('string', [password, email, username])
+      ctx.validate(rule, { username, password, type })
     } catch (err) {
       return ctx.end(false, '用户名或密码校验未通过')
     }
     // 数据库查询
     let query
     try {
-      query = await ctx.service.user.find({ [condition]: username })
+      query = await ctx.service.user.find({ [type]: username })
     } catch (err) {
       return ctx.end(false, err.message)
     }

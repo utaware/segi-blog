@@ -19,6 +19,11 @@ module.exports = (appInfo => {
     enable: true,
     package: 'egg-validate',
   }
+  // sequelize 数据库模型
+  config.sequelize = {
+    enable: false, // 暂且先不适用
+    package: 'egg-sequelize',
+  }
   
   return config;
-})();
+})()
