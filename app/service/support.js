@@ -11,7 +11,13 @@ class SupportService extends Service {
   }
   // 生成svg验证码
   async svgCheckCode () {
-    return svg.create()
+    return svg.create({
+      size: 4,
+      ignoreChars: '0o1i',
+      noise: 1,
+      color: true,
+      background: '#fff'
+    })
   }
 }
 

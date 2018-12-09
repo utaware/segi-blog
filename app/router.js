@@ -10,7 +10,7 @@ module.exports = app => {
   router.get('/', controller.home.index)
   router.get('/github', controller.home.github);
   router.get('/vuepress', controller.home.vuepress);
-  router.post('/api/support/checkCode', controller.support.checkCode)
+  router.get('/api/support/checkCode', controller.support.checkCode)
 
   // user => 用户相关
   router.post('/api/user/register', controller.user.register)
