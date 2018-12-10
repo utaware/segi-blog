@@ -25,6 +25,34 @@ class SupportController extends Controller {
     let data = await ctx.service.support.parse('app/lib/md/yaml.md')
     await ctx.render('yaml.tpl', {data})
   }
+  // 发送邮件功能
+  async sendEmail () {
+    // ctx
+    let { ctx } = this
+    // 发送邮箱地址 email
+    let { email } = ctx.request.body
+    // 生成验证码
+    let { data, text } = await this.ctx.service.support.svgCheckCode()
+    let config = {
+      to: email,
+      html: `<h3 title="${text}">您的验证码为</h3>${data}`,
+      subject: 'segi_blog'
+    }
+    // 发送邮件
+    let send = await ctx.service.email.send(config)
+    // 邮件创建
+    let create_time = ctx.helper.moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+    // 保存至数据库格式
+    let format = {
+      messageId: send.messageId,
+      sender: send.envelope.from,
+      receiver: send.envelope.to,
+      text,
+      create_time
+    }
+    // 插入结果
+    return ctx.end(await ctx.service.email.insert(format))
+  }
 }
 
 module.exports = SupportController;

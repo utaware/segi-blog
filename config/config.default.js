@@ -11,7 +11,7 @@ module.exports = appInfo => {
   config.middleware = ['jwt', 'body'];
   config.jwt = {
     enable: true,
-    ignore: ['/api/user', '/public'],
+    ignore: ['/api/user/login', '/api/user/register', '/public'],
     secret: 'sign_text'
   }
   // http://www.ptbird.cn/koa-body.html

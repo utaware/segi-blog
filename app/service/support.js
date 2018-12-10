@@ -1,8 +1,9 @@
+// module
 const Service = require('egg').Service
 const matther = require('gray-matter')
 const { readFile } = require('./utils/file')
 const svg = require('svg-captcha')
-
+// 不涉及数据库的一些额外功能
 class SupportService extends Service {
   // 头文件解析
   async parse (path) {

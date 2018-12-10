@@ -4,7 +4,7 @@ const Controller = require('egg').Controller
 const rule = {
   username: 'string',
   password: 'string',
-  type: ['email', 'username']
+  mode: ['username', 'email']
 }
 // contoller
 class UserController extends Controller {
@@ -20,7 +20,7 @@ class UserController extends Controller {
     let usable = await ctx.service.user.find({ username })
     // null(不存在) 数组(存在)
     if (usable) {
-      return ctx.end(0, '用户名已存在')
+      return ctx.end(false, '用户名已存在')
     }
     // bcrypt加密过程
     let hash = await ctx.service.bcrypt.hash(password)
@@ -35,17 +35,17 @@ class UserController extends Controller {
     // get params
     let { ctx } = this
     // 获取用户名、密码
-    let { password, username, type } = ctx.request.body
+    let { username, password, mode } = ctx.request.body
     // 校验待修改
     try {
-      ctx.validate(rule, { username, password, type })
+      ctx.validate(rule, ctx.request.body)
     } catch (err) {
       return ctx.end(false, '用户名或密码校验未通过')
     }
     // 数据库查询
     let query
     try {
-      query = await ctx.service.user.find({ [type]: username })
+      query = await ctx.service.user.find({ [mode]: username })
     } catch (err) {
       return ctx.end(false, err.message)
     }
@@ -56,25 +56,78 @@ class UserController extends Controller {
     // 密码是否正确
     let result = await ctx.service.bcrypt.compare(password, query.hash)
     // 解密是否成功的结果
-    const { user_id } = query
+    if (!result) {
+      return ctx.end(false, '密码错误')
+    }
+    const { user_id, role, privilege } = query
     // jwt 主体
-    const content = { username, user_id}
+    const content = { username, user_id, privilege, role }
     // jwt token
     const token = ctx.service.jwt.encrypt(content, {expiresIn: '1d'})
+    // 更新登录时间
+    let login_time = ctx.helper.moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+    await ctx.service.user.update({ login_time }, { username }, false)
     // 返回结果
-    result ? ctx.end(true, '登录成功', { token }) : ctx.end(false, '密码错误')
+    return ctx.end(true, '登录成功', { token })
   }
 
   // 修改密码 post
   async modify () {
+    // 修改密码
     let {ctx} = this
-    ctx.body = 'modify'
+    // jwt 中获取user_id
+    ctx.log(ctx.state.user)
+    let { user_id } = ctx.service.jwt.decrypt()
+    // 修改的密码
+    let { password } = ctx.request.body
+    // 查询
+    let query = await ctx.service.user.find({ user_id })
+    if (!query) {
+      ctx.end(false, '未查找到改用户相关信息')
+    }
+    // 对比原密码
+    let result = await ctx.service.bcrypt.compare(password, query.hash)
+    if (result) {
+      return ctx.end(false, '新密码不能与原密码相同')
+    }
+    // bcrypt加密过程
+    let hash = await ctx.service.bcrypt.hash(password)
+    // 更新hash
+    try {
+      let result = await ctx.service.user.update({ hash }, { user_id })
+      return ctx.end(result)
+    } catch (err) {
+      return ctx.end(false, '密码修改失败')
+    }
   }
   
   // 忘记密码 post
   async forget () {
-    let {ctx} = this
-    ctx.body = 'forget'
+    // ctx
+    let { ctx } = this
+    // 通过邮箱找回密码
+    let { email, code, password } = ctx.request.body
+    let queryUser = await ctx.service.user.find({ email })
+    if (!queryUser) {
+      return ctx.end(false, '此邮箱未被用户绑定')
+    }
+    // 邮箱查询出对应的发送得最早的邮件 => 过期的时间条件增加
+    let queryEmail = await ctx.service.email.query({ receiver: email })
+    // 确认邮箱记录中存在发送记录
+    let [ info ] = queryEmail
+    if (!info) {
+      return ctx.end(false, '请先发送邮箱验证码')
+    }
+    // 对比
+    if (code !== info.text) {
+      return ctx.end(false, '邮箱验证码错误')
+    }
+    // 使用新密码重置
+    let hash = await ctx.service.bcrypt.hash(password)
+    // 存储加密hash和用户信息
+    let update = await ctx.service.user.update({ hash }, { email })
+    // res
+    return ctx.end(update)
   }
 
   // 绑定邮箱
@@ -91,7 +144,7 @@ class UserController extends Controller {
       ctx.end(false, '未查找到改用户相关信息')
     }
     // 更新相关数据
-    let result = await ctx.service.user.update({ user_id, email })
+    let result = await ctx.service.user.update({ email }, { user_id })
     // res
     return ctx.end(result)
   }

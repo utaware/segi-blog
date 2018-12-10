@@ -30,15 +30,18 @@ const mail = {
   // attachments: 附件  
 }
 
-// 发送邮件的方法
-// let sendEmail = (config) => {
-//   transporter.sendMail(config, (err, info) => {
-//     if (err) {
-//         return console.log(err)
-//     }
-//     // 信息对象
-//     return info
-//   })
-// }
-
-module.exports = transporter
+module.exports = { 
+  send: (config) => {
+    // 合并配置
+    config = Object.assign({}, mail, config)
+    // promise封装
+    return new Promise((resolve, reject) => {
+      transporter.sendMail(config, (err, info) => {
+        if (err) {
+          reject(err)
+        }
+        resolve(info)
+      })
+    })
+  }
+}
