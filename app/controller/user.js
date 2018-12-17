@@ -151,12 +151,14 @@ class UserController extends Controller {
 
   // 设置头像
   async avatar () {
+    // ctx
     let { ctx } = this
     // 上传成功获得文件对象
     const files = ctx.request.files
     // 重新分类调整位置
     const result = await ctx.service.upload.files(files.avatar)
-    ctx.end(result)
+    // res
+    return ctx.end(result)
   }
 }
 

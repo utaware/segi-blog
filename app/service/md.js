@@ -1,21 +1,19 @@
+// module
 const { Service } = require('egg')
-const { readFile } = require('./utils/file')
-const { base } = require('./utils/render')
+const { base } = require('./utils/baseRender')
 // vuepress about
 const vuepress = require('../markdown/index')
 const slugify = (s) => encodeURIComponent(String(s).trim().toLowerCase().replace(/\s+/g, '-'))
 
+// service
 class MdService extends Service {
   // 将md => html
-  async baseSupport (path) {
-    let md = await readFile(path)
-    let html = base(md)
-    return html
+  async baseSupport (md) {
+    return await base(md)
   }
   // vuepress相关样式支持
-  async vuepressSupport (path) {
-    let data = await readFile(path)
-    return vuepress({slugify}).render(data)
+  async vuepressSupport (md) {
+    return vuepress({slugify}).render(md)
   }
 }
 

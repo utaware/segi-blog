@@ -3,9 +3,8 @@ const Controller = require('egg').Controller;
 class SupportController extends Controller {
   // 生成验证码 => svg路径 和 验证字符串
   async checkCode () {
-    let code = await this.ctx.service.support.svgCheckCode()
-    // this.ctx.body = Object.assign({ code: 200 }, code)
-    this.ctx.end(true, code)
+    // reponse
+    this.ctx.end(true, await this.ctx.service.support.svgCheckCode())
   }
   // 以github style 为主要搭配的模板
   async github () {

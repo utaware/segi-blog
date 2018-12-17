@@ -1,13 +1,34 @@
-// module
+/*
+ * @Description: 额外附属功能的一些扩展支持
+ * @version: 1.0.0
+ * @Author: utaware
+ * @Date: 2018-11-13 09:21:52
+ * @LastEditors: utaware
+ * @LastEditTime: 2018-12-17 16:21:24
+ */
+
+// egg-service
 const Service = require('egg').Service
+// module
 const matther = require('gray-matter')
-const { readFile } = require('./utils/file')
 const svg = require('svg-captcha')
-// 不涉及数据库的一些额外功能
+const { base } = require('./utils/baseRender')
+// vuepress about
+const vuepress = require('../markdown/index')
+const slugify = (s) => encodeURIComponent(String(s).trim().toLowerCase().replace(/\s+/g, '-'))
+
+// Service
 class SupportService extends Service {
+  // baseRender for markdown
+  async baseMd (md) {
+    return base(md)
+  }
+  // vuepress style content
+  async vuepress (md) {
+    return vuepress({slugify}).render(md)
+  }
   // 头文件解析
-  async parse (path) {
-    let text = await readFile(path)
+  async parse (text) {
     return matther(text)
   }
   // 生成svg验证码

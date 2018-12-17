@@ -23,8 +23,8 @@ module.exports = app => {
   router.put('/api/user/email', controller.user.email) // 更改邮箱
 
   // docs => 文档相关
-  router.post('/api/docs', controller.docs.index)
+  router.post('/api/docs/upload', controller.docs.upload) // 上传文档
 
   // info => 用户信息
-  router.post('/api/upload/avatar', controller.user.avatar)
+  router.post('/api/upload/avatar', controller.user.avatar) // 上传头像
 };

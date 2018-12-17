@@ -1,7 +1,16 @@
-// module
+/*
+ * @Description: jsonwebtoken 相关
+ * @version: 1.0.0
+ * @Author: utaware
+ * @Date: 2018-12-04 19:48:52
+ * @LastEditors: utaware
+ * @LastEditTime: 2018-12-17 11:52:03
+ */
+
+// egg-service
 const Service = require('egg').Service
 const jwt = require('jsonwebtoken')
-// constant
+// data-table
 const sign = 'sign_text'
 // service
 class JwtService extends Service {

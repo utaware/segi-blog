@@ -1,5 +1,15 @@
-const { Service } = require('egg')
+/*
+ * @Description: 用户功能相关模块
+ * @version: 1.0.0
+ * @Author: utaware
+ * @Date: 2018-11-26 16:27:34
+ * @LastEditors: utaware
+ * @LastEditTime: 2018-12-17 15:30:25
+ */
 
+// egg-service
+const { Service } = require('egg')
+// data-table
 const USER_TABLE = 'user_list'
 // service
 class UserService extends Service {
@@ -51,7 +61,6 @@ class UserService extends Service {
     return await this.app.mysql.update(USER_TABLE, row, {
       where: condition
     }).then((r) => {
-      ctx.log(r)
       return r.affectedRows === 1
     }).catch((err) => {
       return ctx.throw(500, err.sqlMessage)
