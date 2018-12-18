@@ -160,6 +160,17 @@ class UserController extends Controller {
     // res
     return ctx.end(result)
   }
+  // 获取所有用户信息
+  async getAll () {
+    // ctx
+    const { ctx } = this
+    // body
+    const info = ctx.request.body
+    // database
+    let result = await ctx.service.user.getAll(info)
+    // res
+    return ctx.end({ result })
+  }
 }
 
 module.exports = UserController;

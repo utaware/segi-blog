@@ -10,7 +10,9 @@
 // egg-service
 const { Service } = require('egg')
 // data-table
-const USER_TABLE = 'user_list'
+const USER_TABLE = 'user_list' // 用户表
+const POSITION_TABLE = 'position_list' // 职位表
+const USER_INFO_TABLE = 'user_info' // 用户信息表
 // service
 class UserService extends Service {
   /**
@@ -64,6 +66,23 @@ class UserService extends Service {
       return r.affectedRows === 1
     }).catch((err) => {
       return ctx.throw(500, err.sqlMessage)
+    })
+  }
+  /**
+   * @description: 获取所有用户的信息
+   * @date 2018-12-18
+   * @param {}
+   * @returns {Object} 所有用户信息
+   */
+  async getAll (info = {}) {
+    // ctx
+    const { ctx, app } = this
+    // database
+    // 用户信息
+    let user_list = app.mysql.select(USER_TABLE, info).then((r) => {
+      return r
+    }).catch((err) => {
+      return ctx.throw(500, ctx.log(err.sqlMessage))
     })
   }
 }

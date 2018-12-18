@@ -21,7 +21,7 @@ module.exports = appInfo => {
     enable: true,
     // 只处理multipart/form-data类型表单
     match: (ctx) => {
-      return ctx.request.header['content-type'].includes('multipart/form-data')
+      return ctx.request.method === 'POST' && ctx.request.header['content-type'].includes('multipart/form-data')
     },
     // 将请求体打到原生 node.js 的ctx.req中 Boolean
     patchNode: true,

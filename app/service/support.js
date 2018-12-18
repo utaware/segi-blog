@@ -28,7 +28,7 @@ class SupportService extends Service {
     return vuepress({slugify}).render(md)
   }
   // 头文件解析
-  async parse (text) {
+  async fileHeader (text) {
     return matther(text)
   }
   // 生成svg验证码
