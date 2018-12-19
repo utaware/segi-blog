@@ -1,11 +1,5 @@
 // module
 const Controller = require('egg').Controller
-// validate rules
-const rule = {
-  username: 'string',
-  password: 'string',
-  mode: ['username', 'email']
-}
 // contoller
 class UserController extends Controller {
 
@@ -17,50 +11,71 @@ class UserController extends Controller {
    */
 
   async register () {
-    // get params
-    let { ctx, app } = this
-    // 获取用户名、密码
-    // 暂不对邮箱登录作区分
-    let { password, username, email } = ctx.request.body
+    
+    const { ctx, app } = this
+    // 获取用户名、邮箱、密码
+    const { password, username, email } = ctx.request.body
+    // 校验
+    try {
+      ctx.validate(app.validator.user.register, { password, username, email })
+    } catch (err) {
+      return ctx.end(false, {err})
+    }
     // 检查用户名是否存在
-    // let usable = await ctx.service.user.find({ username })
-    let usable = await app.model.User.findAll({
+    const usable = await app.model.User.findAll({
       where: { 
         $or: [ { username }, { email } ]
       }
     })
-    ctx.log(usable)
-    // null(不存在) 数组(存在)
-    if (usable) {
-      return ctx.end(false, '用户名已存在')
+    // 判断是否已存在
+    if (usable.length) {
+      return ctx.end(false, '用户名或邮箱已存在')
     }
     // bcrypt加密过程
     let hash = await ctx.service.bcrypt.hash(password)
     // 存储加密hash和用户信息
-    let query = await ctx.service.user.insert(username, hash)
+    try {
+      const result = await app.model.User.create({ username, hash, email })
+      const { user_id } = result.dataValues
+      await app.model.Info.create({ user_id, alias: username })
+    } catch (err) {
+      return ctx.end(false, {err})
+    }
     // res
-    ctx.end(!!query)
+    return ctx.end(true)
   }
 
-  // 用户登录 post
+  /**
+   * @description 用户登陆
+   * @date 2018-12-20
+   * @returns 
+   */
+
   async login () {
     // get params
-    let { ctx } = this
+    let { ctx, app } = this
     // 获取用户名、密码
     let { username, password, mode } = ctx.request.body
-    // 校验待修改
+    // 校验
     try {
-      ctx.validate(rule, ctx.request.body)
+      ctx.validate(app.validator.User.loginMode, { mode })
+      const rule = mode === 'username' ? app.validator.User.loginUsername : app.validator.User.loginEmail
+      ctx.validate(rule, { [mode]: username, password })
     } catch (err) {
       return ctx.end(false, '用户名或密码校验未通过')
     }
     // 数据库查询
-    let query
-    try {
-      query = await ctx.service.user.find({ [mode]: username })
-    } catch (err) {
-      return ctx.end(false, err.message)
-    }
+    // let query
+    // try {
+    //   query = await ctx.service.user.find({ [mode]: username })
+    // } catch (err) {
+    //   return ctx.end(false, err.message)
+    // }
+    const usable = await app.model.User.findAll({
+      where: { 
+        $or: [ { username }, { email: username } ]
+      }
+    })
     // 检验用户信息是否获取
     if (!query) {
       return ctx.end(false, '用户信息不存在')

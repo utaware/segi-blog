@@ -16,14 +16,19 @@ module.exports = (appInfo => {
   }
   // validate 校验
   config.validate = {
-    enable: true,
+    enable: false,
     package: 'egg-validate',
   }
   // sequelize 数据库模型
   config.sequelize = {
-    enable: true, // 暂且先不适用
+    enable: true,
     package: 'egg-sequelize',
   }
-  
+  // joi 校验
+  config.joi = {
+    enable: true,
+    package: 'egg-joi',
+  }
+
   return config;
 })()

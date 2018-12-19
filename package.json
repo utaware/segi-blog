@@ -7,6 +7,7 @@
     "bcrypt": "^3.0.2",
     "chalk": "^2.4.1",
     "egg": "^2.2.1",
+    "egg-joi": "^1.0.6",
     "egg-jwt": "^3.1.4",
     "egg-mysql": "^3.0.0",
     "egg-scripts": "^2.5.0",
