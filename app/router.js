@@ -5,6 +5,10 @@
  */
 module.exports = app => {
   const { router, controller } = app;
+
+  // home => test
+  router.get('/api/home', controller.home.index)
+
   // support => 生成验证码
   router.get('/api/support/checkCode', controller.support.checkCode)
   router.post('/api/support/email', controller.support.sendEmail)

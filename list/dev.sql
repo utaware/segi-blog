@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80013
 File Encoding         : 65001
 
-Date: 2018-12-18 18:42:18
+Date: 2018-12-19 18:45:41
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -20,20 +20,21 @@ SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 DROP TABLE IF EXISTS `email_list`;
 CREATE TABLE `email_list` (
-  `id` int(12) NOT NULL AUTO_INCREMENT COMMENT '邮件对应id',
-  `messageId` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '邮件id',
-  `sender` varchar(24) NOT NULL COMMENT '邮件发送人',
-  `receiver` varchar(24) NOT NULL COMMENT '邮件接收人',
-  `text` tinytext CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '邮件发送内容',
-  `create_time` datetime NOT NULL COMMENT '邮件创建时间',
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '邮件对应id',
+  `messageId` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '邮件id',
+  `sender` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '邮件发送人',
+  `receiver` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '邮件接收人',
+  `content` tinytext CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '邮件发送内容',
+  `created_at` datetime DEFAULT NULL COMMENT '邮件创建时间',
+  `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of email_list
 -- ----------------------------
-INSERT INTO `email_list` VALUES ('1', '<5543a4e9-45fb-df7d-ae92-d22b9713220d@qq.com>', '1175272135@qq.com', '1264051408@qq.com', 'VJxE', '2018-12-10 14:27:09');
-INSERT INTO `email_list` VALUES ('2', '<ef5df309-e0ff-41e6-602e-e5e484f8fff5@qq.com>', '1175272135@qq.com', '1264051408@qq.com', 'Wbq5', '2018-12-10 16:19:47');
+INSERT INTO `email_list` VALUES ('1', '<5543a4e9-45fb-df7d-ae92-d22b9713220d@qq.com>', '1175272135@qq.com', '1264051408@qq.com', 'VJxE', '2018-12-10 14:27:09', null);
+INSERT INTO `email_list` VALUES ('2', '<ef5df309-e0ff-41e6-602e-e5e484f8fff5@qq.com>', '1175272135@qq.com', '1264051408@qq.com', 'Wbq5', '2018-12-10 16:19:47', null);
 
 -- ----------------------------
 -- Table structure for image_list
@@ -42,13 +43,13 @@ DROP TABLE IF EXISTS `image_list`;
 CREATE TABLE `image_list` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '单张图片id',
   `user_id` int(11) NOT NULL COMMENT '图片上传人id',
-  `path` varchar(128) NOT NULL COMMENT '图片路径',
-  `name` varchar(64) NOT NULL COMMENT '原始图片名',
-  `size` varchar(24) NOT NULL COMMENT '图片大小',
-  `type` varchar(24) NOT NULL COMMENT '图片格式',
-  `src` varchar(128) NOT NULL COMMENT '外链地址',
-  `create_time` datetime DEFAULT NULL COMMENT '图片上传时间',
-  `update_time` datetime DEFAULT NULL COMMENT '图片相关信息被修改时间',
+  `path` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '图片路径',
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '原始图片名',
+  `size` int(11) NOT NULL COMMENT '图片大小',
+  `mime_type` varchar(24) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '图片格式',
+  `src` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '外链地址',
+  `created_at` datetime DEFAULT NULL COMMENT '图片上传时间',
+  `updated_at` datetime DEFAULT NULL COMMENT '图片相关信息被修改时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -62,11 +63,11 @@ CREATE TABLE `image_list` (
 DROP TABLE IF EXISTS `privilege_list`;
 CREATE TABLE `privilege_list` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `role` varchar(24) NOT NULL,
+  `privilege` varchar(24) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `remark` varchar(24) NOT NULL,
   `level` int(11) NOT NULL,
-  `create_time` datetime DEFAULT NULL,
-  `update_time` datetime DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
@@ -88,27 +89,27 @@ CREATE TABLE `role_list` (
   `type` varchar(24) NOT NULL,
   `remark` varchar(24) NOT NULL,
   `group` enum('0','1','2','3','4') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0' COMMENT '0-待分组 1-前端开发 2-后端开发 3-非开发人员 4-管理人员',
-  `create_time` datetime DEFAULT NULL,
-  `update_time` datetime DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of role_list
 -- ----------------------------
-INSERT INTO `role_list` VALUES ('1', 'web', 'web前端开发', '1', '2018-12-18 16:01:25', null);
-INSERT INTO `role_list` VALUES ('2', 'java', 'java后端开发', '2', '2018-12-18 16:02:45', null);
-INSERT INTO `role_list` VALUES ('3', 'ios', 'ios开发', '1', '2018-12-18 16:03:16', null);
-INSERT INTO `role_list` VALUES ('4', 'android', 'android开发', '1', '2018-12-18 16:03:27', null);
-INSERT INTO `role_list` VALUES ('5', 'test', '测试', '3', '2018-12-18 16:04:18', null);
-INSERT INTO `role_list` VALUES ('6', 'product', '产品', '3', '2018-12-18 16:05:26', null);
-INSERT INTO `role_list` VALUES ('7', 'operator', '运营', '3', '2018-12-18 16:07:46', null);
-INSERT INTO `role_list` VALUES ('8', 'UI', 'UI设计', '3', '2018-12-18 16:07:59', null);
-INSERT INTO `role_list` VALUES ('9', 'finance', '财务', '3', '2018-12-18 16:08:15', null);
-INSERT INTO `role_list` VALUES ('10', 'spread', '推广', '3', '2018-12-18 16:09:09', null);
-INSERT INTO `role_list` VALUES ('11', 'C_plus', 'C++开发', '2', '2018-12-18 16:09:35', null);
-INSERT INTO `role_list` VALUES ('12', 'manage', '负责人', '4', '2018-12-18 16:09:59', null);
-INSERT INTO `role_list` VALUES ('13', 'tourist', '游客', '0', '2018-12-18 18:40:26', null);
+INSERT INTO `role_list` VALUES ('1', 'tourist', '游客', '0', '2018-12-18 18:40:26', null);
+INSERT INTO `role_list` VALUES ('2', 'web', 'web前端开发', '1', '2018-12-18 16:01:25', null);
+INSERT INTO `role_list` VALUES ('3', 'java', 'java后端开发', '2', '2018-12-18 16:02:45', null);
+INSERT INTO `role_list` VALUES ('4', 'ios', 'ios开发', '1', '2018-12-18 16:03:16', null);
+INSERT INTO `role_list` VALUES ('5', 'android', 'android开发', '1', '2018-12-18 16:03:27', null);
+INSERT INTO `role_list` VALUES ('6', 'test', '测试', '3', '2018-12-18 16:04:18', null);
+INSERT INTO `role_list` VALUES ('7', 'product', '产品', '3', '2018-12-18 16:05:26', null);
+INSERT INTO `role_list` VALUES ('8', 'operator', '运营', '3', '2018-12-18 16:07:46', null);
+INSERT INTO `role_list` VALUES ('9', 'UI', 'UI设计', '3', '2018-12-18 16:07:59', null);
+INSERT INTO `role_list` VALUES ('10', 'finance', '财务', '3', '2018-12-18 16:08:15', null);
+INSERT INTO `role_list` VALUES ('11', 'spread', '推广', '3', '2018-12-18 16:09:09', null);
+INSERT INTO `role_list` VALUES ('12', 'C_plus', 'C++开发', '2', '2018-12-18 16:09:35', null);
+INSERT INTO `role_list` VALUES ('13', 'manage', '负责人', '4', '2018-12-18 16:09:59', null);
 
 -- ----------------------------
 -- Table structure for upload_docs
@@ -142,44 +143,43 @@ INSERT INTO `upload_docs` VALUES ('9', '6', '0', 'E:\\project\\segi-blog\\app\\p
 -- ----------------------------
 DROP TABLE IF EXISTS `user_info`;
 CREATE TABLE `user_info` (
-  `user_id` int(12) NOT NULL COMMENT '用户id',
-  `alias` char(24) NOT NULL COMMENT '用户昵称',
+  `user_id` int(11) NOT NULL COMMENT '用户id',
+  `alias` varchar(24) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '用户昵称',
+  `adress` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '用户地址',
+  `avatar` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '用户头像',
+  `phone` varchar(12) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '手机号码',
   `birthday` date DEFAULT NULL COMMENT '用户年龄',
-  `adress` varchar(32) DEFAULT NULL COMMENT '用户地址',
-  `avatar` varchar(64) DEFAULT NULL COMMENT '用户头像',
-  `phone` char(12) DEFAULT NULL COMMENT '手机号码',
-  `create_time` datetime NOT NULL COMMENT '账号创建时间',
-  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
-  `login_time` datetime DEFAULT NULL COMMENT '登录时间',
+  `created_at` datetime DEFAULT NULL COMMENT '账号创建时间',
+  `updated_at` datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user_info
 -- ----------------------------
-INSERT INTO `user_info` VALUES ('6', 'akane', null, null, null, null, '2018-12-03 15:42:34', null, null);
+INSERT INTO `user_info` VALUES ('6', 'akane', null, null, null, null, '2018-12-03 15:42:34', null);
 
 -- ----------------------------
 -- Table structure for user_list
 -- ----------------------------
 DROP TABLE IF EXISTS `user_list`;
 CREATE TABLE `user_list` (
-  `user_id` int(12) NOT NULL AUTO_INCREMENT COMMENT '用户id',
+  `user_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '用户id',
   `username` char(24) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户名',
-  `hash` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'bcrypt加密后的hash值',
-  `email` char(24) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '用户邮箱',
-  `privilege` enum('4','3','2','1','0') CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT '0' COMMENT '0-游客 1-普通成员 2-组长 3-负责人 4-root',
-  `role` enum('0','1','2','3','4') CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT '0' COMMENT '0-待分配 1-前端 2-测试 3-UI 4-后台',
-  `create_time` datetime NOT NULL COMMENT '账号创建时间',
+  `hash` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'bcrypt加密后的hash值',
+  `email` char(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户邮箱',
+  `privilege` int(11) NOT NULL DEFAULT '0' COMMENT '0-游客 1-普通成员 2-组长 3-负责人 4-root',
+  `role` int(11) NOT NULL DEFAULT '0' COMMENT '0-待分配 1-前端 2-测试 3-UI 4-后台',
   `login_time` datetime DEFAULT NULL COMMENT '登录时间',
-  `update_time` datetime DEFAULT NULL COMMENT '用户信息修改时间',
+  `created_at` datetime DEFAULT NULL COMMENT '账号创建时间',
+  `updated_at` datetime DEFAULT NULL COMMENT '用户信息修改时间',
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user_list
 -- ----------------------------
-INSERT INTO `user_list` VALUES ('6', 'akane', '$2b$10$PMoZz.iGRKG86qJEUGx.BufsmE7Ey30w6fNNm/1E0o8Zghu3/2rUK', '1264051408@qq.com', '4', '1', '2018-12-03 15:42:34', '2018-12-18 15:07:33', '2018-12-10 16:58:42');
+INSERT INTO `user_list` VALUES ('6', 'akane', '$2b$10$PMoZz.iGRKG86qJEUGx.BufsmE7Ey30w6fNNm/1E0o8Zghu3/2rUK', '1264051408@qq.com', '1', '2', '2018-12-19 09:40:03', '2018-12-03 15:42:34', '2018-12-10 16:58:42');
 DROP TRIGGER IF EXISTS `increaseUserInfo`;
 DELIMITER ;;
 CREATE TRIGGER `increaseUserInfo` AFTER INSERT ON `user_list` FOR EACH ROW BEGIN

@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-11-26 16:27:34
  * @LastEditors: utaware
- * @LastEditTime: 2018-12-17 15:30:25
+ * @LastEditTime: 2018-12-19 14:04:06
  */
 
 // egg-service
@@ -78,12 +78,12 @@ class UserService extends Service {
     // ctx
     const { ctx, app } = this
     // database
-    // 用户信息
-    let user_list = app.mysql.select(USER_TABLE, info).then((r) => {
+    let userList = await app.mysql.select(USER_TABLE, info).then((r) => {
       return r
     }).catch((err) => {
       return ctx.throw(500, ctx.log(err.sqlMessage))
     })
+    return userList
   }
 }
 

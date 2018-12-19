@@ -14,6 +14,7 @@ module.exports = {
     this.status = status
     this.body = body
     return 
-  }
-  
+  },
+  // 筛选的方法
+  filterData: tools.filterData
 }

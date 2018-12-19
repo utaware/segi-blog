@@ -93,6 +93,7 @@ module.exports = appInfo => {
   }
   // 数据库
   config.mysql = {
+    enable: false,
     // 单数据库信息配置
     client: {
       // host

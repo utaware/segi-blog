@@ -9,15 +9,27 @@ const rule = {
 // contoller
 class UserController extends Controller {
 
-  // 新增用户 post
+  /**
+   * @description 用户注册 post
+   * @author utaware
+   * @date 2018-12-19
+   * @returns 
+   */
+
   async register () {
     // get params
-    let { ctx } = this
+    let { ctx, app } = this
     // 获取用户名、密码
     // 暂不对邮箱登录作区分
-    let { password, username } = ctx.request.body
+    let { password, username, email } = ctx.request.body
     // 检查用户名是否存在
-    let usable = await ctx.service.user.find({ username })
+    // let usable = await ctx.service.user.find({ username })
+    let usable = await app.model.User.findAll({
+      where: { 
+        $or: [ { username }, { email } ]
+      }
+    })
+    ctx.log(usable)
     // null(不存在) 数组(存在)
     if (usable) {
       return ctx.end(false, '用户名已存在')
@@ -164,8 +176,15 @@ class UserController extends Controller {
   async getAll () {
     // ctx
     const { ctx } = this
+    // 获取查询的数量和偏移量
+    const { pageNo, pageSize } = ctx.request.body
     // body
-    const info = ctx.request.body
+    const info = {
+      columns: ['user_id', 'username', 'email', 'privilege', 'role', 'create_time', 'login_time'],
+      orders: [['create_time', 'desc']],
+      limit: pageSize,
+      offset: pageSize * pageNo
+    }
     // database
     let result = await ctx.service.user.getAll(info)
     // res

@@ -5,7 +5,10 @@ const Controller = require('egg').Controller;
 class HomeController extends Controller {
   // index
   async index () {
-    this.ctx.body = '小草莓是笨蛋';
+    // ctx
+    const { ctx, app } = this
+    let result = await app.model.Role.findAll()
+    return ctx.end({result});
   }
   // 以github style 为主要搭配的模板
   async github () {
