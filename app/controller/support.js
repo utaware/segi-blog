@@ -3,8 +3,8 @@
  * @version: 1.0.0
  * @Author: utaware
  * @Date: 2018-11-20 15:47:49
- * @LastEditors: utaware
- * @LastEditTime: 2018-12-20 11:18:19
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2018-12-21 01:22:04
  */
 
 const { Controller } = require('egg');
@@ -44,6 +44,12 @@ class SupportController extends Controller {
       ctx.validate(app.validator.main.email, email)
     } catch (err) {
       return ctx.end(false, '邮箱格式校验未通过', {err})
+    }
+    // 查询邮箱是否已被使用
+    const queryEmail = await app.model.User.findOne({ where: {email} })
+    ctx.log(queryEmail)
+    if (queryEmail) {
+      return ctx.end(false, '邮箱已经被注册')
     }
     // 生成验证码
     const { data, text } = await ctx.service.support.svgCheckCode()
