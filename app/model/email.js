@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-19 18:04:22
  * @LastEditors: utaware
- * @LastEditTime: 2018-12-19 18:11:20
+ * @LastEditTime: 2018-12-20 11:07:07
  */
 
 module.exports = app => {
@@ -35,9 +35,14 @@ module.exports = app => {
       comment: '接收人'
     },
     content: {
-      type: TEXT('tiny'),
+      type: TEXT('long'),
       allowNull: false,
       comment: '发送邮件内容'
+    },
+    code: {
+      type: STRING(12),
+      allowNull: true,
+      comment: '邮件发送验证码'
     }
   }, {
     freezeTableName: true,

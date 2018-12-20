@@ -1,3 +1,5 @@
+const moment = require('moment')
+
 module.exports = {
   // 命令行颜色
   chalk: require('chalk'),
@@ -18,7 +20,9 @@ module.exports = {
   // 转换文件头部变量语法
   matter: require('gray-matter'),
   // 时间转换
-  moment: require('moment'),
+  moment,
   // tools
-  tools: require('./lib/tools')
+  tools: require('./lib/tools'),
+  // now获取当前时间
+  now: (f = 'YYYY-MM-DD HH:mm:ss') => moment(new Date()).format(f)
 }

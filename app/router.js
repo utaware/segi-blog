@@ -18,7 +18,7 @@ module.exports = app => {
   router.post('/api/user/login', controller.user.login) // 登录
   router.post('/api/user/forget', controller.user.forget) // 忘记密码
   router.put('/api/user/modify', controller.user.modify) // 修改密码
-  router.put('/api/user/email', controller.user.email) // 更改邮箱
+  router.put('/api/user/email', controller.user.bindEmail) // 更改邮箱
   router.get('/api/user/getAll', controller.user.getAll) // 获取所有用户
 
   // position => 职位相关

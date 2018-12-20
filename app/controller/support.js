@@ -1,5 +1,14 @@
-const Controller = require('egg').Controller;       
-// 附属功能支持控制器
+/*
+ * @Description: 附属功能支持
+ * @version: 1.0.0
+ * @Author: utaware
+ * @Date: 2018-11-20 15:47:49
+ * @LastEditors: utaware
+ * @LastEditTime: 2018-12-20 11:18:19
+ */
+
+const { Controller } = require('egg');
+
 class SupportController extends Controller {
   // 生成验证码 => svg路径 和 验证字符串
   async checkCode () {
@@ -26,31 +35,42 @@ class SupportController extends Controller {
   }
   // 发送邮件功能
   async sendEmail () {
-    // ctx
-    let { ctx } = this
+    
+    const { ctx, app } = this
     // 发送邮箱地址 email
-    let { email } = ctx.request.body
+    const { email } = ctx.request.body
+    // 校验邮箱
+    try {
+      ctx.validate(app.validator.main.email, email)
+    } catch (err) {
+      return ctx.end(false, '邮箱格式校验未通过', {err})
+    }
     // 生成验证码
-    let { data, text } = await this.ctx.service.support.svgCheckCode()
-    let config = {
+    const { data, text } = await ctx.service.support.svgCheckCode()
+    // 邮件格式
+    const config = {
       to: email,
       html: `<h3 title="${text}">您的验证码为</h3>${data}`,
       subject: 'segi_blog'
     }
     // 发送邮件
-    let send = await ctx.service.email.send(config)
-    // 邮件创建
-    let create_time = ctx.helper.moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
+    const sendEmail = await ctx.service.email.send(config)
     // 保存至数据库格式
-    let format = {
-      messageId: send.messageId,
-      sender: send.envelope.from,
-      receiver: send.envelope.to,
-      text,
-      create_time
+    const emailInfo = {
+      messageId: sendEmail.messageId,
+      sender: sendEmail.envelope.from,
+      receiver: sendEmail.envelope.to[0],
+      code: text,
+      content: config.html
     }
     // 插入结果
-    return ctx.end(await ctx.service.email.insert(format))
+    try {
+      await app.model.Email.create(emailInfo)
+    } catch (err) {
+      return ctx.end(false, '邮件发送失败', {err})
+    }
+    // res
+    return ctx.end(true, '邮件发送成功')
   }
 }
 

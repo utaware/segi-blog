@@ -10,5 +10,7 @@ module.exports = {
   // username
   username: 'root',
   // password
-  password: 'minagi626QQ'
+  password: 'minagi626QQ',
+  // 时区设置
+  timezone: '+08:00'
 }
