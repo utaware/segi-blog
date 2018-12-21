@@ -4,12 +4,12 @@
  * @Author: utaware
  * @Date: 2018-12-19 17:45:38
  * @LastEditors: utaware
- * @LastEditTime: 2018-12-19 17:53:50
+ * @LastEditTime: 2018-12-21 16:09:53
  */
 
 module.exports = app => {
   // 类型获取
-  const { INTEGER, STRING } = app.Sequelize;
+  const { INTEGER, STRING, BOOLEAN } = app.Sequelize;
 
   const Privilege = app.model.define('Privilege', {
     id: {
@@ -19,7 +19,7 @@ module.exports = app => {
       unique: true,
       comment: 'id'
     },
-    privilege: {
+    type: {
       type: STRING(24),
       unique: true,
       comment: '角色'
@@ -33,7 +33,23 @@ module.exports = app => {
       type: INTEGER,
       unique: true,
       comment: '权限等级'
-    }
+    },
+    create_member: {
+      type: BOOLEAN,
+      comment: '是否可以添加成员'
+    },
+    remove_member: {
+      type: BOOLEAN,
+      comment: '是否可以删除成员'
+    },
+    update_member: {
+      type: BOOLEAN,
+      comment: '是否可以更改成员信息'
+    },
+    query_member: {
+      type: BOOLEAN,
+      comment: '是否可以获取其他用户信息'
+    },
   }, {
     freezeTableName: true,
     timestamps: true,

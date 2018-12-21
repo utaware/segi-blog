@@ -4,8 +4,9 @@
  * @Author: utaware
  * @Date: 2018-11-26 14:07:48
  * @LastEditors: utaware
- * @LastEditTime: 2018-12-20 18:39:28
+ * @LastEditTime: 2018-12-21 16:42:18
  */
+
 // module
 const Controller = require('egg').Controller
 // contoller
@@ -22,6 +23,8 @@ class UserController extends Controller {
     
     const { ctx, app } = this
     // 获取用户名、邮箱、密码
+    const Sql = app.Sequelize
+
     const { password, username, email } = ctx.request.body
     // 校验
     try {
@@ -30,15 +33,21 @@ class UserController extends Controller {
       return ctx.end(false, '参数校验未通过', {err})
     }
     // 检查用户名是否存在
-    const usable = await app.model.User.findAll({
-      where: { 
-        $or: [ { username }, { email } ]
+    try {
+      const usable = await app.model.User.findAll({
+        where: { 
+          $or: [ { email }, { username } ]
+        }
+      })
+      // 判断是否已存在
+      if (usable.length) {
+        return ctx.end(false, '用户名或邮箱已存在')
       }
-    })
-    // 判断是否已存在
-    if (usable.length) {
-      return ctx.end(false, '用户名或邮箱已存在')
+    } catch (err) {
+      ctx.log(err)
+      return ctx.end(false, '用户查询错误', {err})
     }
+
     // bcrypt加密过程
     let hash = await ctx.service.bcrypt.hash(password)
     // 存储加密hash和用户信息
@@ -249,42 +258,122 @@ class UserController extends Controller {
     const { ctx, app } = this
     // 获取查询的数量和偏移量
     const { pageNo = 1, pageSize = 10 } = ctx.request.body
-    // body
+    // 整合查询
     try {
-      // 用户清单
-      let user_list = await app.model.User.findAll({
-        attributes: ['user_id', 'username', 'email', 'privilege', 'role', 'created_at', 'login_time'],
+
+      const Seq = app.Sequelize
+      const result = await app.model.User.findAll({
+        // 字段
+        attributes: [
+          'user_id', 'username', 'email', 'created_at', 'login_time', 'role', 'privilege',
+          [Seq.col('r.type'), 'role_type'], [Seq.col('r.remark'), 'role_remark'], Seq.col('r.group'),
+          [Seq.col('p.type'), 'privilege_type'], [Seq.col('p.remark'), 'privilege_remark'], Seq.col('p.level'),
+        ],
+        // 嵌套
+        include: [
+          { 
+            model: app.model.Role,
+            as: 'r',
+            attributes: []
+          },
+          {
+            model: app.model.Privilege,
+            as: 'p',
+            attributes: []
+          }
+        ],
+        // 数据格式化
+        raw: true, 
+        // 对象层级关系转换
+        nest: false,
         orders: [['created_at', 'desc']],
         limit: pageSize,
         offset: pageSize * (pageNo - 1)
       })
-      // 权限清单
-      let privilege_list = await app.model.Privilege.findAll({
-        attributes: ['id', 'privilege', 'remark', 'level']
-      })
-      // 角色清单
-      let role_list = await app.model.Role.findAll({
-        attributes: ['id', 'type', 'remark', 'group']
-      })
-      // 数据填充
-      const result = user_list.map((v) => {
-        let { privilege, role } = v
-        const pl = privilege_list.filter(p => p.id === privilege)[0]
-        const rl = role_list.filter(r => r.id === role)[0]
-        v.privilege = pl.privilege
-        v.role = rl.type
-        // 增加属性
-        v.dataValues.remark_privilege = pl.remark
-        v.dataValues.remark_role = rl.remark
-        v.dataValues.level = pl.level
-        return v
-      })
-      return ctx.end({ result })
+      return ctx.end({result})
     } catch (err) {
-      return ctx.end(false, '数据获取错误', {err})
+      return ctx.end(false, '查询错误', {err})
     }
-    // https://blog.csdn.net/qq_30101131/article/details/79474905
+    
   }
+  
+  /**
+   * @description 账户注销 delete 软删除
+   * @author utaware
+   * @date 2018-12-21
+   * @returns 
+   */
+  // 作废
+  async cancellation () {
+
+    const { ctx, app } = this
+
+    const { user_id } = ctx.state.user
+
+    try {
+      const result = await app.model.User.destroy({where: {user_id}}, {force: false})
+      return ctx.end(true, '账户注销成功', {result})
+    } catch (err) {
+      ctx.log(err)
+      return ctx.end(false, '账户注销失败', {err})
+    }
+
+  }
+
+  /**
+   * @description 用户账户恢复
+   * @author utaware
+   * @date 2018-12-21
+   * @returns 
+   */
+
+  async recovery () {
+    
+    const { ctx, app } = this
+
+    const { privilege } = ctx.state.user
+
+    const { username, email } = ctx.request.body
+
+    const able = await app.model.Privilege.findOne({
+      where: { id: privilege },
+      plain: true
+    })
+
+
+    if (!able.update_member) {
+      return ctx.end(false, '您无权修改用户信息')
+    }
+
+    try {
+      const user = await app.model.User.findOne({
+        paranoid: false,
+        where: {
+          $and: [ {username}, {email}, {deleted_at: {$ne: null}} ]
+        }
+      })
+      ctx.log(user)
+      if (!user) {
+        return ctx.end(false, '用户不存在或者信息错误')
+      }
+    } catch (err) {
+      ctx.log(err)
+      return ctx.end(false, '用户信息查询失败', {err})
+    }
+
+    try {
+      await app.model.User.restore({
+        where: {
+          $and: [ {username}, {email} ]
+        }
+      })
+      return ctx.end(true, '用户信息恢复成功')
+    } catch (err) {
+      return ctx.end(false, '用户信息恢复失败', {err})      
+    }
+
+  }
+
 }
 
 module.exports = UserController;

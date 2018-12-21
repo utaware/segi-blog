@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-19 10:43:43
  * @LastEditors: utaware
- * @LastEditTime: 2018-12-19 18:26:16
+ * @LastEditTime: 2018-12-21 14:46:53
  */
 
 // https://github.com/caiya/vuejs-admin-server/blob/master/app/model/user.js
@@ -88,6 +88,11 @@ module.exports = app => {
     // 引擎
     // engine: 'InnoDB'
   })
+
+  User.associate = () => {
+    app.model.User.belongsTo(app.model.Role, { foreignKey: 'role', targetKey: 'id', as: 'r'});
+    app.model.User.belongsTo(app.model.Privilege, { foreignKey: 'privilege', targetKey: 'id', as: 'p'});
+  }
 
   return User
 }

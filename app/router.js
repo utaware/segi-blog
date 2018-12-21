@@ -20,6 +20,8 @@ module.exports = app => {
   router.put('/api/user/modify', controller.user.modify) // 修改密码
   router.put('/api/user/email', controller.user.bindEmail) // 更改邮箱
   router.get('/api/user/getAll', controller.user.getAll) // 获取所有用户
+  router.delete('/api/user/cancellation', controller.user.cancellation) // 用户账户注销
+  router.put('/api/user/recovery', controller.user.recovery) // 用户账户恢复
 
   // position => 职位相关
   router.resources('role', '/api/role', controller.role) // 职位相关
