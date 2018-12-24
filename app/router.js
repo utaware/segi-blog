@@ -23,8 +23,11 @@ module.exports = app => {
   router.delete('/api/user/cancellation', controller.user.cancellation) // 用户账户注销
   router.put('/api/user/recovery', controller.user.recovery) // 用户账户恢复
 
-  // position => 职位相关
-  router.resources('role', '/api/role', controller.role) // 职位相关
+  // role => 角色相关
+  router.resources('role', '/api/role', controller.role) // 角色相关
+
+  // privilege => 权限相关
+  router.resources('privilege', '/api/privilege', controller.privilege) // 角色相关
   
   // docs => 文档相关
   router.post('/api/docs/upload', controller.docs.upload) // 上传文档

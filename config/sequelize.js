@@ -17,6 +17,7 @@ module.exports = {
   timezone: '+08:00',
   // 设置别名，否则不识别$like等关键词($like: Op.like对应关系)
   // operatorsAliases: 'object',
+  operatorsAliases: false,
   // 定义时的全局设置
   define: {
     // 可以给表设置别名
