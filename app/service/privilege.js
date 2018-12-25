@@ -4,66 +4,47 @@
  * @Author: utaware
  * @Date: 2018-12-19 09:49:48
  * @LastEditors: utaware
- * @LastEditTime: 2018-12-24 18:19:15
+ * @LastEditTime: 2018-12-25 10:45:55
  */
 
 const Service = require('egg').Service;
 // service
 class RoleService extends Service {
   // 查找所有的职位类型
-  async getAll (query = {}) {
+  async getAll (condition = {}) {
 
-    const { ctx, app } = this
-
-    return await app.model.Privilege.findAll(query).then((r) => {
-      return r
-    }).catch((err) => {
-      return ctx.throw(500, ctx.log(err.sqlMessage))
-    })
+    return await this.app.model.Privilege.findAll(condition)
+    
   }
   // 查询一条
   async query (info) {
 
-    const { ctx, app } = this
-
-    return await app.model.Privilege.findOne(info).then((r) => {
-      return r
-    }).catch((err) => {
-      return ctx.throw(500, ctx.log(err.sqlMessage))
-    })
+    return await this.app.model.Privilege.findOne(info)
+    
   }
   // 新增一条
   async create (info) {
 
-    const { ctx, app } = this
-
-    return await app.model.Privilege.create(info).then((r) => {
-      return r
-    }).catch((err) => {
-      return ctx.throw(500, ctx.log(err.sqlMessage))
-    })
+    return await this.app.model.Privilege.create(info)
+     
   }
   // 删除一条
-  async remove (condition) {
+  async destroy (condition, config = {}) {
 
-    const { ctx, app } = this
-
-    return await app.model.Privilege.remove(condition).then((r) => {
-      return r
-    }).catch((err) => {
-      return ctx.throw(500, ctx.log(err.sqlMessage))
-    })
+    return await this.app.model.Privilege.destroy(condition, config)
+    
   }
   // 更新单条
   async update (info, condition) {
 
-    const { ctx, app } = this
+    return await this.app.model.Privilege.update(info, condition)
+  
+  }
+  // 恢复一条
+  async recovery (info) {
 
-    return await app.model.Privilege.update(info, condition).then((r) => {
-      return r
-    }).catch((err) => {
-      return ctx.throw(500, ctx.log(err.sqlMessage))
-    })
+    return await this.app.model.Privilege.restore(info)
+  
   }
 }
 

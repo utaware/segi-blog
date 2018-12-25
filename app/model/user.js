@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-19 10:43:43
  * @LastEditors: utaware
- * @LastEditTime: 2018-12-21 14:46:53
+ * @LastEditTime: 2018-12-25 18:45:44
  */
 
 // https://github.com/caiya/vuejs-admin-server/blob/master/app/model/user.js
@@ -75,21 +75,44 @@ module.exports = app => {
     }
   }, {
     // 额外配置
-    // 不允许调整表名 默认地, sequelize 会自动转换所有传递的模型名字(define 的第一个参数)
-    freezeTableName: true,
-    // 使用createdAt updatedAt
-    timestamps: true,
     // 表名
     tableName: 'user_list',
     // 注释
     comment: '用户列表',
     // 不要使用驼峰式语法,用下划线代替
     underscored: true,
-    // 引擎
-    // engine: 'InnoDB'
+    // 钩子函数
+    hooks: {
+      // 创建后
+      afterCreate: async (u, options) => {
+        return await app.model.Info.create({
+          alias: u.username,
+          user_id: u.user_id
+        })
+      },
+      // 软删除后
+      afterDestroy: async (u, options) => {
+        app.log(u)
+        app.log(options)
+        return await app.model.Info.findById(u.user_id)
+      },
+      // 恢复前
+      afterRestore: async (u, options) => {
+        app.log(u)
+        app.log(options)
+        return await app.model.Info.findById(u.user_id)
+      },
+      // 更新前
+      beforeUpdate: async (u, options) => {
+        app.log(u)
+        app.log(options)
+        return await app.model.Info.findById(u.user_id)
+      }
+    }
   })
 
   User.associate = () => {
+    app.model.User.belongsTo(app.model.Info, { foreignKey: 'user_id', targetKey: 'user_id', onDelete: 'cascade', hooks: true})
     app.model.User.belongsTo(app.model.Role, { foreignKey: 'role', targetKey: 'id', as: 'r'});
     app.model.User.belongsTo(app.model.Privilege, { foreignKey: 'privilege', targetKey: 'id', as: 'p'});
   }

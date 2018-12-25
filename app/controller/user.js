@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-11-26 14:07:48
  * @LastEditors: utaware
- * @LastEditTime: 2018-12-21 16:42:18
+ * @LastEditTime: 2018-12-25 18:11:13
  */
 
 // module
@@ -44,22 +44,18 @@ class UserController extends Controller {
         return ctx.end(false, '用户名或邮箱已存在')
       }
     } catch (err) {
-      ctx.log(err)
       return ctx.end(false, '用户查询错误', {err})
     }
 
     // bcrypt加密过程
-    let hash = await ctx.service.bcrypt.hash(password)
+    const hash = await ctx.service.bcrypt.hash(password)
     // 存储加密hash和用户信息
     try {
-      const result = await app.model.User.create({ username, hash, email })
-      const { user_id } = result
-      await app.model.Info.create({ user_id, alias: username })
+      await app.model.User.create({ username, hash, email })
+      return ctx.end(true, '用户信息创建成功')
     } catch (err) {
       return ctx.end(false, '用户信息创建失败', {err})
     }
-    // res
-    return ctx.end(true)
   }
 
   /**
@@ -167,7 +163,6 @@ class UserController extends Controller {
     try {
       ctx.validate(app.validator.main.forget, { email, code, password })
     } catch (err) {
-      ctx.log(err)
       return ctx.end(false, '参数校验未通过', {err})
     }
     // 查找该邮箱是否有注册的账户
@@ -237,7 +232,7 @@ class UserController extends Controller {
   // 设置头像
   async avatar () {
 
-    let { ctx } = this
+    const { ctx } = this
     // 上传成功获得文件对象
     const files = ctx.request.files
     // 重新分类调整位置
@@ -260,12 +255,11 @@ class UserController extends Controller {
     const { pageNo = 1, pageSize = 10 } = ctx.request.body
     // 整合查询
     try {
-
       const Seq = app.Sequelize
       const result = await app.model.User.findAll({
         // 字段
         attributes: [
-          'user_id', 'username', 'email', 'created_at', 'login_time', 'role', 'privilege',
+          'user_id', 'username', 'email', 'created_at', 'login_time', 'role', 'privilege', 'deleted_at',
           [Seq.col('r.type'), 'role_type'], [Seq.col('r.remark'), 'role_remark'], Seq.col('r.group'),
           [Seq.col('p.type'), 'privilege_type'], [Seq.col('p.remark'), 'privilege_remark'], Seq.col('p.level'),
         ],
@@ -287,6 +281,7 @@ class UserController extends Controller {
         // 对象层级关系转换
         nest: false,
         orders: [['created_at', 'desc']],
+        paranoid: false,
         limit: pageSize,
         offset: pageSize * (pageNo - 1)
       })
@@ -294,7 +289,6 @@ class UserController extends Controller {
     } catch (err) {
       return ctx.end(false, '查询错误', {err})
     }
-    
   }
   
   /**
@@ -308,13 +302,39 @@ class UserController extends Controller {
 
     const { ctx, app } = this
 
-    const { user_id } = ctx.state.user
+    const { privilege } = ctx.state.user
 
+    const { user_id } = ctx.request.body
+
+    // 查询该用户是否存在
+    let queryUser
+    try {
+      queryUser = await app.model.User.findById(user_id)
+      if (!queryUser) {
+        return ctx.end(false, '用户不存在')
+      }
+    } catch (err) {
+      return ctx.end(false, '用户查询错误', {err})
+    }
+
+    // 查询权限是否可以移除用户
+    try {
+      const result = await app.model.Privilege.findById(privilege)
+      if (!result.remove_member) {
+        return ctx.end(false, '无权删除用户')
+      }
+      if (privilege <= queryUser.privilege) {
+        return ctx.end(false, '无足够的权限')
+      }
+    } catch (err) {
+      return ctx.end(false, '权限查询出错', {err})
+    }
+
+    // 删除用户
     try {
       const result = await app.model.User.destroy({where: {user_id}}, {force: false})
       return ctx.end(true, '账户注销成功', {result})
     } catch (err) {
-      ctx.log(err)
       return ctx.end(false, '账户注销失败', {err})
     }
 
@@ -333,45 +353,120 @@ class UserController extends Controller {
 
     const { privilege } = ctx.state.user
 
-    const { username, email } = ctx.request.body
+    const { user_id } = ctx.request.body
 
-    const able = await app.model.Privilege.findOne({
-      where: { id: privilege },
-      plain: true
-    })
-
-
-    if (!able.update_member) {
-      return ctx.end(false, '您无权修改用户信息')
+    // 是否有恢复账户的权限
+    try {
+      const result = await app.model.Privilege.findOne({
+        where: { id: privilege },
+        plain: true
+      })
+      if (!result.update_member) {
+        return ctx.end(false, '您无权修改用户信息')
+      }
+    } catch (err) {
+      return ctx.end(false, '权限查询失败', {err})
     }
 
+    // 账户是否可恢复
     try {
       const user = await app.model.User.findOne({
         paranoid: false,
         where: {
-          $and: [ {username}, {email}, {deleted_at: {$ne: null}} ]
+          $and: [ {user_id}, {deleted_at: {$ne: null}} ]
         }
       })
-      ctx.log(user)
       if (!user) {
         return ctx.end(false, '用户不存在或者信息错误')
       }
     } catch (err) {
-      ctx.log(err)
       return ctx.end(false, '用户信息查询失败', {err})
     }
 
+    // 恢复账户
     try {
-      await app.model.User.restore({
-        where: {
-          $and: [ {username}, {email} ]
-        }
+      const result = await app.model.User.restore({
+        where: {user_id}
       })
       return ctx.end(true, '用户信息恢复成功')
     } catch (err) {
       return ctx.end(false, '用户信息恢复失败', {err})      
     }
+  }
 
+  /**
+   * @description 获取角色相关列表和权限相关列表信息 get
+   * @author utaware
+   * @date 2018-12-25
+   * @returns 
+   */
+
+  async getList () {
+
+    const { ctx } = this
+
+    try {
+      const privilegeList = await ctx.service.privilege.getAll({
+        attributes: ['id', 'type', 'remark', 'level']
+      })
+      const roleList = await ctx.service.role.getAll({
+        attributes: ['id', 'type', 'remark', 'group']
+      })
+      return ctx.end(true, {roleList, privilegeList})
+    } catch (err) {
+      return ctx.end(false, {err})
+    }
+  }
+
+  /**
+   * @description 管理员新增用户
+   * @author utaware
+   * @date 2018-12-25
+   * @returns 
+   */
+
+  async increase () {
+
+    const { ctx, app } = this
+
+    const current_user = ctx.state.user
+    // 检查该用户是否有新增用户的权限
+    try {
+      const result = await app.model.Privilege.findById(current_user.privilege)
+      if (!result.create_member) {
+        return ctx.end(false, '无权限新增用户')
+      }
+    } catch (err) {
+      return ctx.end(false, '权限查询失败', {err})
+    }
+
+    const { username, password, email, privilege, role } = ctx.request.body
+
+    if (current_user.privilege <= privilege) {
+      return ctx.end(false, '用户权限不足')
+    }
+    // 检查用户名和邮箱是否已存在 -- 防止重复
+    try {
+      const usable = await app.model.User.findAll({
+        where: { 
+          $or: [ { email }, { username } ]
+        }
+      })
+      if (usable.length) {
+        return ctx.end(false, '邮箱或者用户名已被注册')
+      }
+    } catch (err) {
+      return ctx.end(false, '查询失败', {err})
+    }
+    // 1. 加密密码
+    // 2. 新增用户
+    try {
+      const hash = await ctx.service.bcrypt.hash(password)
+      const result = await app.model.User.create({username, hash, email, privilege, role})
+      return ctx.end(true, '用户添加成功')
+    } catch (err) {
+      return ctx.end(false, '加密或者创建用户失败', {err})
+    }
   }
 
 }

@@ -4,82 +4,145 @@
  * @Author: utaware
  * @Date: 2018-12-18 11:44:14
  * @LastEditors: utaware
- * @LastEditTime: 2018-12-24 18:18:36
+ * @LastEditTime: 2018-12-25 10:37:41
  */
 
 // egg-controller
 const { Controller } = require('egg')
 
 class PrivilegeController extends Controller {
-  // 查询所有权限信息 get
+  
+  /**
+   * @description 查询所有权限信息 get
+   * @author utaware
+   * @date 2018-12-25
+   * @returns 
+   */
+
   async index () {
 
     const { ctx } = this
 
-    const list = await ctx.service.privilege.getAll({
-      attributes: ['id', 'type', 'remark', 'level']
-    })
-
-    return ctx.end({ list })
+    try {
+      const list = await ctx.service.privilege.getAll({
+        attributes: ['id', 'type', 'remark', 'level']
+      })
+      return ctx.end(true, { list })
+    } catch (err) {
+      return ctx.end(false, {err})
+    }
   }
-  // 新增职位类型 post
+
+  /**
+   * @description 新增权限类型 post
+   * @author utaware
+   * @date 2018-12-25
+   * @returns 
+   */
+
   async create () {
 
     const { ctx } = this
 
-    const { type, remark, group } = ctx.request.body
+    const { type, remark, level } = ctx.request.body
 
-    const info = {
-      type,
-      remark,
-      group
-    }
+    const info = { type, remark, level }
 
     try {
-      await ctx.service.privilege.create({info})
-      return ctx.end(true, '权限添加成功')
+      const result = await ctx.service.privilege.create(info)
+      return ctx.end(true, {result})
     } catch (err) {
-      ctx.log(err)
-      return ctx.end(false, '查询错误', {err})
+      return ctx.end(false, {err})
     }
   }
-  // 删除职位类型 delete
+  
+  /** 删除职位类型 delete
+   * @description
+   * @author utaware
+   * @date 2018-12-25
+   * @returns 
+   */
+
   async destroy () {
-    // ctx
+
     const { ctx } = this
-    // body
+
     const { id } = ctx.params
-    // database
-    return ctx.end(await ctx.service.role.remove({ id }))
-  }
-  // 更改职位类型 put
-  async update () {
-    // ctx
-    const { ctx } = this
-    // id
-    const { id } = ctx.params
-    // body
-    const data = ctx.request.body
-    // update_time
-    const update_time = ctx.helper.moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
-    // update
-    let info = {
-      ...data,
-      update_time
+
+    try {
+      const result = await ctx.service.privilege.destroy({ where: {id} })
+      return ctx.end(true, {result})
+    } catch (err) {
+      return ctx.end(false, {err})
     }
-    // database
-    return ctx.end(await ctx.service.role.update(info, id))
   }
-  // 查询单个岗位 get /:id
-  async show () {
-    // ctx
+
+  /**
+   * @description 更改职位类型 put
+   * @author utaware
+   * @date 2018-12-25
+   * @returns 
+   */
+
+   async update () {
+
     const { ctx } = this
-    // query
+
     const { id } = ctx.params
-    // database
-    const query = await ctx.service.role.query({ id })
-    // res
-    return ctx.end({ query })
+
+    const { type, remark, level } = ctx.request.body
+
+    const info = { type, remark, level }
+
+    try {
+      const result = await ctx.service.privilege.update(info, {where: {id}})
+      return ctx.end(true, {result})
+    } catch (err) {
+      return ctx.end(false, {err})
+    }
+  }
+
+  /**
+   * @description 查询单个岗位 get /:id
+   * @author utaware
+   * @date 2018-12-25
+   * @returns 
+   */
+
+   async show () {
+
+    const { ctx } = this
+
+    const { id } = ctx.params
+
+    ctx.log(id)
+
+    try {
+      const result = await ctx.service.privilege.query({ where: {id}})
+      return ctx.end(true, {result})
+    } catch (err) {
+      return ctx.end(false, {err})
+    }
+  }
+
+  /**
+   * @description
+   * @author utaware
+   * @date 2018-12-25
+   * @returns 
+   */
+  async recovery () {
+    
+    const { ctx } = this
+
+    const { id } = ctx.params
+
+    try {
+      const result = await ctx.service.privilege.recovery({ where: {id}})
+      return ctx.end(true, {result})
+    } catch (err) {
+      return ctx.end(false, {err})
+    }
   }
 }
 

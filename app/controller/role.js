@@ -4,75 +4,144 @@
  * @Author: utaware
  * @Date: 2018-12-18 11:44:14
  * @LastEditors: utaware
- * @LastEditTime: 2018-12-18 18:32:25
+ * @LastEditTime: 2018-12-25 11:07:17
  */
 
 // egg-controller
 const { Controller } = require('egg')
-// controller
+
 class RoleController extends Controller {
-  // 获取所有职位类型 get
+
+  /**
+   * @description 查询所有职位信息 get
+   * @author utaware
+   * @date 2018-12-25
+   * @returns 
+   */
+
   async index () {
-    // ctx
+
     const { ctx } = this
-    // select
-    const result = await ctx.service.role.getAll()
-    // res
-    return ctx.end({ result })
+    
+    try {
+      const result = await ctx.service.role.getAll({
+        attributes: ['id', 'type', 'remark', 'group']
+      })
+      return ctx.end(true, { result })
+    } catch (err) {
+      return ctx.end(false, {err})
+    }
   }
-  // 新增职位类型 post
+
+  /**
+   * @description 新增职位类型 post
+   * @author utaware
+   * @date 2018-12-25
+   * @returns 
+   */
+
   async create () {
-    // ctx
+
     const { ctx } = this
-    // body
+
     const { type, remark, group } = ctx.request.body
-    // create_time
-    const create_time = ctx.helper.moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
-    const info = {
-      type,
-      remark,
-      group,
-      create_time
+
+    const info = { type, remark, group }
+
+    try {
+      const result = await ctx.service.role.create(info)
+      return ctx.end(true, {result})
+    } catch (err) {
+      return ctx.end(false, {err})
     }
-    return ctx.end(await ctx.service.role.insert(info))
   }
-  // 删除职位类型 delete
+
+  /**
+   * @description 删除职位类型 delete
+   * @author utaware
+   * @date 2018-12-25
+   * @returns 
+   */
+
   async destroy () {
-    // ctx
+    
     const { ctx } = this
-    // body
+    
     const { id } = ctx.params
-    // database
-    return ctx.end(await ctx.service.role.remove({ id }))
-  }
-  // 更改职位类型 put
-  async update () {
-    // ctx
-    const { ctx } = this
-    // id
-    const { id } = ctx.params
-    // body
-    const data = ctx.request.body
-    // update_time
-    const update_time = ctx.helper.moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
-    // update
-    let info = {
-      ...data,
-      update_time
+
+    try {
+      const result = await ctx.service.role.destroy({ where: { id }})
+      return ctx.end(true, {result}) 
+    } catch (err) {
+      return ctx.end(false, {err})
     }
-    // database
-    return ctx.end(await ctx.service.role.update(info, id))
   }
-  // 查询单个岗位 get /:id
-  async show () {
-    // ctx
+
+  /**
+   * @description 更改职位类型 put
+   * @author utaware
+   * @date 2018-12-25
+   * @returns 
+   */
+
+   async update () {
+
     const { ctx } = this
-    // query
+    
     const { id } = ctx.params
-    // database
-    const query = await ctx.service.role.query({ id })
-    // res
-    return ctx.end({ query })
+    
+    const { type, remark, group } = ctx.request.body
+    
+    let info = { type, remark, group }
+
+    try {
+      const result = await ctx.service.role.update(info, { where: {id} })
+      return ctx.end(true, {result})
+    } catch (err) {
+      return ctx.end(false, {err})
+    }
+  }
+
+  /**
+   * @description 查询单个岗位 get /:id
+   * @author utaware
+   * @date 2018-12-25
+   * @returns 
+   */
+
+  async show () {
+
+    const { ctx } = this
+
+    const { id } = ctx.params
+
+    try {
+      const result = await ctx.service.role.query({ where: { id }})
+      return ctx.end(true, {result}) 
+    } catch (err) {
+      return ctx.end(false, {err})
+    }
+  }
+
+  /**
+   * @description 软删除恢复 get
+   * @author utaware
+   * @date 2018-12-25
+   * @returns 
+   */
+
+  async recovery () {
+
+    const { ctx } = this
+
+    const { id } = ctx.params
+
+    try {
+      const result = await ctx.service.role.recovery({ where: { id }})
+      return ctx.end(true, {result}) 
+    } catch (err) {
+      return ctx.end(false, {err})
+    }
   }
 }
 

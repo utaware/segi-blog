@@ -2,8 +2,10 @@
  * @Description: user 相关接口格式校验
  * @Author: HasebeAya
  * @Date: 2018-12-19 23:57:30
- * @LastEditTime: 2018-12-20 11:42:01
+ * @LastEditTime: 2018-12-25 15:23:57
  */ 
+
+// https://github.com/hapijs/joi/blob/v14.3.0/API.md
 
 module.exports = app => {
 
@@ -22,6 +24,12 @@ module.exports = app => {
   const pageNo = Joi.number().min(1)
   // 单页数目
   const pageSize = Joi.number().min(10).max(100)
+  // id
+  const id = Joi.number().min(1).required()
+  // 权限
+  const privilege = Joi.number().min(1).required()
+  // 角色
+  const role = Joi.number().min(1).required()
 
   return {
     // 注册
@@ -39,6 +47,8 @@ module.exports = app => {
     // 邮箱校验
     email,
     // 分页校验
-    page: Joi.object().keys({ pageNo, pageSize })
+    page: Joi.object().keys({ pageNo, pageSize }),
+    // id校验
+    id
   }
 };

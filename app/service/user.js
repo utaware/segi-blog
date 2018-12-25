@@ -4,24 +4,22 @@
  * @Author: utaware
  * @Date: 2018-11-26 16:27:34
  * @LastEditors: utaware
- * @LastEditTime: 2018-12-19 14:04:06
+ * @LastEditTime: 2018-12-25 11:10:33
  */
 
 // egg-service
 const { Service } = require('egg')
-// data-table
-const USER_TABLE = 'user_list' // 用户表
-const POSITION_TABLE = 'position_list' // 职位表
-const USER_INFO_TABLE = 'user_info' // 用户信息表
 // service
 class UserService extends Service {
+
   /**
    * @description 根据条件查询单个用户信息
    * @date 2018-12-10
    * @param {查询条件} info
    * @returns 查询结果
    */
-  async find (info) {
+  
+   async find (info) {
     return await this.app.mysql.get(USER_TABLE, info).then((r) => {
       return r
     }).catch((err) => {
@@ -68,22 +66,18 @@ class UserService extends Service {
       return ctx.throw(500, err.sqlMessage)
     })
   }
+
   /**
    * @description: 获取所有用户的信息
    * @date 2018-12-18
    * @param {}
    * @returns {Object} 所有用户信息
    */
+  
   async getAll (info = {}) {
-    // ctx
-    const { ctx, app } = this
-    // database
-    let userList = await app.mysql.select(USER_TABLE, info).then((r) => {
-      return r
-    }).catch((err) => {
-      return ctx.throw(500, ctx.log(err.sqlMessage))
-    })
-    return userList
+
+    return this.app.model.User.findAll(info)
+
   }
 }
 
