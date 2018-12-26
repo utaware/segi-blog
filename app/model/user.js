@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-19 10:43:43
  * @LastEditors: utaware
- * @LastEditTime: 2018-12-25 18:45:44
+ * @LastEditTime: 2018-12-26 18:40:39
  */
 
 // https://github.com/caiya/vuejs-admin-server/blob/master/app/model/user.js
@@ -79,10 +79,12 @@ module.exports = app => {
     tableName: 'user_list',
     // 注释
     comment: '用户列表',
-    // 不要使用驼峰式语法,用下划线代替
-    underscored: true,
     // 钩子函数
     hooks: {
+      // 软删除后
+      beforeCreate: async (u, options) => {
+        app.log('beforeCreate-user')
+      },
       // 创建后
       afterCreate: async (u, options) => {
         return await app.model.Info.create({
@@ -92,27 +94,29 @@ module.exports = app => {
       },
       // 软删除后
       afterDestroy: async (u, options) => {
-        app.log(u)
-        app.log(options)
-        return await app.model.Info.findById(u.user_id)
+        app.log('afterDestroy-user')
       },
-      // 恢复前
-      afterRestore: async (u, options) => {
-        app.log(u)
-        app.log(options)
-        return await app.model.Info.findById(u.user_id)
+      // 更新后
+      afterUpdate: async (u, options) => {
+        app.log('afterUpdate-user')
       },
       // 更新前
-      beforeUpdate: async (u, options) => {
-        app.log(u)
-        app.log(options)
-        return await app.model.Info.findById(u.user_id)
+      afterSave: async (u, options) => {
+        app.log('afterSave-user')
+      },
+      // 恢复后
+      afterRestore: async (u, options) => {
+        app.log('afterRestore-user')
+      },
+      // 插入后
+      afterUpsert: async (u, options) => {
+        app.log('afterUpsert-user')
       }
     }
   })
 
   User.associate = () => {
-    app.model.User.belongsTo(app.model.Info, { foreignKey: 'user_id', targetKey: 'user_id', onDelete: 'cascade', hooks: true})
+    app.model.User.hasOne(app.model.Info, { foreignKey: 'user_id', targetKey: 'user_id', onDelete: 'cascade', hooks: true, as: 'i'})
     app.model.User.belongsTo(app.model.Role, { foreignKey: 'role', targetKey: 'id', as: 'r'});
     app.model.User.belongsTo(app.model.Privilege, { foreignKey: 'privilege', targetKey: 'id', as: 'p'});
   }

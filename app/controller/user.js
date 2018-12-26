@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-11-26 14:07:48
  * @LastEditors: utaware
- * @LastEditTime: 2018-12-25 18:11:13
+ * @LastEditTime: 2018-12-26 18:34:57
  */
 
 // module
@@ -332,7 +332,13 @@ class UserController extends Controller {
 
     // 删除用户
     try {
-      const result = await app.model.User.destroy({where: {user_id}}, {force: false})
+      const result = await app.model.User.destroy({
+        where: {user_id},
+        include: [{
+          model: app.model.Info,
+          as: 'i'
+        }]
+      })
       return ctx.end(true, '账户注销成功', {result})
     } catch (err) {
       return ctx.end(false, '账户注销失败', {err})
@@ -462,7 +468,7 @@ class UserController extends Controller {
     // 2. 新增用户
     try {
       const hash = await ctx.service.bcrypt.hash(password)
-      const result = await app.model.User.create({username, hash, email, privilege, role})
+      await app.model.User.create({username, hash, email, privilege, role})
       return ctx.end(true, '用户添加成功')
     } catch (err) {
       return ctx.end(false, '加密或者创建用户失败', {err})
