@@ -3,8 +3,8 @@
  * @version: 1.0.0
  * @Author: utaware
  * @Date: 2018-12-19 17:52:01
- * @LastEditors: utaware
- * @LastEditTime: 2018-12-26 18:42:33
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2018-12-26 23:36:53
  */
 
 module.exports = app => {
@@ -42,10 +42,6 @@ module.exports = app => {
     comment: '用户角色',
     underscored: true
   })
-
-  Role.associate = () => {
-    app.model.Role.hasMany(app.model.User, { foreignKey: 'id', targetKey: 'role', as: 'r'})
-  }
 
   return Role
 }

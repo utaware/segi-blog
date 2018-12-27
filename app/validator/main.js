@@ -2,7 +2,7 @@
  * @Description: user 相关接口格式校验
  * @Author: HasebeAya
  * @Date: 2018-12-19 23:57:30
- * @LastEditTime: 2018-12-25 15:23:57
+ * @LastEditTime: 2018-12-26 23:13:20
  */ 
 
 // https://github.com/hapijs/joi/blob/v14.3.0/API.md
@@ -10,45 +10,30 @@
 module.exports = app => {
 
   const Joi = app.Joi;
-  // 用户名
-  const username = Joi.string().alphanum().min(4).max(12).required()
-  // 邮箱
-  const email = Joi.string().email().required()
-  // 密码
-  const password = Joi.string().regex(/^[a-zA-Z0-9]{6,16}$/).required()
-  // 模式
-  const mode = Joi.any().valid(['username', 'email'])
-  // 验证码
-  const code = Joi.string().regex(/^[a-zA-Z0-9]{4}$/).required()
-  // 页数
-  const pageNo = Joi.number().min(1)
-  // 单页数目
-  const pageSize = Joi.number().min(10).max(100)
-  // id
-  const id = Joi.number().min(1).required()
-  // 权限
-  const privilege = Joi.number().min(1).required()
-  // 角色
-  const role = Joi.number().min(1).required()
 
-  return {
-    // 注册
-    register: Joi.object().keys({ username, email, password }),
-    // 登陆-用户名
-    loginUsername: Joi.object().keys({ username, password }),
-    // 登陆-邮箱
-    loginEmail: Joi.object().keys({ email, password}),
-    // 登陆方式
-    loginMode: Joi.object().keys({ mode }),
-    // 修改密码
-    modify: Joi.object().keys({ password }),
-    // 忘记密码
-    forget: Joi.object().keys({ password, code, email }),
-    // 邮箱校验
-    email,
-    // 分页校验
-    page: Joi.object().keys({ pageNo, pageSize }),
-    // id校验
-    id
+  const rules = {
+    username: Joi.string().alphanum().min(4).max(12).required(),
+    email: Joi.string().email().required(),
+    password: Joi.string().regex(/^[a-zA-Z0-9]{6,16}$/).required(),
+    mode: Joi.any().valid(['username', 'email']).required(),
+    checkCode: Joi.string().regex(/^[a-zA-Z0-9]{4}$/).required(),
+    pageNo: Joi.number().min(1),
+    pageSize: Joi.number().min(10).max(100),
+    id: Joi.number().min(1).required(),
+    privilege: Joi.number().min(1).required(),
+    role: Joi.number().min(1).required()
   }
+
+  return (order) => {
+      let o = {}
+      order.forEach(v => {
+        if (rules[v] === undefined) {
+          throw new Error('不存在的校验规则')
+        } else {
+          o[v] = rules[v]
+        }
+      })
+      return Joi.object().keys(o)
+    }
+
 };

@@ -3,8 +3,8 @@
  * @version: 1.0.0
  * @Author: utaware
  * @Date: 2018-12-19 17:45:38
- * @LastEditors: utaware
- * @LastEditTime: 2018-12-26 18:42:02
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2018-12-26 23:36:50
  */
 
 module.exports = app => {
@@ -57,10 +57,6 @@ module.exports = app => {
     comment: '用户权限',
     underscored: true
   })
-
-  Privilege.associate = () => {
-    app.model.Privilege.hasMany(app.model.User, { foreignKey: 'id', targetKey: 'privilege', as: 'p'})
-  }
 
   return Privilege;
 }

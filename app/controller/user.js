@@ -3,8 +3,8 @@
  * @version: 1.0.0
  * @Author: utaware
  * @Date: 2018-11-26 14:07:48
- * @LastEditors: utaware
- * @LastEditTime: 2018-12-26 18:34:57
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2018-12-26 23:36:24
  */
 
 // module
@@ -22,16 +22,15 @@ class UserController extends Controller {
   async register () {
     
     const { ctx, app } = this
-    // 获取用户名、邮箱、密码
-    const Sql = app.Sequelize
-
     const { password, username, email } = ctx.request.body
+
     // 校验
     try {
-      ctx.validate(app.validator.main.register, { password, username, email })
+      ctx.validate(app.validator.main(['username', 'password', 'email']),{ password, username, email })
     } catch (err) {
       return ctx.end(false, '参数校验未通过', {err})
     }
+
     // 检查用户名是否存在
     try {
       const usable = await app.model.User.findAll({
@@ -39,7 +38,6 @@ class UserController extends Controller {
           $or: [ { email }, { username } ]
         }
       })
-      // 判断是否已存在
       if (usable.length) {
         return ctx.end(false, '用户名或邮箱已存在')
       }
@@ -47,10 +45,9 @@ class UserController extends Controller {
       return ctx.end(false, '用户查询错误', {err})
     }
 
-    // bcrypt加密过程
-    const hash = await ctx.service.bcrypt.hash(password)
     // 存储加密hash和用户信息
     try {
+      const hash = await ctx.service.bcrypt.hash(password)
       await app.model.User.create({ username, hash, email })
       return ctx.end(true, '用户信息创建成功')
     } catch (err) {
@@ -68,41 +65,46 @@ class UserController extends Controller {
   async login () {
 
     const { ctx, app } = this
-    // 获取用户名、密码
     const { username, password, mode } = ctx.request.body
+
     // 校验
     try {
-      ctx.validate(app.validator.main.loginMode, { mode })
-      const rule = mode === 'username' ? app.validator.main.loginUsername : app.validator.main.loginEmail
-      ctx.validate(rule, { [mode]: username, password })
+      ctx.validate(app.validator.main(['mode']), { mode })
+      ctx.validate(app.validator.main(['password'].concat(mode)), { [mode]: username, password })
     } catch (err) {
       return ctx.end(false, '参数校验未通过', {err})
     }
-    // 数据库查询
-    const query = await app.model.User.findOne({
-      where: { [mode]: username }
-    })
-    // 检验用户信息是否获取
-    if (!query) {
-      return ctx.end(false, '用户信息不存在')
+
+    // 用户是否存在
+    let query
+    try {
+      query = await app.model.User.findOne({
+        where: { [mode]: username }
+      })
+      if (!query) {
+        return ctx.end(false, '用户信息不存在')
+      }
+    } catch (err) {
+      return ctx.end(false, '用户信息查询出错', {err})
     }
+
     // 密码是否正确
-    let result = await ctx.service.bcrypt.compare(password, query.hash)
-    // 解密是否成功的结果
+    const result = await ctx.service.bcrypt.compare(password, query.hash)
     if (!result) {
       return ctx.end(false, '密码错误')
     }
+
     const { user_id, role, privilege } = query
-    // jwt 主体
     const content = { username, user_id, privilege, role }
-    // jwt token
     const token = ctx.service.jwt.encrypt(content, {expiresIn: '7d'})
-    // 更新登录时间
     const login_time = ctx.helper.now()
-    // 更新信息
-    await app.model.User.update({ login_time }, { where: {user_id} })
-    // 返回结果
-    return ctx.end(true, '登录成功', { token })
+
+    try {
+      await app.model.User.update({ login_time }, { where: {user_id} })
+      return ctx.end(true, '登录成功', { token })
+    } catch (err) {
+      return ctx.end(false, '登陆时间更新失败', {err})
+    }
   }
 
   /**
@@ -115,36 +117,41 @@ class UserController extends Controller {
   async modify () {
 
     const { ctx, app } = this
-    // jwt 中获取user_id
     const { user_id } = ctx.state.user
-    // 修改的密码
     const { password } = ctx.request.body
+
     // 校验
     try {
-      ctx.validate(app.validator.main.modify, { password })
+      ctx.validate(app.validator.main(['password']), { password })
     } catch (err) {
       return ctx.end(false, '密码格式校验不符', {err})
     }
-    // 查询
-    const userQuery = await app.model.User.findOne({ where: { user_id } })
-    // 查询结果
-    if (!userQuery) {
-      ctx.end(false, '未查找到改用户相关信息')
+
+    // 查询用户
+    let find_user
+    try {
+      find_user = await app.model.User.findOne({ where: { user_id } })
+      if (!find_user) {
+        return ctx.end(false, '未查找到改用户相关信息')
+      }
+    } catch (err) {
+      return ctx.end(false, '查询对应用户失败')
     }
+
     // 对比原密码
-    const compare = await ctx.service.bcrypt.compare(password, userQuery.hash)
+    const compare = await ctx.service.bcrypt.compare(password, find_user.hash)
     if (compare) {
       return ctx.end(false, '新密码不能与原密码相同')
     }
-    // bcrypt加密过程
-    let hash = await ctx.service.bcrypt.hash(password)
+
     // 更新hash
     try {
+      let hash = await ctx.service.bcrypt.hash(password)
       await app.model.User.update({ hash }, { where: { user_id } })
+      return ctx.end(true, '密码修改成功')
     } catch (err) {
       return ctx.end(false, '密码修改失败', {err})
     }
-    return ctx.end(true, '密码修改成功')
   }
   
   /**
@@ -157,44 +164,54 @@ class UserController extends Controller {
   async forget () {
 
     const { ctx, app } = this
-    // 通过邮箱找回密码
-    const { email, code, password } = ctx.request.body
+    const { email, checkCode, password } = ctx.request.body
+
     // 参数校验
     try {
-      ctx.validate(app.validator.main.forget, { email, code, password })
+      ctx.validate(app.validator.main(['email', 'checkCode', 'password']), { email, checkCode, password })
     } catch (err) {
       return ctx.end(false, '参数校验未通过', {err})
     }
-    // 查找该邮箱是否有注册的账户
-    const userQuery = await app.model.User.findOne({ where: { email } })
 
-    if (!userQuery) {
-      return ctx.end(false, '此邮箱未被用户绑定')
+    // 查找该邮箱是否有注册的账户
+    try {
+      const find_user = await app.model.User.findOne({ where: { email } })
+      if (!find_user) {
+        return ctx.end(false, '此邮箱未被用户绑定')
+      }
+    } catch (err) {
+      return ctx.end(false, '用户查询失败', {err})
     }
+
     // 邮箱查询出对应的发送得最早的邮件 => 过期的时间条件增加
-    const emailQuery = await app.model.Email.findOne({ 
-      where: { receiver: email },
-      order: [['created_at', 'DESC']],
-      attributes: ['id', 'code', 'receiver', 'sender']
-    })
+    let find_email
+    try {
+      find_email = await app.model.Email.findOne({ 
+        where: { receiver: email },
+        order: [['created_at', 'DESC']],
+        attributes: ['id', 'code', 'receiver', 'sender']
+      })
+    } catch (err) {
+      return ctx.end(false, '邮件查询失败', {err})
+    }
+
     // 确认邮箱记录中存在发送记录
-    if (!emailQuery) {
+    if (!find_email) {
       return ctx.end(false, '请先发送邮箱验证码')
     }
     // 对比
-    if (code !== emailQuery.code) {
+    if (code !== find_email.code) {
       return ctx.end(false, '邮箱验证码错误')
     }
-    // 使用新密码重置
-    let hash = await ctx.service.bcrypt.hash(password)
+
     // 存储加密hash和用户信息
     try {
+      const hash = await ctx.service.bcrypt.hash(password)
       await app.model.User.update({ hash }, { where: { email } })
+      return ctx.end(true, '密码重置成功')
     } catch (err) {
       return ctx.end(false, '密码重置失败', {err})
     }
-    // res
-    return ctx.end(true, '密码重置成功')
   }
 
   /**
@@ -207,37 +224,41 @@ class UserController extends Controller {
   async bindEmail () {
 
     const { ctx, app } = this
-    // jwt 中获取user_id
     const { user_id } = ctx.state.user
-    // 获取email
     const { email } = ctx.request.body
+    
     // 校验邮箱
     try {
-      ctx.validate(app.validator.main.email, email)
+      ctx.validate(app.validator.main(['email']), email)
     } catch (err) {
       return ctx.end(false, '邮箱格式校验未通过', {err})
     }
-    // 查询
-    const userQuery = await app.model.User.findOne({ where: { email } })
 
-    if (userQuery) {
-      return ctx.end(false, '该邮箱已被其他用户绑定')
+    // 查询
+    try {
+      const find_user = await app.model.User.findOne({ where: { email } })
+      if (find_user) {
+        return ctx.end(false, '该邮箱已被其他用户绑定')
+      }
+    } catch (err) {
+      return ctx.end(false, '用户查询失败', {err})
     }
+
     // 更新相关数据
-    const result = await app.model.User.update({ email }, { where: { user_id } })
-    // res
-    return ctx.end(true, '邮箱换绑成功', {result})
+    try {
+      await app.model.User.update({ email }, { where: { user_id } })
+      return ctx.end(true, '邮箱换绑成功')
+    } catch (err) {
+      return ctx.end(false, '邮箱更新失败', {err})
+    }
   }
 
   // 设置头像
   async avatar () {
 
     const { ctx } = this
-    // 上传成功获得文件对象
     const files = ctx.request.files
-    // 重新分类调整位置
     const result = await ctx.service.upload.files(files.avatar)
-    // res
     return ctx.end(result)
   }
 
@@ -251,8 +272,8 @@ class UserController extends Controller {
    async getAll () {
 
     const { ctx, app } = this
-    // 获取查询的数量和偏移量
     const { pageNo = 1, pageSize = 10 } = ctx.request.body
+
     // 整合查询
     try {
       const Seq = app.Sequelize
@@ -301,9 +322,7 @@ class UserController extends Controller {
   async cancellation () {
 
     const { ctx, app } = this
-
     const { privilege } = ctx.state.user
-
     const { user_id } = ctx.request.body
 
     // 查询该用户是否存在
@@ -356,9 +375,7 @@ class UserController extends Controller {
   async recovery () {
     
     const { ctx, app } = this
-
     const { privilege } = ctx.state.user
-
     const { user_id } = ctx.request.body
 
     // 是否有恢复账户的权限
@@ -434,8 +451,8 @@ class UserController extends Controller {
   async increase () {
 
     const { ctx, app } = this
-
     const current_user = ctx.state.user
+    
     // 检查该用户是否有新增用户的权限
     try {
       const result = await app.model.Privilege.findById(current_user.privilege)

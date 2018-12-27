@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-11-20 15:47:49
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2018-12-21 01:22:04
+ * @LastEditTime: 2018-12-26 23:47:31
  */
 
 const { Controller } = require('egg');
@@ -41,13 +41,12 @@ class SupportController extends Controller {
     const { email } = ctx.request.body
     // 校验邮箱
     try {
-      ctx.validate(app.validator.main.email, email)
+      ctx.validate(app.validator.main(['email']), email)
     } catch (err) {
       return ctx.end(false, '邮箱格式校验未通过', {err})
     }
     // 查询邮箱是否已被使用
     const queryEmail = await app.model.User.findOne({ where: {email} })
-    ctx.log(queryEmail)
     if (queryEmail) {
       return ctx.end(false, '邮箱已经被注册')
     }
@@ -72,11 +71,10 @@ class SupportController extends Controller {
     // 插入结果
     try {
       await app.model.Email.create(emailInfo)
+      return ctx.end(true, '邮件发送成功')
     } catch (err) {
       return ctx.end(false, '邮件发送失败', {err})
     }
-    // res
-    return ctx.end(true, '邮件发送成功')
   }
 }
 
