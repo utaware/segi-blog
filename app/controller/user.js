@@ -3,8 +3,8 @@
  * @version: 1.0.0
  * @Author: utaware
  * @Date: 2018-11-26 14:07:48
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2018-12-26 23:36:24
+ * @LastEditors: utaware
+ * @LastEditTime: 2018-12-27 10:25:26
  */
 
 // module
@@ -118,35 +118,41 @@ class UserController extends Controller {
 
     const { ctx, app } = this
     const { user_id } = ctx.state.user
-    const { password } = ctx.request.body
+    const { oldPass, newPass } = ctx.request.body
 
-    // 校验
     try {
-      ctx.validate(app.validator.main(['password']), { password })
+      ctx.validate(app.validator.main(['password']), { password: oldPass })
     } catch (err) {
-      return ctx.end(false, '密码格式校验不符', {err})
+      return ctx.end(false, '原密码格式校验不符', {err})
     }
 
-    // 查询用户
-    let find_user
+    // 验证旧密码是否正确
     try {
-      find_user = await app.model.User.findOne({ where: { user_id } })
+      const find_user = await app.model.User.findOne({where: {user_id}})
+      const hash = find_user.hash
+      const result = await ctx.service.bcrypt.compare(oldPass, hash)
       if (!find_user) {
-        return ctx.end(false, '未查找到改用户相关信息')
+        return ctx.end(false, '用户不存在')
+      }
+      if (!result) {
+        return ctx.end(false, '原密码错误')
       }
     } catch (err) {
-      return ctx.end(false, '查询对应用户失败')
+      return ctx.end(false, '用户查询错误')
     }
 
-    // 对比原密码
-    const compare = await ctx.service.bcrypt.compare(password, find_user.hash)
-    if (compare) {
+    try {
+      ctx.validate(app.validator.main(['password']), { password: newPass })
+    } catch (err) {
+      return ctx.end(false, '新密码格式校验不符', {err})
+    }
+
+    if (oldPass === newPass) {
       return ctx.end(false, '新密码不能与原密码相同')
     }
 
-    // 更新hash
     try {
-      let hash = await ctx.service.bcrypt.hash(password)
+      const hash = await ctx.service.bcrypt.hash(newPass)
       await app.model.User.update({ hash }, { where: { user_id } })
       return ctx.end(true, '密码修改成功')
     } catch (err) {
@@ -352,11 +358,7 @@ class UserController extends Controller {
     // 删除用户
     try {
       const result = await app.model.User.destroy({
-        where: {user_id},
-        include: [{
-          model: app.model.Info,
-          as: 'i'
-        }]
+        where: {user_id}
       })
       return ctx.end(true, '账户注销成功', {result})
     } catch (err) {

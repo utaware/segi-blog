@@ -35,6 +35,10 @@ module.exports = app => {
   
   // docs => 文档相关
   router.post('/api/docs/upload', controller.docs.upload) // 上传文档
+  router.resources('docs', '/api/docs', controller.docs)
+
+  // docsType => 文档类型
+  router.resources('docsType', '/api/docsType', controller.docsType)
 
   // info => 用户信息
   router.post('/api/upload/avatar', controller.user.avatar) // 上传头像

@@ -43,13 +43,10 @@ class RoleController extends Controller {
   async create () {
 
     const { ctx } = this
-
     const { type, remark, group } = ctx.request.body
 
-    const info = { type, remark, group }
-
     try {
-      const result = await ctx.service.role.create(info)
+      const result = await ctx.service.role.create({ type, remark, group })
       return ctx.end(true, {result})
     } catch (err) {
       return ctx.end(false, {err})
@@ -66,7 +63,6 @@ class RoleController extends Controller {
   async destroy () {
     
     const { ctx } = this
-    
     const { id } = ctx.params
 
     try {
@@ -87,15 +83,11 @@ class RoleController extends Controller {
    async update () {
 
     const { ctx } = this
-    
     const { id } = ctx.params
-    
     const { type, remark, group } = ctx.request.body
     
-    let info = { type, remark, group }
-
     try {
-      const result = await ctx.service.role.update(info, { where: {id} })
+      const result = await ctx.service.role.update({ type, remark, group }, { where: {id} })
       return ctx.end(true, {result})
     } catch (err) {
       return ctx.end(false, {err})

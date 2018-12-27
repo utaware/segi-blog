@@ -1,13 +1,22 @@
+/*
+ * @Description: 文档内容相关
+ * @version: 1.0.0
+ * @Author: utaware
+ * @Date: 2018-12-04 18:08:56
+ * @LastEditors: utaware
+ * @LastEditTime: 2018-12-27 18:33:33
+ */
+
 const Controller = require('egg').Controller;       
 // 文档相关
 class DocsController extends Controller {
-  // 上传文档 => md
+
+  // 文档操作管理
+
   async upload () {
-    // ctx
+
     const { ctx } = this
-    // user_id 用户id
     const { user_id } = ctx.state.user
-    // docs file对象 path, type, size, name
     const { path, type, size, name } = ctx.request.files.docs
     // 读取文档内容
     const content_md = await ctx.service.file.readFile(path)
@@ -53,14 +62,91 @@ class DocsController extends Controller {
     // res
     return ctx.end(result)
   }
-  // 删除文档
-  async remove () {
-    // ctx
-    const { ctx } = this
-    // 获取文档id
-    const { id } = ctx.request.body
-    // 查询文章
+ 
+  /**
+   * @description 新增文档 post
+   * @author utaware
+   * @date 2018-12-27
+   * @returns 
+   */
+
+  async create () {
+
+    const { ctx, app } = this
+    const { user_id } = ctx.state.user
+    const { type, editor, title, md, html } = ctx.request.body
+
+    try {
+      const result = await app.model.Docs.create({user_id, type, editor, title, md, html})
+      return ctx.end(true, '新增文档成功', {result})
+    } catch (err) {
+      return ctx.end(false, '新增文档失败', {err})
+    }
   }
+
+  /**
+   * @description 查询文档 get
+   * @author utaware
+   * @date 2018-12-27
+   * @returns 
+   */
+
+  async index () {
+
+    const { ctx, app } = this
+    
+    try {
+      const Sql = app.Sequelize
+      const result = await app.model.Docs.findAll({
+        attributes: ['id', 'title', 'editor', 'md', 'html',
+          [Sql.col('d.remark'), 'remark'], [Sql.col('d.value'), 'value'], [Sql.col('d.name'), 'name']],
+        include: [
+          {
+            model: app.model.DocsType,
+            as: 'd',
+            attributes: []
+          }
+        ]
+      })
+      return ctx.end(true, '文档查询成功', {result})
+    } catch (err) {
+      return ctx.end(false, '文档查询失败', {err})
+    }
+  }
+
+  /**
+   * @description 查看单个文档内容
+   * @author utaware
+   * @date 2018-12-27
+   * @returns 
+   */
+
+   async show () {
+
+    const { ctx, app } = this
+    const { id } = ctx.params
+    
+    try {
+      const Sql = app.Sequelize
+      const result = await app.model.Docs.findOne({
+        attributes: ['id', 'title', 'editor', 'md', 'html',
+          [Sql.col('d.remark'), 'remark'], [Sql.col('d.value'), 'value'], [Sql.col('d.name'), 'name']],
+        include: [
+          {
+            model: app.model.DocsType,
+            as: 'd',
+            attributes: []
+          }
+        ],
+        where: {id}
+      })
+      return ctx.end(true, '文档查询成功', {result})
+    } catch (err) {
+      return ctx.end(false, '文档查询失败', {err})
+    }
+  }
+
+  
 }
 
 module.exports = DocsController;
