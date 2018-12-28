@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-04 18:08:56
  * @LastEditors: utaware
- * @LastEditTime: 2018-12-27 18:33:33
+ * @LastEditTime: 2018-12-28 15:52:18
  */
 
 const Controller = require('egg').Controller;       
@@ -73,11 +73,11 @@ class DocsController extends Controller {
   async create () {
 
     const { ctx, app } = this
-    const { user_id } = ctx.state.user
+    const { user_id, username } = ctx.state.user
     const { type, editor, title, md, html } = ctx.request.body
 
     try {
-      const result = await app.model.Docs.create({user_id, type, editor, title, md, html})
+      const result = await app.model.Docs.create({user_id, type, editor, title, md, html, author: username})
       return ctx.end(true, '新增文档成功', {result})
     } catch (err) {
       return ctx.end(false, '新增文档失败', {err})
@@ -94,12 +94,19 @@ class DocsController extends Controller {
   async index () {
 
     const { ctx, app } = this
-    
+    let { pageNo = 1, pageSize = 15 } = ctx.request.query
+
+    pageNo = Number(pageNo)
+    pageSize = Number(pageSize)
+
     try {
       const Sql = app.Sequelize
+      let [ pagination ] = await app.model.Docs.findAll({
+        attributes: [[Sql.fn('COUNT', Sql.col('id')), 'totalCount']]
+      })
       const result = await app.model.Docs.findAll({
-        attributes: ['id', 'title', 'editor', 'md', 'html',
-          [Sql.col('d.remark'), 'remark'], [Sql.col('d.value'), 'value'], [Sql.col('d.name'), 'name']],
+        attributes: ['id', 'title', 'editor', 'md', 'html', 'comment', 'created_at', 'author',
+          [Sql.col('d.remark'), 'type'], [Sql.col('d.value'), 'value'], [Sql.col('d.name'), 'name']],
         include: [
           {
             model: app.model.DocsType,
@@ -108,7 +115,8 @@ class DocsController extends Controller {
           }
         ]
       })
-      return ctx.end(true, '文档查询成功', {result})
+      pagination = Object.assign(pagination.get({plain: true}), {pageNo, pageSize})
+      return ctx.end(true, '文档查询成功', {result, pagination})
     } catch (err) {
       return ctx.end(false, '文档查询失败', {err})
     }
@@ -129,8 +137,8 @@ class DocsController extends Controller {
     try {
       const Sql = app.Sequelize
       const result = await app.model.Docs.findOne({
-        attributes: ['id', 'title', 'editor', 'md', 'html',
-          [Sql.col('d.remark'), 'remark'], [Sql.col('d.value'), 'value'], [Sql.col('d.name'), 'name']],
+        attributes: ['id', 'title', 'editor', 'md', 'html', 'comment', 'created_at', 'author',
+          [Sql.col('d.remark'), 'type'], [Sql.col('d.value'), 'value'], [Sql.col('d.name'), 'name']],
         include: [
           {
             model: app.model.DocsType,
@@ -146,7 +154,69 @@ class DocsController extends Controller {
     }
   }
 
+  /**
+   * @description 编辑文档 put
+   * @author utaware
+   * @date 2018-12-28
+   * @returns 
+   */
+
+  async update () {
+    
+    const { ctx, app } = this
+    const { id } = ctx.params
+    const { user_id, username } = ctx.state.user
+    const { type, editor, title, md, html } = ctx.request.body
+
+    try {
+      const result = await app.model.Docs.update(
+        {user_id, type, editor, title, md, html, author: username},
+        {where: {id}})
+      return ctx.end(true, '编辑文档成功', {result})
+    } catch (err) {
+      return ctx.end(false, '编辑文档失败', {err})
+    }
+  }
+
+  /**
+   * @description 删除文档 delete
+   * @author utaware
+   * @date 2018-12-28
+   * @returns 
+   */
+
+  async destroy () {
+
+    const { ctx, app } = this
+    const { id } = ctx.params
+
+    try {
+      const result = await app.model.Docs.destroy({where: {id}})
+      return ctx.end(true, '删除文档成功', {result})
+    } catch (err) {
+      return ctx.end(false, '删除文档失败', {err})
+    }
+  }
   
+  /**
+   * @description 恢复软删除的文档 put
+   * @author utaware
+   * @date 2018-12-28
+   * @returns 
+   */
+
+  async recovery () {
+
+    const { ctx, app } = this
+    const { id } = ctx.params
+
+    try {
+      const result = await app.model.Docs.restore({where: {id}})
+      return ctx.end(true, '恢复文档成功', {result})
+    } catch (err) {
+      return ctx.end(false, '恢复文档失败', {err})
+    }
+  }
 }
 
 module.exports = DocsController;

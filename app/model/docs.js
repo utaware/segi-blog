@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-19 18:16:01
  * @LastEditors: utaware
- * @LastEditTime: 2018-12-27 18:24:11
+ * @LastEditTime: 2018-12-28 11:05:43
  */
 
 module.exports = app => {
@@ -23,6 +23,17 @@ module.exports = app => {
       type: INTEGER,
       allowNull: false,
       comment: '上传用户user_id'
+    },
+    author: {
+      type: STRING(24),
+      allowNull: false,
+      comment: '作者名'
+    },
+    comment: {
+      type: INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+      comment: '评论数目'
     },
     type: {
       type: INTEGER,

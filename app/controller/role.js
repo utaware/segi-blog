@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-18 11:44:14
  * @LastEditors: utaware
- * @LastEditTime: 2018-12-25 11:07:17
+ * @LastEditTime: 2018-12-28 16:29:12
  */
 
 // egg-controller
@@ -21,15 +21,15 @@ class RoleController extends Controller {
 
   async index () {
 
-    const { ctx } = this
+    const { ctx, app } = this
     
     try {
-      const result = await ctx.service.role.getAll({
+      const result = await app.model.Role.findAll({
         attributes: ['id', 'type', 'remark', 'group']
       })
-      return ctx.end(true, { result })
+      return ctx.end(true, '查询角色成功', { result })
     } catch (err) {
-      return ctx.end(false, {err})
+      return ctx.end(false, '查询角色失败', {err})
     }
   }
 
@@ -42,14 +42,14 @@ class RoleController extends Controller {
 
   async create () {
 
-    const { ctx } = this
+    const { ctx, app } = this
     const { type, remark, group } = ctx.request.body
 
     try {
-      const result = await ctx.service.role.create({ type, remark, group })
-      return ctx.end(true, {result})
+      const result = await app.model.Role.create({ type, remark, group })
+      return ctx.end(true, '新增角色成功', {result})
     } catch (err) {
-      return ctx.end(false, {err})
+      return ctx.end(false, '新增角色失败', {err})
     }
   }
 
@@ -62,14 +62,14 @@ class RoleController extends Controller {
 
   async destroy () {
     
-    const { ctx } = this
+    const { ctx, app } = this
     const { id } = ctx.params
 
     try {
-      const result = await ctx.service.role.destroy({ where: { id }})
-      return ctx.end(true, {result}) 
+      const result = await app.model.Role.destroy({ where: { id }})
+      return ctx.end(true, '删除角色成功', {result}) 
     } catch (err) {
-      return ctx.end(false, {err})
+      return ctx.end(false, '删除角色失败', {err})
     }
   }
 
@@ -82,15 +82,15 @@ class RoleController extends Controller {
 
    async update () {
 
-    const { ctx } = this
+    const { ctx, app } = this
     const { id } = ctx.params
     const { type, remark, group } = ctx.request.body
     
     try {
-      const result = await ctx.service.role.update({ type, remark, group }, { where: {id} })
-      return ctx.end(true, {result})
+      const result = await app.model.Role.update({ type, remark, group }, { where: {id} })
+      return ctx.end(true, '更新角色成功', {result})
     } catch (err) {
-      return ctx.end(false, {err})
+      return ctx.end(false, '更新角色失败', {err})
     }
   }
 
@@ -103,15 +103,14 @@ class RoleController extends Controller {
 
   async show () {
 
-    const { ctx } = this
-
+    const { ctx, app } = this
     const { id } = ctx.params
 
     try {
-      const result = await ctx.service.role.query({ where: { id }})
-      return ctx.end(true, {result}) 
+      const result = await app.model.Role.findOne({ where: { id }})
+      return ctx.end(true, '查询角色成功', {result}) 
     } catch (err) {
-      return ctx.end(false, {err})
+      return ctx.end(false, '查询角色失败', {err})
     }
   }
 
@@ -124,15 +123,14 @@ class RoleController extends Controller {
 
   async recovery () {
 
-    const { ctx } = this
-
+    const { ctx, app } = this
     const { id } = ctx.params
 
     try {
-      const result = await ctx.service.role.recovery({ where: { id }})
-      return ctx.end(true, {result}) 
+      const result = await app.model.Role.restore({ where: { id }})
+      return ctx.end(true, '恢复角色成功', {result}) 
     } catch (err) {
-      return ctx.end(false, {err})
+      return ctx.end(false, '恢复角色失败', {err})
     }
   }
 }

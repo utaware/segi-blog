@@ -26,15 +26,16 @@ module.exports = app => {
   router.put('/api/user/recovery', controller.user.recovery) // 用户账户恢复
 
   // role => 角色相关
+  router.put('/api/role/recovery', controller.role.recovery) // 软删除恢复
   router.resources('role', '/api/role', controller.role) // 角色相关
-  router.get('/api/role/recovery/:id', controller.role.recovery) // 软删除恢复
 
   // privilege => 权限相关
+  router.put('/api/privilege/recovery', controller.privilege.recovery) // 软删除恢复
   router.resources('privilege', '/api/privilege', controller.privilege) // 权限相关
-  router.get('/api/privilege/recovery/:id', controller.privilege.recovery) // 软删除恢复
   
   // docs => 文档相关
   router.post('/api/docs/upload', controller.docs.upload) // 上传文档
+  router.put('docs', '/api/docs', controller.docs)
   router.resources('docs', '/api/docs', controller.docs)
 
   // docsType => 文档类型

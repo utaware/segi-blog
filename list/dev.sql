@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80013
 File Encoding         : 65001
 
-Date: 2018-12-27 18:41:38
+Date: 2018-12-28 19:10:12
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -43,6 +43,8 @@ DROP TABLE IF EXISTS `docs_list`;
 CREATE TABLE `docs_list` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '文档id',
   `user_id` int(11) NOT NULL COMMENT '上传用户id',
+  `author` varchar(24) NOT NULL COMMENT '文章作者',
+  `comment` int(11) NOT NULL DEFAULT '0' COMMENT '评论数目',
   `type` int(11) NOT NULL COMMENT '文档对应类别',
   `editor` enum('md','html') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'md' COMMENT '编辑方式',
   `title` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '文档标题',
@@ -52,13 +54,14 @@ CREATE TABLE `docs_list` (
   `updated_at` datetime DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of docs_list
 -- ----------------------------
-INSERT INTO `docs_list` VALUES ('1', '1', '1', 'md', 'hello', '++下划线++\n\n# 一级标题\n\n*斜体*\n\n**粗体**\n\n^上角标^\n\n~下角标~\n', '<p><ins>下划线</ins></p>\n<h1><a id=\"_2\"></a>一级标题</h1>\n<p><em>斜体</em></p>\n<p><strong>粗体</strong></p>\n<p><sup>上角标</sup></p>\n<p><sub>下角标</sub></p>\n', '2018-12-27 18:14:31', '2018-12-27 18:14:31', null);
-INSERT INTO `docs_list` VALUES ('2', '1', '1', 'md', 'HTML 5 文档规范', '# segi-blog\n\nnone\n\n## QuickStart\n\n<!-- add docs here for user -->\n\nsee [egg docs][egg] for more detail.\n\n### Development\n\n```bash\n$ npm i\n$ npm run dev\n$ open http://localhost:7001/\n```\n\n### Deploy\n\n```bash\n$ npm start\n$ npm stop\n```\n\n### npm scripts\n\n- Use `npm run lint` to check code style.\n- Use `npm test` to run unit test.\n- Use `npm run autod` to auto detect dependencies upgrade, see [autod](https://www.npmjs.com/package/autod) for more detail.\n', '<h1><a id=\"segiblog_0\"></a>segi-blog</h1>\n<p>none</p>\n<h2><a id=\"QuickStart_4\"></a>QuickStart</h2>\n<!-- add docs here for user -->\n<p>see [egg docs][egg] for more detail.</p>\n<h3><a id=\"Development_10\"></a>Development</h3>\n<pre><div class=\"hljs\"><code class=\"lang-bash\">$ npm i\n$ npm run dev\n$ open http://localhost:7001/\n</code></div></pre>\n<h3><a id=\"Deploy_18\"></a>Deploy</h3>\n<pre><div class=\"hljs\"><code class=\"lang-bash\">$ npm start\n$ npm stop\n</code></div></pre>\n<h3><a id=\"npm_scripts_25\"></a>npm scripts</h3>\n<ul>\n<li>Use <code>npm run lint</code> to check code style.</li>\n<li>Use <code>npm test</code> to run unit test.</li>\n<li>Use <code>npm run autod</code> to auto detect dependencies upgrade, see <a href=\"https://www.npmjs.com/package/autod\" target=\"_blank\">autod</a> for more detail.</li>\n</ul>\n', '2018-12-27 18:18:07', '2018-12-27 18:18:07', null);
+INSERT INTO `docs_list` VALUES ('1', '1', 'akane', '0', '1', 'md', 'hello', '++下划线++\n\n# 一级标题\n\n*斜体*\n\n**粗体**\n\n^上角标^\n\n~下角标~\n', '<p><ins>下划线</ins></p>\n<h1><a id=\"_2\"></a>一级标题</h1>\n<p><em>斜体</em></p>\n<p><strong>粗体</strong></p>\n<p><sup>上角标</sup></p>\n<p><sub>下角标</sub></p>\n', '2018-12-27 18:14:31', '2018-12-28 15:19:25', '2018-12-28 15:49:54');
+INSERT INTO `docs_list` VALUES ('2', '1', 'akane', '0', '1', 'md', 'HTML 5 文档规范', '# segi-blog\n\nnone\n\n## QuickStart\n\n<!-- add docs here for user -->\n\nsee [egg docs][egg] for more detail.\n\n### Development\n\n```bash\n$ npm i\n$ npm run dev\n$ open http://localhost:7001/\n```\n\n### Deploy\n\n```bash\n$ npm start\n$ npm stop\n```\n\n### npm scripts\n\n- Use `npm run lint` to check code style.\n- Use `npm test` to run unit test.\n- Use `npm run autod` to auto detect dependencies upgrade, see [autod](https://www.npmjs.com/package/autod) for more detail.\n', '<h1><a id=\"segiblog_0\"></a>segi-blog</h1>\n<p>none</p>\n<h2><a id=\"QuickStart_4\"></a>QuickStart</h2>\n<!-- add docs here for user -->\n<p>see [egg docs][egg] for more detail.</p>\n<h3><a id=\"Development_10\"></a>Development</h3>\n<pre><div class=\"hljs\"><code class=\"lang-bash\">$ npm i\n$ npm run dev\n$ open http://localhost:7001/\n</code></div></pre>\n<h3><a id=\"Deploy_18\"></a>Deploy</h3>\n<pre><div class=\"hljs\"><code class=\"lang-bash\">$ npm start\n$ npm stop\n</code></div></pre>\n<h3><a id=\"npm_scripts_25\"></a>npm scripts</h3>\n<ul>\n<li>Use <code>npm run lint</code> to check code style.</li>\n<li>Use <code>npm test</code> to run unit test.</li>\n<li>Use <code>npm run autod</code> to auto detect dependencies upgrade, see <a href=\"https://www.npmjs.com/package/autod\" target=\"_blank\">autod</a> for more detail.</li>\n</ul>\n', '2018-12-27 18:18:07', '2018-12-27 18:18:07', null);
+INSERT INTO `docs_list` VALUES ('3', '1', 'akane', '0', '1', 'md', '文档测试', '\n# 代码示范\n\n**粗体**\n\n```js\nconsole.log(\'hello world\')\n```', '<h1><a id=\"_1\"></a>代码示范</h1>\n<p><strong>粗体</strong></p>\n<pre><div class=\"hljs\"><code class=\"lang-js\"><span class=\"hljs-built_in\">console</span>.log(<span class=\"hljs-string\">\'hello world\'</span>)\n</code></div></pre>\n', '2018-12-28 11:10:26', '2018-12-28 11:10:26', null);
 
 -- ----------------------------
 -- Table structure for docs_type
@@ -264,7 +267,7 @@ CREATE TABLE `user_list` (
 -- ----------------------------
 -- Records of user_list
 -- ----------------------------
-INSERT INTO `user_list` VALUES ('1', 'akane', '$2b$10$Hep2.syaPqmt6km66yXq0O09kuAm9gZeiZ1GJjEtpDN/4dBLX7mmq', '1264051408@qq.com', '5', '2', '2018-12-27 10:22:01', '2018-12-03 15:42:34', '2018-12-27 10:22:16', null);
+INSERT INTO `user_list` VALUES ('1', 'akane', '$2b$10$Hep2.syaPqmt6km66yXq0O09kuAm9gZeiZ1GJjEtpDN/4dBLX7mmq', '1264051408@qq.com', '5', '2', '2018-12-28 16:09:49', '2018-12-03 15:42:34', '2018-12-28 16:09:49', null);
 INSERT INTO `user_list` VALUES ('11', 'test2', '$2b$10$tHbzPawpoZwR.FEFd98moOg3vGsU8s9E5.PK0.QsSmgIV4c9WDSii', 'test2@qq.com', '1', '1', null, '2018-12-25 18:18:40', '2018-12-25 18:18:40', null);
 INSERT INTO `user_list` VALUES ('12', 'test3', '$2b$10$BrX8lIpM1l36cVjWymxl7.ArKcyy8rpEzxoxU79Zn1d1w6w9DAHcG', 'test3@qq.com', '2', '2', null, '2018-12-26 17:54:18', '2018-12-26 17:54:18', null);
 INSERT INTO `user_list` VALUES ('13', 'test4', '$2b$10$GGc2IEAWT.XAAwINchDAHOEvDXGPut8J1.yPFtBp6jgxX8C5LK3Du', 'test4@qq.com', '1', '1', null, '2018-12-26 18:22:37', '2018-12-26 18:22:37', null);

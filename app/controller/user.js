@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-11-26 14:07:48
  * @LastEditors: utaware
- * @LastEditTime: 2018-12-27 10:25:26
+ * @LastEditTime: 2018-12-28 17:47:30
  */
 
 // module
@@ -358,7 +358,10 @@ class UserController extends Controller {
     // 删除用户
     try {
       const result = await app.model.User.destroy({
-        where: {user_id}
+        where: {user_id},
+        include: [
+          {model: app.model.Info, as: 'i'}
+        ]
       })
       return ctx.end(true, '账户注销成功', {result})
     } catch (err) {
@@ -410,8 +413,11 @@ class UserController extends Controller {
 
     // 恢复账户
     try {
-      const result = await app.model.User.restore({
-        where: {user_id}
+      await app.model.User.restore({
+        where: {user_id},
+        include: [
+          {model: app.model.Info, as: 'i'}
+        ]
       })
       return ctx.end(true, '用户信息恢复成功')
     } catch (err) {
@@ -428,18 +434,18 @@ class UserController extends Controller {
 
   async getList () {
 
-    const { ctx } = this
+    const { ctx, app } = this
 
     try {
-      const privilegeList = await ctx.service.privilege.getAll({
+      const privilegeList = await app.model.Privilege.findAll({
         attributes: ['id', 'type', 'remark', 'level']
       })
-      const roleList = await ctx.service.role.getAll({
+      const roleList = await app.model.Role.findAll({
         attributes: ['id', 'type', 'remark', 'group']
       })
-      return ctx.end(true, {roleList, privilegeList})
+      return ctx.end(true, '获取角色权限列表成功', {roleList, privilegeList})
     } catch (err) {
-      return ctx.end(false, {err})
+      return ctx.end(false, '获取角色权限列表失败', {err})
     }
   }
 

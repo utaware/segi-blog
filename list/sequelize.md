@@ -33,3 +33,53 @@ app.model.DocsType.findAll({
   attributes: {exclude: ['created_at', 'updated_at', 'deleted_at']}
 })
 ```
+
+## Virtual类型做虚拟数据处理
+
+定义假属性可以使用访问器或定义为VIRTUAL类型两种方式，Virtual类型可以验证而访问器则不能。
+
+## Getters & setters - 访问器&设置器
+
+* 做为一个属性定义
+* 做为模型选项
+
+```js
+// 为属性定义
+var Employee = sequelize.define('employee', {
+  name:  {
+    type     : Sequelize.STRING,
+    allowNull: false,
+    get      : function()  {
+      var title = this.getDataValue('title');
+      // 'this' allows you to access attributes of the instance
+      return this.getDataValue('name') + ' (' + title + ')';
+    },
+  },
+  title: {
+    type     : Sequelize.STRING,
+    allowNull: false,
+    set      : function(val) {
+      this.setDataValue('title', val.toUpperCase());
+    }
+  }
+});
+// 为模型定义
+var Foo = sequelize.define('foo', {
+  firstname: Sequelize.STRING,
+  lastname: Sequelize.STRING
+}, {
+  getterMethods   : {
+    fullName       : function()  { return this.firstname + ' ' + this.lastname }
+  },
+
+  setterMethods   : {
+    fullName       : function(value) {
+        var names = value.split(' ');
+
+        this.setDataValue('firstname', names.slice(0, -1).join(' '));
+        this.setDataValue('lastname', names.slice(-1).join(' '));
+    },
+  }
+});
+```
+
