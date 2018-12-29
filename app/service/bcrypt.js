@@ -1,4 +1,12 @@
-// module
+/*
+ * @Description: bcrypt 加密解密服务
+ * @version: 1.0.0
+ * @Author: utaware
+ * @Date: 2018-12-05 09:27:20
+ * @LastEditors: utaware
+ * @LastEditTime: 2018-12-29 14:46:19
+ */
+
 const Service = require('egg').Service;
 const bcrypt = require('bcrypt')
 // constant

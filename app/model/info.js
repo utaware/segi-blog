@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-19 17:22:48
  * @LastEditors: utaware
- * @LastEditTime: 2018-12-26 18:07:55
+ * @LastEditTime: 2018-12-29 14:01:46
  */
 
 module.exports = app => {
@@ -53,29 +53,11 @@ module.exports = app => {
     }
   }, {
     tableName: 'user_info',
-    comment: '用户详细信息',
-    hooks: {
-      // 创建后
-      afterCreate: async (u, options) => {
-        app.log('afterCreate-info')
-      },
-      // 软删除后
-      afterDestroy: async (u, options) => {
-        app.log('afterDestroy-info')
-      },
-      // 恢复前
-      afterRestore: async (u, options) => {
-        app.log('afterRestore-info')
-      },
-      // 更新前
-      beforeUpdate: async (u, options) => {
-        app.log('beforeUpdate-info')
-      }
-    }
+    comment: '用户详细信息'
   })
   
   Info.associate = () => {
-    app.model.Info.belongsTo(app.model.User, { foreignKey: 'user_id', targetKey: 'user_id', onDelete: 'cascade', hooks: true, as: 'i'})
+    app.model.Info.belongsTo(app.model.User, { foreignKey: 'user_id', targetKey: 'user_id', hooks: true, as: 'i'})
   }
 
   return Info

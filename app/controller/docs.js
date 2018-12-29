@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-04 18:08:56
  * @LastEditors: utaware
- * @LastEditTime: 2018-12-28 15:52:18
+ * @LastEditTime: 2018-12-29 10:39:26
  */
 
 const Controller = require('egg').Controller;       
@@ -110,7 +110,7 @@ class DocsController extends Controller {
         include: [
           {
             model: app.model.DocsType,
-            as: 'd',
+            as: 't',
             attributes: []
           }
         ]

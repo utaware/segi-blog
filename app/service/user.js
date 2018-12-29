@@ -1,83 +1,39 @@
 /*
- * @Description: 用户功能相关模块
+ * @Description: 用户功能相关服务
  * @version: 1.0.0
  * @Author: utaware
  * @Date: 2018-11-26 16:27:34
  * @LastEditors: utaware
- * @LastEditTime: 2018-12-25 11:10:33
+ * @LastEditTime: 2018-12-29 17:00:39
  */
 
 // egg-service
 const { Service } = require('egg')
-// service
+
 class UserService extends Service {
 
   /**
-   * @description 根据条件查询单个用户信息
-   * @date 2018-12-10
-   * @param {查询条件} info
-   * @returns 查询结果
+   * @description 新增用户产生的事务: 1. 新增用户 2. 新增用户信息 3. 更新用户数量
+   * @author utaware
+   * @date 2018-12-29
+   * @param {*} info
    */
-  
-   async find (info) {
-    return await this.app.mysql.get(USER_TABLE, info).then((r) => {
-      return r
-    }).catch((err) => {
-      return this.ctx.throw(500, err.sqlMessage)
-    })
-  }
-  /**
-   * @description 用户注册
-   * @date 2018-12-10
-   * @param {string} username 用户名
-   * @param {string} hash 密码加密hash值
-   * @returns 
-   */
-  async insert (username, hash) {
-    // 生成创建时间
-    let create_time = this.ctx.helper.moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
-    let info = {
-      username,
-      hash,
-      create_time
+
+  async createUser (info) {
+
+    const { ctx, app } = this
+    const { username, password, email, privilege = 0, role = 0 } = info
+    const transaction = await app.model.transaction()
+
+    try {
+      const { user_id } = await app.model.User.create({username, hash: password, email, privilege, role}, {transaction})
+      await app.model.Info.create({alias: username, user_id}, {transaction})
+      await app.model.Total.increment(['total'], {where: {category: 'user'}, transaction})
+      await transaction.commit()
+    } catch (err) {
+      await transaction.rollback()
+      throw new Error(JSON.stringify(err))
     }
-    return await this.app.mysql.insert(USER_TABLE, info).then((r) => {
-      return r.affectedRows === 1
-    }).catch((err) => {
-      return this.ctx.throw(500, err.sqlMessage)
-    })
-  }
-  /**
-   * @description 对应更新用户信息
-   * @date 2018-12-10
-   * @param {object} info 需要更新的信息字段
-   * @param {查询条件} condition
-   * @returns 
-   */
-  async update (info, condition, need = true) {
-    let { ctx } = this
-    let update_time = ctx.helper.moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
-    let row = need ? Object.assign({}, info, { update_time }) : info
-    return await this.app.mysql.update(USER_TABLE, row, {
-      where: condition
-    }).then((r) => {
-      return r.affectedRows === 1
-    }).catch((err) => {
-      return ctx.throw(500, err.sqlMessage)
-    })
-  }
-
-  /**
-   * @description: 获取所有用户的信息
-   * @date 2018-12-18
-   * @param {}
-   * @returns {Object} 所有用户信息
-   */
-  
-  async getAll (info = {}) {
-
-    return this.app.model.User.findAll(info)
-
   }
 }
 

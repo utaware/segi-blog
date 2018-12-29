@@ -4,6 +4,8 @@
   - findAll => []
   - findOne => {} || null
   - findById => {} || null
+  - findOrCreate => {} 查询或者创建
+  - findAndCountAll => { count: 匹配的总数, rows: 匹配的分页的数据 } 
 - 删除
   - destroy
   - restore => [] (受影响的内容)
@@ -83,3 +85,66 @@ var Foo = sequelize.define('foo', {
 });
 ```
 
+## 自增自减的实现
+
+[docs](https://itbilu.com/nodejs/npm/N1pPjUdMf.html)
+
+* instance.increment(fields, [options]) - 字段值自增
+* nstance.decrement(fields, [options]) - 字段值自减
+
+```js
+user.increment(['age', 'number'], {by:2}).then(function(user){
+ console.log('success');
+})
+```
+
+increment()和decrement()都是针对单个实例进行自增或自减操作的，也就是说操作的数据为数据库中的一行数据。要实现类似如下批量自增、自减操作，就无法通过Instance操作
+
+```sql
+UPDATE `user` SET `age`=`age` + 1 WHERE `number` > 10;
+```
+
+这时，我们可以通过Model.update()并借助sequelize中的顶级方法sequelize.literal()来实现：
+
+sequelize.literal()方法用于创建一个字面量对象，该对象（val）会被直接传入所生成的SQL语句中，而不会进行任何转义。
+
+如，将number大于10的用户年龄增加1：
+
+```js
+User.update({sex:sequelize.literal('`age` +1')}, {where:{number:{$gt:10}}}).then(function(user){
+ console.log('success');
+})
+```
+
+## issues
+
+[sequelize 删除钩子触发](https://github.com/sequelize/sequelize/issues/2547)
+
+## 从实例中获取干净的数据
+
+```js
+User.get({plain: true})
+```
+
+## log
+
+> get 坑点
+
+1. 模型关联关系的时候(查询所有用户信息的时候)
+2. 关于时间错误的问题(timeZone时区设置)
+3. 钩子函数触发问题(destory, restore) => 事务处理
+4. 事务的写法
+```js
+try {
+  const transaction = await app.model.transaction()
+  const hash = await ctx.service.bcrypt.hash(password)
+  const { user_id } = await app.model.User.create({ username, hash, email }, {transaction})
+  await app.model.Info.create({ alias: username, user_id}, {transaction})
+  await app.model.Total.increment(['total'], { where: { category: 'user' }, transaction})
+  await transaction.commit();
+  return ctx.end(true, '用户信息创建成功')
+} catch (err) {
+  await transaction.rollback();
+  return ctx.end(false, '用户信息创建失败', {err})
+}
+```

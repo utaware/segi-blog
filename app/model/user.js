@@ -4,14 +4,18 @@
  * @Author: utaware
  * @Date: 2018-12-19 10:43:43
  * @LastEditors: utaware
- * @LastEditTime: 2018-12-27 10:42:23
+ * @LastEditTime: 2018-12-29 18:36:09
  */
 
 // https://github.com/caiya/vuejs-admin-server/blob/master/app/model/user.js
 
+const bcrypt = require('bcrypt')
+const moment = require('moment')
+const saltRounds = 10
+
 module.exports = app => {
   // 类型获取
-  const { INTEGER, STRING, DATE } = app.Sequelize;
+  const { INTEGER, STRING, DATE, VIRTUAL } = app.Sequelize;
   // define
   const User = app.model.define('User', {
     // 表结构
@@ -37,7 +41,10 @@ module.exports = app => {
     hash: {
       type: STRING,
       allowNull: false,
-      comment: '登录密码加密hash'
+      comment: '登录密码加密hash',
+      set (v) {
+        this.setDataValue('hash', bcrypt.hashSync(v, saltRounds))
+      }
     },
     email: {
       type: STRING,
@@ -72,51 +79,39 @@ module.exports = app => {
       allowNull: true,
       defaultValue: null,
       comment: '用户最后登录时间'
+    },
+    last_login: {
+      type: VIRTUAL,
+      defaultValue: '1小时内',
+      get () {
+        app.log(this.getDataValue('login_time'))
+        return moment().subtract(this.getDataValue('login_time'))
+      }
     }
   }, {
-    // 额外配置
     // 表名
     tableName: 'user_list',
     // 注释
     comment: '用户列表',
-    // 钩子函数
-    hooks: {
-      // 软删除后
-      beforeCreate: async (u, options) => {
-        app.log('beforeCreate-user')
-      },
-      // 创建后
-      afterCreate: async (u, options) => {
-        return await app.model.Info.create({
-          alias: u.username,
-          user_id: u.user_id
-        })
-      },
-      // 软删除后
-      afterDestroy: async (u, options) => {
-        app.log('afterDestroy-user')
-      },
-      // 更新后
-      afterUpdate: async (u, options) => {
-        app.log('afterUpdate-user')
-      },
-      // 更新前
-      afterSave: async (u, options) => {
-        app.log('afterSave-user')
-      },
-      // 恢复后
-      afterRestore: async (u, options) => {
-        app.log('afterRestore-user')
-      },
-      // 插入后
-      afterUpsert: async (u, options) => {
-        app.log('afterUpsert-user')
-      }
-    }
+    // 额外获取
+    getterMethods: {
+    },
+    // 额外设置
+    setterMethods: {}
   })
 
+  // 额外方法
+  User.compareHash = async (password, condition) => {
+    const result = await User.findOne(condition)
+    const hash = result.get({plain: true}).hash
+    const contrast = await bcrypt.compare(password, hash)
+    return contrast
+  }
+
+  // 关联关系
   User.associate = () => {
-    app.model.User.hasOne(app.model.Info, { foreignKey: 'user_id', targetKey: 'user_id', onDelete: 'cascade', hooks: true, as: 'i'});
+    app.model.User.hasOne(app.model.Info, { foreignKey: 'user_id', targetKey: 'user_id', as: 'i'});
+    app.model.User.hasMany(app.model.Docs, { foreignKey: 'user_id', targetKey: 'user_id', as: 'd' })
     app.model.User.belongsTo(app.model.Role, { foreignKey: 'role', targetKey: 'id', as: 'r'});
     app.model.User.belongsTo(app.model.Privilege, { foreignKey: 'privilege', targetKey: 'id', as: 'p'});
   }

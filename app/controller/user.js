@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-11-26 14:07:48
  * @LastEditors: utaware
- * @LastEditTime: 2018-12-28 17:47:30
+ * @LastEditTime: 2018-12-29 18:38:20
  */
 
 // module
@@ -26,7 +26,7 @@ class UserController extends Controller {
 
     // 校验
     try {
-      ctx.validate(app.validator.main(['username', 'password', 'email']),{ password, username, email })
+      ctx.validate(app.validator.main(['username', 'password', 'email']),{password, username, email})
     } catch (err) {
       return ctx.end(false, '参数校验未通过', {err})
     }
@@ -34,9 +34,7 @@ class UserController extends Controller {
     // 检查用户名是否存在
     try {
       const usable = await app.model.User.findAll({
-        where: { 
-          $or: [ { email }, { username } ]
-        }
+        where: { $or: [ {email}, {username} ]}
       })
       if (usable.length) {
         return ctx.end(false, '用户名或邮箱已存在')
@@ -45,13 +43,12 @@ class UserController extends Controller {
       return ctx.end(false, '用户查询错误', {err})
     }
 
-    // 存储加密hash和用户信息
+    // 增加用户事务
     try {
-      const hash = await ctx.service.bcrypt.hash(password)
-      await app.model.User.create({ username, hash, email })
+      await ctx.service.user.createUser({ username, password, email })
       return ctx.end(true, '用户信息创建成功')
     } catch (err) {
-      return ctx.end(false, '用户信息创建失败', {err})
+      return ctx.end(false, {err})
     }
   }
 
@@ -152,8 +149,7 @@ class UserController extends Controller {
     }
 
     try {
-      const hash = await ctx.service.bcrypt.hash(newPass)
-      await app.model.User.update({ hash }, { where: { user_id } })
+      await app.model.User.update({ hash: newPass }, { where: { user_id } })
       return ctx.end(true, '密码修改成功')
     } catch (err) {
       return ctx.end(false, '密码修改失败', {err})
@@ -212,8 +208,7 @@ class UserController extends Controller {
 
     // 存储加密hash和用户信息
     try {
-      const hash = await ctx.service.bcrypt.hash(password)
-      await app.model.User.update({ hash }, { where: { email } })
+      await app.model.User.update({ hash: password }, { where: { email } })
       return ctx.end(true, '密码重置成功')
     } catch (err) {
       return ctx.end(false, '密码重置失败', {err})
@@ -359,9 +354,7 @@ class UserController extends Controller {
     try {
       const result = await app.model.User.destroy({
         where: {user_id},
-        include: [
-          {model: app.model.Info, as: 'i'}
-        ]
+        // individualHooks: true
       })
       return ctx.end(true, '账户注销成功', {result})
     } catch (err) {
@@ -386,8 +379,7 @@ class UserController extends Controller {
     // 是否有恢复账户的权限
     try {
       const result = await app.model.Privilege.findOne({
-        where: { id: privilege },
-        plain: true
+        where: { id: privilege }
       })
       if (!result.update_member) {
         return ctx.end(false, '您无权修改用户信息')
@@ -476,6 +468,7 @@ class UserController extends Controller {
     if (current_user.privilege <= privilege) {
       return ctx.end(false, '用户权限不足')
     }
+    
     // 检查用户名和邮箱是否已存在 -- 防止重复
     try {
       const usable = await app.model.User.findAll({
@@ -489,15 +482,54 @@ class UserController extends Controller {
     } catch (err) {
       return ctx.end(false, '查询失败', {err})
     }
-    // 1. 加密密码
-    // 2. 新增用户
+
+    // 增加用户事务
     try {
-      const hash = await ctx.service.bcrypt.hash(password)
-      await app.model.User.create({username, hash, email, privilege, role})
-      return ctx.end(true, '用户添加成功')
+      await ctx.service.user.createUser({username, password, email, privilege, role})
+      return ctx.end(true, '用户信息创建成功')
     } catch (err) {
-      return ctx.end(false, '加密或者创建用户失败', {err})
+      return ctx.end(false, {err})
     }
+  }
+
+  /**
+   * @description 获取概览信息 get
+   * @author utaware
+   * @date 2018-12-29
+   * @returns 
+   */
+  
+  async getBreifInfo () {
+
+    const { ctx, app } = this
+    const Sql = app.Sequelize
+
+    try {
+      const user_total = await app.model.User.findAll({
+        attributes: [[Sql.col('r.id'), 'id'], [Sql.fn('COUNT', 'role'), 'count'],
+        [Sql.col('r.type'), 'type'], [Sql.col('r.remark'), 'remark']],
+        include: [{
+          model: app.model.Role,
+          as: 'r',
+          attributes: []
+        }],
+        group: 'role'
+      })
+      const last_login = await app.model.User.findAll({
+        attributes: ['login_time', 'last_login'],
+        where: {
+          login_time: {
+            $ne: null
+          }
+        },
+        order: [['user_id', 'desc']],
+        limit: 10
+      })
+      return ctx.end({ user_total, last_login })
+    } catch (err) {
+      return ctx.end(false, {err})
+    }
+
   }
 
 }

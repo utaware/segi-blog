@@ -16,3 +16,8 @@ INSERT user_info (
 );
 END
 ```
+
+```sql
+SELECT realname,DATE_FORMAT(str_to_date(create_time, '%Y-%m-%d %H:%i:%s'), '%Y-%m-%d %H:%i:%s') AS last_login FROM user WHERE status = '1' ORDER BY last_login DESC LIMIT 10;
+SELECT  DATE_FORMAT(create_time,'%Y-%m-%d') days, count(*) as total FROM user WHERE DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= date(create_time) AND status = '1' GROUP BY days;
+```

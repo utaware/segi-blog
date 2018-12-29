@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-19 18:16:01
  * @LastEditors: utaware
- * @LastEditTime: 2018-12-28 11:05:43
+ * @LastEditTime: 2018-12-29 10:51:03
  */
 
 module.exports = app => {
@@ -66,7 +66,9 @@ module.exports = app => {
   })
 
   Docs.associate = () => {
-    app.model.Docs.belongsTo(app.model.DocsType, { foreignKey: 'type', targetKey: 'id', as: 'd'});
+    app.model.Docs.belongsTo(app.model.DocsType, { foreignKey: 'type', targetKey: 'id', as: 't'});
+    app.model.Docs.belongsTo(app.model.User, { foreignKey: 'user_id', targetKey: 'user_id', foreignKeyConstraint : true,
+    hooks: true, as: 'd'})
   }
 
   return Docs
