@@ -25,15 +25,15 @@ module.exports = app => {
   }
 
   return (order) => {
-      let o = {}
-      order.forEach(v => {
-        if (rules[v] === undefined) {
-          throw new Error('不存在的校验规则')
-        } else {
-          o[v] = rules[v]
-        }
-      })
-      return Joi.object().keys(o)
-    }
+    let o = {}
+    order.forEach(v => {
+      if (rules[v] === undefined) {
+        throw new Error('不存在的校验规则')
+      } else {
+        o[v] = rules[v]
+      }
+    })
+    return Joi.object().keys(o)
+  }
 
 };

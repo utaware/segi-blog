@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-19 10:43:43
  * @LastEditors: utaware
- * @LastEditTime: 2018-12-29 18:36:09
+ * @LastEditTime: 2019-01-02 15:40:02
  */
 
 // https://github.com/caiya/vuejs-admin-server/blob/master/app/model/user.js
@@ -84,7 +84,6 @@ module.exports = app => {
       type: VIRTUAL,
       defaultValue: '1小时内',
       get () {
-        app.log(this.getDataValue('login_time'))
         return moment().subtract(this.getDataValue('login_time'))
       }
     }

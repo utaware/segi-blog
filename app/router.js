@@ -31,6 +31,7 @@ module.exports = app => {
   router.resources('role', '/api/role', controller.role) // 角色相关
 
   // privilege => 权限相关
+  router.get('/api/privilege/test', controller.privilege.test) // 权限相关
   router.put('/api/privilege/recovery', controller.privilege.recovery) // 软删除恢复
   router.resources('privilege', '/api/privilege', controller.privilege) // 权限相关
   

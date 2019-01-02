@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-18 11:44:14
  * @LastEditors: utaware
- * @LastEditTime: 2018-12-28 16:01:49
+ * @LastEditTime: 2019-01-02 16:02:40
  */
 
 // egg-controller
@@ -134,6 +134,26 @@ class PrivilegeController extends Controller {
     } catch (err) {
       return ctx.end(false, '权限恢复失败', {err})
     }
+  }
+
+  async test () {
+    
+    const { ctx, app } = this
+
+    try {
+      const result = await app.model.Privilege.findAll({
+        attributes: ['id', 'type', 'remark', 'level'],
+        include: [{ 
+          model: app.model.User,
+          as: 'u'
+        }]
+      })
+      return ctx.end(true, {result})
+    } catch (err) {
+      ctx.log(err)
+      return ctx.end(false, {err})
+    }
+
   }
 }
 
