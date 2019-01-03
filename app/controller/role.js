@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-18 11:44:14
  * @LastEditors: utaware
- * @LastEditTime: 2018-12-28 16:29:12
+ * @LastEditTime: 2019-01-03 16:09:29
  */
 
 // egg-controller
@@ -24,9 +24,7 @@ class RoleController extends Controller {
     const { ctx, app } = this
     
     try {
-      const result = await app.model.Role.findAll({
-        attributes: ['id', 'type', 'remark', 'group']
-      })
+      const result = await app.model.Role.findAll()
       return ctx.end(true, '查询角色成功', { result })
     } catch (err) {
       return ctx.end(false, '查询角色失败', {err})
@@ -115,7 +113,7 @@ class RoleController extends Controller {
   }
 
   /**
-   * @description 软删除恢复 get
+   * @description 软删除恢复 put
    * @author utaware
    * @date 2018-12-25
    * @returns 
@@ -124,7 +122,7 @@ class RoleController extends Controller {
   async recovery () {
 
     const { ctx, app } = this
-    const { id } = ctx.params
+    const { id } = ctx.request.body
 
     try {
       const result = await app.model.Role.restore({ where: { id }})

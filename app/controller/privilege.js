@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-18 11:44:14
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-02 16:02:40
+ * @LastEditTime: 2019-01-03 16:26:13
  */
 
 // egg-controller
@@ -24,10 +24,8 @@ class PrivilegeController extends Controller {
     const { ctx, app } = this
 
     try {
-      const list = await app.model.Privilege.findAll({
-        attributes: ['id', 'type', 'remark', 'level']
-      })
-      return ctx.end(true, '权限查询成功', { list })
+      const result = await app.model.Privilege.findAll()
+      return ctx.end(true, '权限查询成功', { result })
     } catch (err) {
       return ctx.end(false, '权限查询失败', {err})
     }
@@ -136,25 +134,6 @@ class PrivilegeController extends Controller {
     }
   }
 
-  async test () {
-    
-    const { ctx, app } = this
-
-    try {
-      const result = await app.model.Privilege.findAll({
-        attributes: ['id', 'type', 'remark', 'level'],
-        include: [{ 
-          model: app.model.User,
-          as: 'u'
-        }]
-      })
-      return ctx.end(true, {result})
-    } catch (err) {
-      ctx.log(err)
-      return ctx.end(false, {err})
-    }
-
-  }
 }
 
 module.exports = PrivilegeController;

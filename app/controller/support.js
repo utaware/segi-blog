@@ -3,9 +3,11 @@
  * @version: 1.0.0
  * @Author: utaware
  * @Date: 2018-11-20 15:47:49
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2018-12-26 23:47:31
+ * @LastEditors: utaware
+ * @LastEditTime: 2019-01-03 17:21:41
  */
+
+const fs = require('fs-extra')
 
 const { Controller } = require('egg');
 
@@ -18,13 +20,17 @@ class SupportController extends Controller {
   // 以github style 为主要搭配的模板
   async github () {
     let ctx = this.ctx;
-    let data = await ctx.service.markdown.baseSupport('app/lib/md/mark.md');
+    let md = await fs.readFile('app/lib/md/mark.md')
+    ctx.log(md.toString())
+    let data = await ctx.service.md.baseSupport(md.toString());
     await ctx.render('github.tpl', {data});
   }
   // 以vuepress为原型
   async vuepress () {
     let ctx = this.ctx;
-    let data = await ctx.service.markdown.vuepressSupport('app/lib/md/mark.md')
+    let md = await fs.readFile('app/lib/md/mark.md')
+    ctx.log(md.toString())
+    let data = await ctx.service.md.vuepressSupport(md.toString())
     await ctx.render('vuepress.tpl', {data})
   }
   // js-yaml page test

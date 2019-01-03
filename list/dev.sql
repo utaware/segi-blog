@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80013
 File Encoding         : 65001
 
-Date: 2018-12-29 18:44:48
+Date: 2019-01-03 18:36:42
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -150,7 +150,7 @@ CREATE TABLE `privilege_list` (
   `updated_at` datetime DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of privilege_list
@@ -160,6 +160,7 @@ INSERT INTO `privilege_list` VALUES ('2', 'ordinary', '普通成员', '1', '0', 
 INSERT INTO `privilege_list` VALUES ('3', 'chargeman', '组长', '2', '1', '1', '0', '0', '2018-12-18 18:26:42', null, null);
 INSERT INTO `privilege_list` VALUES ('4', 'headman', '负责人', '3', '1', '1', '1', '1', '2018-12-18 18:27:27', null, null);
 INSERT INTO `privilege_list` VALUES ('5', 'root', '管理员', '4', '1', '1', '1', '1', '2018-12-18 18:27:42', null, null);
+INSERT INTO `privilege_list` VALUES ('7', 'test', '测试', '3', '0', '0', '0', '0', '2019-01-03 17:36:59', '2019-01-03 17:37:10', '2019-01-03 17:37:27');
 
 -- ----------------------------
 -- Table structure for role_list
@@ -174,7 +175,7 @@ CREATE TABLE `role_list` (
   `updated_at` datetime DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of role_list
@@ -186,12 +187,13 @@ INSERT INTO `role_list` VALUES ('4', 'ios', 'ios开发', '1', '2018-12-18 16:03:
 INSERT INTO `role_list` VALUES ('5', 'android', 'android开发', '1', '2018-12-18 16:03:27', null, null);
 INSERT INTO `role_list` VALUES ('6', 'test', '测试', '3', '2018-12-18 16:04:18', null, null);
 INSERT INTO `role_list` VALUES ('7', 'product', '产品', '3', '2018-12-18 16:05:26', null, null);
-INSERT INTO `role_list` VALUES ('8', 'operator', '运营', '3', '2018-12-18 16:07:46', null, null);
+INSERT INTO `role_list` VALUES ('8', 'operator', '运营', '3', '2018-12-18 16:07:46', '2019-01-03 16:10:36', null);
 INSERT INTO `role_list` VALUES ('9', 'UI', 'UI设计', '3', '2018-12-18 16:07:59', null, null);
 INSERT INTO `role_list` VALUES ('10', 'finance', '财务', '3', '2018-12-18 16:08:15', null, null);
 INSERT INTO `role_list` VALUES ('11', 'spread', '推广', '3', '2018-12-18 16:09:09', null, null);
 INSERT INTO `role_list` VALUES ('12', 'C_plus', 'C++开发', '2', '2018-12-18 16:09:35', null, null);
 INSERT INTO `role_list` VALUES ('13', 'manage', '负责人', '4', '2018-12-18 16:09:59', null, null);
+INSERT INTO `role_list` VALUES ('16', 'tests', '测试类型', '2', '2019-01-03 16:08:20', '2019-01-03 16:08:38', '2019-01-03 16:09:39');
 
 -- ----------------------------
 -- Table structure for total_list
@@ -298,7 +300,7 @@ CREATE TABLE `user_list` (
 -- ----------------------------
 -- Records of user_list
 -- ----------------------------
-INSERT INTO `user_list` VALUES ('1', 'akane', '$2b$10$Hep2.syaPqmt6km66yXq0O09kuAm9gZeiZ1GJjEtpDN/4dBLX7mmq', '1264051408@qq.com', '5', '2', '2018-12-29 17:08:15', '2018-12-03 15:42:34', '2018-12-29 17:08:15', null);
+INSERT INTO `user_list` VALUES ('1', 'akane', '$2b$10$Hep2.syaPqmt6km66yXq0O09kuAm9gZeiZ1GJjEtpDN/4dBLX7mmq', '1264051408@qq.com', '4', '2', '2019-01-03 14:20:16', '2018-12-03 15:42:34', '2019-01-03 14:20:16', null);
 INSERT INTO `user_list` VALUES ('11', 'test2', '$2b$10$tHbzPawpoZwR.FEFd98moOg3vGsU8s9E5.PK0.QsSmgIV4c9WDSii', 'test2@qq.com', '1', '1', null, '2018-12-25 18:18:40', '2018-12-25 18:18:40', null);
 INSERT INTO `user_list` VALUES ('12', 'test3', '$2b$10$BrX8lIpM1l36cVjWymxl7.ArKcyy8rpEzxoxU79Zn1d1w6w9DAHcG', 'test3@qq.com', '2', '2', null, '2018-12-26 17:54:18', '2018-12-26 17:54:18', '2018-12-29 10:51:17');
 INSERT INTO `user_list` VALUES ('13', 'test4', '$2b$10$GGc2IEAWT.XAAwINchDAHOEvDXGPut8J1.yPFtBp6jgxX8C5LK3Du', 'test4@qq.com', '1', '1', null, '2018-12-26 18:22:37', '2018-12-26 18:22:37', null);

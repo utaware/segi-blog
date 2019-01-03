@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-04 18:08:56
  * @LastEditors: utaware
- * @LastEditTime: 2018-12-29 10:39:26
+ * @LastEditTime: 2019-01-03 14:32:58
  */
 
 const Controller = require('egg').Controller;       
@@ -106,11 +106,11 @@ class DocsController extends Controller {
       })
       const result = await app.model.Docs.findAll({
         attributes: ['id', 'title', 'editor', 'md', 'html', 'comment', 'created_at', 'author',
-          [Sql.col('d.remark'), 'type'], [Sql.col('d.value'), 'value'], [Sql.col('d.name'), 'name']],
+          [Sql.col('DocsType.remark'), 'type'], [Sql.col('DocsType.value'), 'value'], [Sql.col('DocsType.name'), 'name']],
         include: [
           {
             model: app.model.DocsType,
-            as: 't',
+            as: 'DocsType',
             attributes: []
           }
         ]

@@ -9,6 +9,10 @@ module.exports = app => {
   // home => test
   router.get('/api/home', controller.home.index)
 
+  // md
+  router.get('/api/support/md/github', controller.support.github)
+  router.get('/api/support/md/vuepress', controller.support.vuepress)
+
   // support => 生成验证码
   router.get('/api/support/checkCode', controller.support.checkCode)
   router.post('/api/support/email', controller.support.sendEmail)
@@ -31,7 +35,6 @@ module.exports = app => {
   router.resources('role', '/api/role', controller.role) // 角色相关
 
   // privilege => 权限相关
-  router.get('/api/privilege/test', controller.privilege.test) // 权限相关
   router.put('/api/privilege/recovery', controller.privilege.recovery) // 软删除恢复
   router.resources('privilege', '/api/privilege', controller.privilege) // 权限相关
   

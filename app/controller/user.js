@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-11-26 14:07:48
  * @LastEditors: utaware
- * @LastEditTime: 2018-12-29 18:38:20
+ * @LastEditTime: 2019-01-03 15:14:50
  */
 
 // module
@@ -302,7 +302,7 @@ class UserController extends Controller {
         raw: true, 
         // 对象层级关系转换
         nest: false,
-        orders: [['created_at', 'desc']],
+        orders: [['id', 'desc']],
         paranoid: false,
         limit: pageSize,
         offset: pageSize * (pageNo - 1)
