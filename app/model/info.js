@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-19 17:22:48
  * @LastEditors: utaware
- * @LastEditTime: 2018-12-29 14:01:46
+ * @LastEditTime: 2019-01-04 16:23:31
  */
 
 module.exports = app => {
@@ -27,7 +27,7 @@ module.exports = app => {
       unique: true,
       comment: '昵称'
     },
-    adress: {
+    address: {
       type: STRING,
       allowNull: true,
       defaultValue: null,

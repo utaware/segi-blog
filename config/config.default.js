@@ -49,8 +49,8 @@ module.exports = appInfo => {
   // 错误处理
   config.onerror = {
     // 所有响应类型的错误处理方法
-    all (err, ctx) {
-      ctx.end(false, 200, err.message)
+    all (error, ctx) {
+      ctx.end(false, 200, {error})
     }
   }
   // Sequelize

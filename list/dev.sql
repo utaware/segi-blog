@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80013
 File Encoding         : 65001
 
-Date: 2019-01-03 18:36:42
+Date: 2019-01-04 18:26:10
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -254,7 +254,7 @@ DROP TABLE IF EXISTS `user_info`;
 CREATE TABLE `user_info` (
   `user_id` int(11) NOT NULL COMMENT '用户id',
   `alias` varchar(24) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '用户昵称',
-  `adress` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '用户地址',
+  `address` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '用户地址',
   `avatar` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '用户头像',
   `phone` varchar(12) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '手机号码',
   `birthday` date DEFAULT NULL COMMENT '用户年龄',
@@ -267,7 +267,7 @@ CREATE TABLE `user_info` (
 -- ----------------------------
 -- Records of user_info
 -- ----------------------------
-INSERT INTO `user_info` VALUES ('1', 'akane', null, null, null, null, '2018-12-21 15:50:22', '2018-12-21 15:50:22', null);
+INSERT INTO `user_info` VALUES ('1', 'utaware', '深圳市宝安区金港华庭G-27C', '/public/upload/avatar/7d7f2f16-e8df-3fd7-96c3-df06810e0096.jpg', '18285115398', '2019-01-17', '2018-12-21 15:50:22', '2019-01-04 16:55:28', null);
 INSERT INTO `user_info` VALUES ('11', 'test2', null, null, null, null, '2018-12-25 18:18:40', '2018-12-25 18:18:40', null);
 INSERT INTO `user_info` VALUES ('12', 'test3', null, null, null, null, '2018-12-26 17:54:18', '2018-12-26 17:54:18', null);
 INSERT INTO `user_info` VALUES ('13', 'test4', null, null, null, null, '2018-12-26 18:22:38', '2018-12-26 18:22:38', null);
@@ -300,7 +300,7 @@ CREATE TABLE `user_list` (
 -- ----------------------------
 -- Records of user_list
 -- ----------------------------
-INSERT INTO `user_list` VALUES ('1', 'akane', '$2b$10$Hep2.syaPqmt6km66yXq0O09kuAm9gZeiZ1GJjEtpDN/4dBLX7mmq', '1264051408@qq.com', '4', '2', '2019-01-03 14:20:16', '2018-12-03 15:42:34', '2019-01-03 14:20:16', null);
+INSERT INTO `user_list` VALUES ('1', 'akane', '$2b$10$Hep2.syaPqmt6km66yXq0O09kuAm9gZeiZ1GJjEtpDN/4dBLX7mmq', '1264051408@qq.com', '4', '2', '2019-01-04 10:08:06', '2018-12-03 15:42:34', '2019-01-04 10:08:06', null);
 INSERT INTO `user_list` VALUES ('11', 'test2', '$2b$10$tHbzPawpoZwR.FEFd98moOg3vGsU8s9E5.PK0.QsSmgIV4c9WDSii', 'test2@qq.com', '1', '1', null, '2018-12-25 18:18:40', '2018-12-25 18:18:40', null);
 INSERT INTO `user_list` VALUES ('12', 'test3', '$2b$10$BrX8lIpM1l36cVjWymxl7.ArKcyy8rpEzxoxU79Zn1d1w6w9DAHcG', 'test3@qq.com', '2', '2', null, '2018-12-26 17:54:18', '2018-12-26 17:54:18', '2018-12-29 10:51:17');
 INSERT INTO `user_list` VALUES ('13', 'test4', '$2b$10$GGc2IEAWT.XAAwINchDAHOEvDXGPut8J1.yPFtBp6jgxX8C5LK3Du', 'test4@qq.com', '1', '1', null, '2018-12-26 18:22:37', '2018-12-26 18:22:37', null);

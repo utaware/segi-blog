@@ -9,13 +9,14 @@ module.exports = app => {
   // home => test
   router.get('/api/home', controller.home.index)
 
-  // md
+  // md => md相关
   router.get('/api/support/md/github', controller.support.github)
   router.get('/api/support/md/vuepress', controller.support.vuepress)
 
-  // support => 生成验证码
+  // support => 附属支持相关
   router.get('/api/support/checkCode', controller.support.checkCode)
   router.post('/api/support/email', controller.support.sendEmail)
+  router.post('/api/support/uploadAvatar', controller.support.uploadAvatar)
 
   // user => 用户相关
   router.post('/api/user/register', controller.user.register) // 注册
@@ -47,5 +48,6 @@ module.exports = app => {
   router.resources('docsType', '/api/docsType', controller.docsType)
 
   // info => 用户信息
-  router.post('/api/upload/avatar', controller.user.avatar) // 上传头像
+  router.put('/api/info/update', controller.info.update) // 完善用户信息
+  router.get('/api/info/show', controller.info.show) // 完善用户信息
 };

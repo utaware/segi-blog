@@ -3,7 +3,7 @@ const path = require('path')
 module.exports = {
   // http://www.ptbird.cn/koa-body.html
   // https://blog.csdn.net/simple__dream/article/details/80890696
-  enable: true,
+  enable: false,
   // 只处理multipart/form-data类型表单
   match: (ctx) => {
     return ctx.request.method === 'POST' && ctx.request.header['content-type'].includes('multipart/form-data')
