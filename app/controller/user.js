@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-11-26 14:07:48
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-03 15:14:50
+ * @LastEditTime: 2019-01-07 16:44:25
  */
 
 // module
@@ -254,15 +254,6 @@ class UserController extends Controller {
     }
   }
 
-  // 设置头像
-  async avatar () {
-
-    const { ctx } = this
-    const files = ctx.request.files
-    const result = await ctx.service.upload.files(files.avatar)
-    return ctx.end(result)
-  }
-
   /**
    * @description 获取所有用户信息
    * @author utaware
@@ -502,30 +493,32 @@ class UserController extends Controller {
   async getBreifInfo () {
 
     const { ctx, app } = this
-    const Sql = app.Sequelize
+
+    const { ip, url, method, host, protocol } = ctx
+    const { type } = ctx.request
+    const user_agent = ctx.request.header['user-agent']
+    const info = {ip, url, method, type, host, protocol, user_agent}
+    const result = await ctx.model.Visit.create(info)
 
     try {
-      const user_total = await app.model.User.findAll({
-        attributes: [[Sql.col('r.id'), 'id'], [Sql.fn('COUNT', 'role'), 'count'],
-        [Sql.col('r.type'), 'type'], [Sql.col('r.remark'), 'remark']],
-        include: [{
-          model: app.model.Role,
-          as: 'r',
-          attributes: []
-        }],
-        group: 'role'
+      // 七天内访问量
+      const visit = [10, 52, 200, 334, 390, 330, 220]
+      // 统计信息
+      const total = await app.model.Total.findAll({
+        attributes: ['category', 'total', 'remark']
       })
-      const last_login = await app.model.User.findAll({
-        attributes: ['login_time', 'last_login'],
+      // 最后登录信息
+      const login = await app.model.User.findAll({
+        attributes: ['username', 'login_time'],
         where: {
           login_time: {
             $ne: null
           }
         },
-        order: [['user_id', 'desc']],
+        order: [['login_time', 'desc']],
         limit: 10
       })
-      return ctx.end({ user_total, last_login })
+      return ctx.end({login, total, visit})
     } catch (err) {
       return ctx.end(false, {err})
     }

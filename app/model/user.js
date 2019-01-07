@@ -4,13 +4,16 @@
  * @Author: utaware
  * @Date: 2018-12-19 10:43:43
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-03 14:24:43
+ * @LastEditTime: 2019-01-07 15:48:22
  */
 
 // https://github.com/caiya/vuejs-admin-server/blob/master/app/model/user.js
 
 const bcrypt = require('bcrypt')
 const moment = require('moment')
+// const precise = require('moment-precise-range-plugin')
+// https://github.com/codebox/moment-precise-range 用以获取精确的时间差字符串
+moment.locale('zh-cn'); 
 const saltRounds = 10
 
 module.exports = app => {
@@ -79,13 +82,6 @@ module.exports = app => {
       allowNull: true,
       defaultValue: null,
       comment: '用户最后登录时间'
-    },
-    last_login: {
-      type: VIRTUAL,
-      defaultValue: '1小时内',
-      get () {
-        return moment().subtract(this.getDataValue('login_time'))
-      }
     }
   }, {
     // 表名
@@ -93,8 +89,7 @@ module.exports = app => {
     // 注释
     comment: '用户列表',
     // 额外获取
-    getterMethods: {
-    },
+    getterMethods: {},
     // 额外设置
     setterMethods: {}
   })

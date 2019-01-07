@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80013
 File Encoding         : 65001
 
-Date: 2019-01-04 18:26:10
+Date: 2019-01-07 18:42:02
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -300,7 +300,7 @@ CREATE TABLE `user_list` (
 -- ----------------------------
 -- Records of user_list
 -- ----------------------------
-INSERT INTO `user_list` VALUES ('1', 'akane', '$2b$10$Hep2.syaPqmt6km66yXq0O09kuAm9gZeiZ1GJjEtpDN/4dBLX7mmq', '1264051408@qq.com', '4', '2', '2019-01-04 10:08:06', '2018-12-03 15:42:34', '2019-01-04 10:08:06', null);
+INSERT INTO `user_list` VALUES ('1', 'akane', '$2b$10$Hep2.syaPqmt6km66yXq0O09kuAm9gZeiZ1GJjEtpDN/4dBLX7mmq', '1264051408@qq.com', '4', '2', '2019-01-07 09:27:51', '2018-12-03 15:42:34', '2019-01-07 09:27:51', null);
 INSERT INTO `user_list` VALUES ('11', 'test2', '$2b$10$tHbzPawpoZwR.FEFd98moOg3vGsU8s9E5.PK0.QsSmgIV4c9WDSii', 'test2@qq.com', '1', '1', null, '2018-12-25 18:18:40', '2018-12-25 18:18:40', null);
 INSERT INTO `user_list` VALUES ('12', 'test3', '$2b$10$BrX8lIpM1l36cVjWymxl7.ArKcyy8rpEzxoxU79Zn1d1w6w9DAHcG', 'test3@qq.com', '2', '2', null, '2018-12-26 17:54:18', '2018-12-26 17:54:18', '2018-12-29 10:51:17');
 INSERT INTO `user_list` VALUES ('13', 'test4', '$2b$10$GGc2IEAWT.XAAwINchDAHOEvDXGPut8J1.yPFtBp6jgxX8C5LK3Du', 'test4@qq.com', '1', '1', null, '2018-12-26 18:22:37', '2018-12-26 18:22:37', null);
@@ -312,3 +312,28 @@ INSERT INTO `user_list` VALUES ('20', 'test8', '$2b$10$r4a2C4w5pfWSeD1Gh0vRuOa1p
 INSERT INTO `user_list` VALUES ('21', 'test9', '$2b$10$3YADH9aj.nPiiscW.if0peZcFeYikEHuaZAWaf.iTOuk8nGP2nInK', 'test9@qq.com', '1', '1', null, '2018-12-29 16:12:18', '2018-12-29 16:12:18', null);
 INSERT INTO `user_list` VALUES ('22', 'test10', '$2b$10$fHJbI0KH/Zj0dmn90Pgofe7Ju05mMTpZPCDRSyKBZX3jW.CPmxWpm', 'test10@qq.com', '1', '1', null, '2018-12-29 16:16:03', '2018-12-29 16:16:03', null);
 INSERT INTO `user_list` VALUES ('23', 'test11', '$2b$10$f7EVrE/vn9phNLx6CErTMOStbwcVYJxs4gHPkyYLGxQ.DyAA7yAlS', 'test11@qq.com', '1', '1', null, '2018-12-29 17:01:13', '2018-12-29 17:01:13', null);
+
+-- ----------------------------
+-- Table structure for visit_log
+-- ----------------------------
+DROP TABLE IF EXISTS `visit_log`;
+CREATE TABLE `visit_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ip` varchar(255) NOT NULL COMMENT '访问ip',
+  `url` varchar(255) NOT NULL COMMENT '请求地址',
+  `method` varchar(255) NOT NULL COMMENT '访问方法',
+  `type` varchar(255) NOT NULL COMMENT '请求content-type',
+  `user_agent` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户请求头信息',
+  `host` varchar(255) NOT NULL,
+  `protocol` varchar(255) NOT NULL COMMENT '请求协议',
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `deleted_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of visit_log
+-- ----------------------------
+INSERT INTO `visit_log` VALUES ('1', '::1', '/api/user/getBreifInfo', 'GET', 'application/x-www-form-urlencoded', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '2019-01-07 16:39:18', '2019-01-07 16:39:18', null);
+INSERT INTO `visit_log` VALUES ('2', '::1', '/api/user/getBreifInfo', 'GET', 'application/x-www-form-urlencoded', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '2019-01-07 16:39:48', '2019-01-07 16:39:48', null);
