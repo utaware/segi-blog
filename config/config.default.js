@@ -2,6 +2,8 @@
 const sequelizeConfig = require('./sequelize')
 const koaBodyConfig = require('./koaBody')
 
+// https://yq.aliyun.com/articles/609447 egg
+// https://new01.cn/blog/new005-1/ config
 module.exports = appInfo => {
   
   const config = exports = {};
@@ -17,6 +19,10 @@ module.exports = appInfo => {
   }
   // koa-body
   config.body = koaBodyConfig
+  // multipart
+  config.multipart = {
+    fileExtensions: ['.txt', '.md', '.ppt', '.doc', '.rar', '.zip', '.xlsx']
+  }
   // 模板引擎
   config.view = {
     // 默认渲染引擎

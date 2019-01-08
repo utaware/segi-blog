@@ -1,4 +1,5 @@
 const moment = require('moment')
+// https://github.com/demopark/sequelize-docs-Zh-CN/blob/master/models-usage.md
 
 module.exports = {
   // 数据库类型

@@ -16,7 +16,10 @@ module.exports = app => {
   // support => 附属支持相关
   router.get('/api/support/checkCode', controller.support.checkCode)
   router.post('/api/support/email', controller.support.sendEmail)
-  router.post('/api/support/uploadAvatar', controller.support.uploadAvatar)
+
+  // upload => 上传相关
+  router.post('/api/upload/avatar', controller.upload.avatar)
+  router.post('/api/upload/share', controller.upload.share)
 
   // user => 用户相关
   router.post('/api/user/register', controller.user.register) // 注册
