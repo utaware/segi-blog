@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-04 19:48:52
  * @LastEditors: utaware
- * @LastEditTime: 2018-12-17 11:52:03
+ * @LastEditTime: 2019-01-09 10:22:55
  */
 
 // egg-service
@@ -34,7 +34,7 @@ class JwtService extends Service {
    */
   decrypt () {
     // this
-    let { ctx } = this
+    const { ctx } = this
     // jwt-token => header
     const authorization = ctx.header.authorization
     if (!authorization) {

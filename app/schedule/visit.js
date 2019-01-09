@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2019-01-07 16:59:47
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-08 16:06:02
+ * @LastEditTime: 2019-01-09 10:58:35
  */
 
 // https://blog.csdn.net/qq411397201/article/details/52593491 sequelize
@@ -23,40 +23,9 @@ module.exports = {
   },
   // 生成访问日志
   async task (ctx) {
-    const { app } = ctx
-    const Sql = app.Sequelize
 
-    let data
-    try {
-      data = await app.model.Visit.findAll({
-        where: {
-          created_at: Sql.where(Sql.fn('DATE_SUB', Sql.fn('now'), Sql.literal('INTERVAL 1 day')), '<=', Sql.col('created_at'))
-        }
-      })
-    } catch (err) {
-      ctx.log(err)
-    }
-
-    const moment = ctx.helper.moment
-    const formatTime = ['created_at', 'updated_at']
-
-    data = data.map((row) => {
-      let r = []
-      row = row.get({plain: true})
-      ctx.log(row)
-      for (let k in row) {
-        if (formatTime.includes(k)) {
-          row[k] = moment(row[k]).format('YYYY-MM-DD HH:MM:SS')
-        }
-        r.push(row[k])
-      }
-      return r
-    })
-
+    const data = await ctx.service.visit.index()
     const now = ctx.helper.now('YYYY-MM-DD')
-    ctx.log(data)
-    data.unshift(['id', 'ip', 'url', 'method', 'type', 'user-agent', 'host', 'created_at', 'updated_at', 'deleted_at'])
-    
     const buffer = xlsx.build([{name: '访问信息', data}]);
     const fileName = `${__dirname}/${now}.xlsx`
     

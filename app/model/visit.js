@@ -4,12 +4,12 @@
  * @Author: utaware
  * @Date: 2018-12-19 17:52:01
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-07 16:30:54
+ * @LastEditTime: 2019-01-09 10:43:59
  */
 
 module.exports = app => {
 
-  const { INTEGER, STRING } = app.Sequelize;
+  const { INTEGER, STRING, BOOLEAN } = app.Sequelize;
   
   const Visit = app.model.define('Visit', {
     id: {
@@ -46,6 +46,18 @@ module.exports = app => {
     protocol: {
       type: STRING,
       comment: '请求protocol'
+    },
+    status: {
+      type: INTEGER,
+      comment: '响应status'
+    },
+    code: {
+      type: BOOLEAN,
+      comment: '响应code'
+    },
+    message: {
+      type: STRING,
+      comment: '响应message'
     }
   }, {
     tableName: 'visit_log',

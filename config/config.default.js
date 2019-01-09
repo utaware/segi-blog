@@ -10,7 +10,7 @@ module.exports = appInfo => {
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_1541994609332_7211';
   // middleware
-  config.middleware = ['jwt', 'body'];
+  config.middleware = ['jwt', 'body', 'visit'];
   // koa-jwt
   config.jwt = {
     enable: true,
@@ -19,6 +19,9 @@ module.exports = appInfo => {
   }
   // koa-body
   config.body = koaBodyConfig
+  config.visit = {
+    enable: true
+  }
   // multipart
   config.multipart = {
     fileExtensions: ['.txt', '.md', '.ppt', '.doc', '.rar', '.zip', '.xlsx']
@@ -51,13 +54,6 @@ module.exports = appInfo => {
     },
     app: true, // 是否加载到 app 上，默认开启
     agent: false // 是否加载到 agent 上，默认关闭
-  }
-  // 错误处理
-  config.onerror = {
-    // 所有响应类型的错误处理方法
-    all (error, ctx) {
-      ctx.end(false, 200, {error})
-    }
   }
   // Sequelize
   config.sequelize = sequelizeConfig;

@@ -47,10 +47,17 @@ module.exports = app => {
   router.put('docs', '/api/docs', controller.docs)
   router.resources('docs', '/api/docs', controller.docs)
 
+  // share => 分享相关
+  router.post('/api/share/create', controller.share.create) // 新增
+
   // docsType => 文档类型
   router.resources('docsType', '/api/docsType', controller.docsType)
 
   // info => 用户信息
   router.put('/api/info/update', controller.info.update) // 完善用户信息
   router.get('/api/info/show', controller.info.show) // 完善用户信息
+
+  // database => 数据库相关
+  router.delete('/api/database/truncate', controller.database.truncate) // 重置表数据
+
 };

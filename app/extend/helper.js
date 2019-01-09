@@ -1,4 +1,6 @@
 const moment = require('moment')
+// https://blog.csdn.net/zhouyingge1104/article/details/50596420
+moment.locale('zh')
 
 module.exports = {
   // 命令行颜色
