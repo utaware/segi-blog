@@ -20,6 +20,7 @@ module.exports = app => {
   // upload => 上传相关
   router.post('/api/upload/avatar', controller.upload.avatar)
   router.post('/api/upload/share', controller.upload.share)
+  router.delete('/api/upload/deleteOne', controller.upload.deleteOne)
 
   // user => 用户相关
   router.post('/api/user/register', controller.user.register) // 注册
@@ -49,6 +50,7 @@ module.exports = app => {
 
   // share => 分享相关
   router.post('/api/share/create', controller.share.create) // 新增
+  router.get('/api/share/query', controller.share.index) // 新增
 
   // docsType => 文档类型
   router.resources('docsType', '/api/docsType', controller.docsType)
@@ -59,5 +61,4 @@ module.exports = app => {
 
   // database => 数据库相关
   router.delete('/api/database/truncate', controller.database.truncate) // 重置表数据
-
 };

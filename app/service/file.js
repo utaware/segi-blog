@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-17 11:24:36
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-09 17:04:20
+ * @LastEditTime: 2019-01-10 11:34:22
  */
 const { Service } = require('egg')
 const path = require('path')
@@ -18,11 +18,12 @@ const uploadDir = '/public/upload'
 class FileService extends Service {
 
   // 上传单个文件
-  async single (options) {
+  async uploadOne (options) {
     // allowType: 允许的文件后缀 => Array []
     // transferDir: 转移的文件目录(相对cache) => String
     const { allowType, transferDir } = options
     const { ctx, app } = this
+    const { user_id, username } = ctx.state.user
     // 解决cache => upload => transferDir 文件路径映射
     const dirMap = dirname => path.join(this.config.baseDir, 'app', uploadDir, dirname)
     const cacheDir = dirMap('cache')
@@ -53,21 +54,43 @@ class FileService extends Service {
       const resource = path.join(transDir, relname)
       // 从cache中转移到指定目录
       const isExist = await fs.pathExists(resource)
+      let data
+      // 如果已存在就直接查询
       if (isExist) {
-        await app.model.Upload.destroy({
-          where: {resource},
-          force: true
+        data = await app.model.Upload.findOne({
+          where: {resource}
+        })
+      } else {
+        await fs.move(target, resource)
+        const src = `${uploadDir}/${transferDir}/${relname}`
+        data = await app.model.Upload.create({
+          resource, size, relname, mimeType, encoding, filename, src, tag: transferDir, user_id
         })
       }
-      await fs.move(target, resource, {overwrite: true})
-      const src = `${uploadDir}/${transferDir}/${relname}`
-      return {resource, size, relname, mimeType, encoding, filename, src, tag: transferDir}
+      return data.get({plain: true})
     } catch (err) {
       // 消费流避免持续读取浏览器卡死
       ctx.status = 500
+      ctx.log(err)
       await sendToWormhole(stream)
       return ctx.throw(500, '文件操作错误', {err})
     }
+  }
+
+  // 删除文件
+  async deleteOne (path) {
+
+    const isExist = await fs.pathExists(path)
+    if (!isExist) {
+      return ctx.throw(403, '文件目录不存在')
+    }
+
+    try {
+      await fs.remove(path)
+    } catch (err) {
+      return ctx.throw(500, '文件删除错误', {err})
+    }
+
   }
 
 }

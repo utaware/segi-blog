@@ -4,14 +4,34 @@
  * @Author: utaware
  * @Date: 2019-01-09 17:14:23
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-09 18:38:54
+ * @LastEditTime: 2019-01-10 11:51:00
  */
 
 const Controller = require('egg').Controller;
 
 class ShareController extends Controller {
 
-  // create post
+  async index () {
+
+    const { ctx, app } = this
+    const user_id = ctx.state.user
+
+    let result
+    try { 
+      result = await app.model.User.privilege(user_id)
+    } catch (err) {
+      ctx.log(err)
+    }
+
+    return ctx.end(true, {result})
+  }
+  
+  /**
+   * @description 创建分享信息 post
+   * @author utaware
+   * @date 2019-01-10
+   * @returns 
+   */
   async create () {
 
     const { ctx, app } = this

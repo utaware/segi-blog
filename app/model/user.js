@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-19 10:43:43
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-07 15:48:22
+ * @LastEditTime: 2019-01-10 11:55:23
  */
 
 // https://github.com/caiya/vuejs-admin-server/blob/master/app/model/user.js
@@ -18,7 +18,8 @@ const saltRounds = 10
 
 module.exports = app => {
   // 类型获取
-  const { INTEGER, STRING, DATE, VIRTUAL } = app.Sequelize;
+  const Sql = app.Sequelize
+  const { INTEGER, STRING, DATE, VIRTUAL } = Sql
   // define
   const User = app.model.define('User', {
     // 表结构
@@ -100,6 +101,17 @@ module.exports = app => {
     const hash = result.get({plain: true}).hash
     const contrast = await bcrypt.compare(password, hash)
     return contrast
+  }
+  // 查询用户权限
+  User.privilege = async (user_id) => {
+    return await User.findOne({
+      // include: {
+      //   model: app.model.Privilege,
+      //   as: 'p',
+      //   attributes: []
+      // },
+      where: { user_id }
+    })
   }
 
   // 关联关系
