@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80013
 File Encoding         : 65001
 
-Date: 2019-01-09 18:37:52
+Date: 2019-01-12 17:14:29
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -202,7 +202,7 @@ DROP TABLE IF EXISTS `share_list`;
 CREATE TABLE `share_list` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '上传文件相关id',
   `user_id` int(11) NOT NULL,
-  `username` varchar(255) NOT NULL,
+  `author` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `file_id` int(11) NOT NULL COMMENT '文件上传id',
   `day` varchar(24) NOT NULL,
   `cycle` varchar(255) NOT NULL COMMENT '期数',
@@ -217,8 +217,8 @@ CREATE TABLE `share_list` (
 -- ----------------------------
 -- Records of share_list
 -- ----------------------------
-INSERT INTO `share_list` VALUES ('1', '1', 'akane', '18', '18/12/31', '1', '测试标题1', '测试描述1', '2019-01-09 18:34:46', '2019-01-09 18:34:46', null);
-INSERT INTO `share_list` VALUES ('2', '1', 'akane', '18', '19/01/07', '2', '测试标题2', '测试描述2', '2019-01-09 18:36:10', '2019-01-09 18:36:10', null);
+INSERT INTO `share_list` VALUES ('1', '1', 'akane', '18', '2018/12/31', '1', '测试标题1', '测试描述1', '2019-01-09 18:34:46', '2019-01-09 18:34:46', null);
+INSERT INTO `share_list` VALUES ('2', '1', 'akane', '18', '2019/01/07', '2', '测试标题2', '测试描述2', '2019-01-09 18:36:10', '2019-01-09 18:36:10', null);
 
 -- ----------------------------
 -- Table structure for total_list
@@ -326,7 +326,7 @@ CREATE TABLE `user_list` (
 -- ----------------------------
 -- Records of user_list
 -- ----------------------------
-INSERT INTO `user_list` VALUES ('1', 'akane', '$2b$10$Hep2.syaPqmt6km66yXq0O09kuAm9gZeiZ1GJjEtpDN/4dBLX7mmq', '1264051408@qq.com', '4', '2', '2019-01-09 10:47:07', '2018-12-03 15:42:34', '2019-01-09 10:47:07', null);
+INSERT INTO `user_list` VALUES ('1', 'akane', '$2b$10$Hep2.syaPqmt6km66yXq0O09kuAm9gZeiZ1GJjEtpDN/4dBLX7mmq', '1264051408@qq.com', '4', '2', '2019-01-12 10:33:17', '2018-12-03 15:42:34', '2019-01-12 10:33:17', null);
 INSERT INTO `user_list` VALUES ('11', 'test2', '$2b$10$tHbzPawpoZwR.FEFd98moOg3vGsU8s9E5.PK0.QsSmgIV4c9WDSii', 'test2@qq.com', '1', '1', null, '2018-12-25 18:18:40', '2018-12-25 18:18:40', null);
 INSERT INTO `user_list` VALUES ('12', 'test3', '$2b$10$BrX8lIpM1l36cVjWymxl7.ArKcyy8rpEzxoxU79Zn1d1w6w9DAHcG', 'test3@qq.com', '2', '2', null, '2018-12-26 17:54:18', '2018-12-26 17:54:18', '2018-12-29 10:51:17');
 INSERT INTO `user_list` VALUES ('13', 'test4', '$2b$10$GGc2IEAWT.XAAwINchDAHOEvDXGPut8J1.yPFtBp6jgxX8C5LK3Du', 'test4@qq.com', '1', '1', null, '2018-12-26 18:22:37', '2018-12-26 18:22:37', null);
@@ -359,7 +359,7 @@ CREATE TABLE `visit_log` (
   `updated_at` datetime DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=118 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of visit_log
@@ -385,3 +385,99 @@ INSERT INTO `visit_log` VALUES ('18', '127.0.0.1', '/api/share/create', 'POST', 
 INSERT INTO `visit_log` VALUES ('19', '127.0.0.1', '/api/share/create', 'POST', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '0', '新增失败', '2019-01-09 18:33:55', '2019-01-09 18:33:55', null);
 INSERT INTO `visit_log` VALUES ('20', '127.0.0.1', '/api/share/create', 'POST', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '新增成功', '2019-01-09 18:34:46', '2019-01-09 18:34:46', null);
 INSERT INTO `visit_log` VALUES ('21', '127.0.0.1', '/api/share/create', 'POST', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '新增成功', '2019-01-09 18:36:10', '2019-01-09 18:36:10', null);
+INSERT INTO `visit_log` VALUES ('22', '127.0.0.1', '/api/user/login', 'POST', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '登录成功', '2019-01-12 10:33:17', '2019-01-12 10:33:17', null);
+INSERT INTO `visit_log` VALUES ('23', '::1', '/api/share/query', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', 'fail', '2019-01-12 10:40:31', '2019-01-12 10:40:31', null);
+INSERT INTO `visit_log` VALUES ('24', '::1', '/api/share/query', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', 'fail', '2019-01-12 10:41:14', '2019-01-12 10:41:14', null);
+INSERT INTO `visit_log` VALUES ('25', '::1', '/api/share/query', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询分享失败', '2019-01-12 10:46:30', '2019-01-12 10:46:30', null);
+INSERT INTO `visit_log` VALUES ('26', '::1', '/api/share/query', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询分享失败', '2019-01-12 11:00:30', '2019-01-12 11:00:30', null);
+INSERT INTO `visit_log` VALUES ('27', '::1', '/api/share/query', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询分享失败', '2019-01-12 11:03:20', '2019-01-12 11:03:20', null);
+INSERT INTO `visit_log` VALUES ('28', '::1', '/api/share/query', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询分享失败', '2019-01-12 11:03:37', '2019-01-12 11:03:37', null);
+INSERT INTO `visit_log` VALUES ('29', '::1', '/api/share/query', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询分享失败', '2019-01-12 11:03:59', '2019-01-12 11:03:59', null);
+INSERT INTO `visit_log` VALUES ('30', '::1', '/api/share/query', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询分享失败', '2019-01-12 11:04:53', '2019-01-12 11:04:53', null);
+INSERT INTO `visit_log` VALUES ('31', '::1', '/api/share/query', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询分享失败', '2019-01-12 11:04:54', '2019-01-12 11:04:54', null);
+INSERT INTO `visit_log` VALUES ('32', '::1', '/api/share/query', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询分享失败', '2019-01-12 11:05:36', '2019-01-12 11:05:36', null);
+INSERT INTO `visit_log` VALUES ('33', '::1', '/api/share/query', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询分享失败', '2019-01-12 11:05:38', '2019-01-12 11:05:38', null);
+INSERT INTO `visit_log` VALUES ('34', '::1', '/api/share/query', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询分享失败', '2019-01-12 11:05:55', '2019-01-12 11:05:55', null);
+INSERT INTO `visit_log` VALUES ('35', '::1', '/api/share/query', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询分享失败', '2019-01-12 11:05:55', '2019-01-12 11:05:55', null);
+INSERT INTO `visit_log` VALUES ('36', '::1', '/api/share/query', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询分享失败', '2019-01-12 11:15:08', '2019-01-12 11:15:08', null);
+INSERT INTO `visit_log` VALUES ('37', '::1', '/api/share/query', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '查询分量成功', '2019-01-12 11:17:33', '2019-01-12 11:17:33', null);
+INSERT INTO `visit_log` VALUES ('38', '::1', '/api/share/query', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '查询分量成功', '2019-01-12 11:18:05', '2019-01-12 11:18:05', null);
+INSERT INTO `visit_log` VALUES ('39', '::1', '/api/share/query', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询分享失败', '2019-01-12 11:18:31', '2019-01-12 11:18:31', null);
+INSERT INTO `visit_log` VALUES ('40', '::1', '/api/share/query', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询分享失败', '2019-01-12 11:22:17', '2019-01-12 11:22:17', null);
+INSERT INTO `visit_log` VALUES ('41', '::1', '/api/share/query', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '查询分量成功', '2019-01-12 11:25:32', '2019-01-12 11:25:32', null);
+INSERT INTO `visit_log` VALUES ('42', '::1', '/api/share/query', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '查询分量成功', '2019-01-12 11:26:03', '2019-01-12 11:26:03', null);
+INSERT INTO `visit_log` VALUES ('43', '::1', '/api/share/query', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '查询分量成功', '2019-01-12 11:26:05', '2019-01-12 11:26:05', null);
+INSERT INTO `visit_log` VALUES ('44', '::1', '/api/share/cycle', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '分享期数查询失败', '2019-01-12 13:59:34', '2019-01-12 13:59:34', null);
+INSERT INTO `visit_log` VALUES ('45', '::1', '/api/share/cycle', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '分享期数查询失败', '2019-01-12 14:00:23', '2019-01-12 14:00:23', null);
+INSERT INTO `visit_log` VALUES ('46', '::1', '/api/share/cycle', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '分享期数查询失败', '2019-01-12 14:00:44', '2019-01-12 14:00:44', null);
+INSERT INTO `visit_log` VALUES ('47', '::1', '/api/share/cycle', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '分享期数查询成功', '2019-01-12 14:00:59', '2019-01-12 14:00:59', null);
+INSERT INTO `visit_log` VALUES ('48', '::1', '/api/share/cycle', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '分享期数查询成功', '2019-01-12 14:04:26', '2019-01-12 14:04:26', null);
+INSERT INTO `visit_log` VALUES ('49', '::1', '/api/share/cycle', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '分享期数查询成功', '2019-01-12 14:05:36', '2019-01-12 14:05:36', null);
+INSERT INTO `visit_log` VALUES ('50', '::1', '/api/share/cycle', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '分享期数查询成功', '2019-01-12 14:14:00', '2019-01-12 14:14:00', null);
+INSERT INTO `visit_log` VALUES ('51', '::1', '/api/share/cycle', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '分享期数查询成功', '2019-01-12 14:15:47', '2019-01-12 14:15:47', null);
+INSERT INTO `visit_log` VALUES ('52', '::1', '/api/share/cycle', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '分享期数查询失败', '2019-01-12 14:18:37', '2019-01-12 14:18:37', null);
+INSERT INTO `visit_log` VALUES ('53', '::1', '/api/share/cycle', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '分享期数查询失败', '2019-01-12 14:19:02', '2019-01-12 14:19:02', null);
+INSERT INTO `visit_log` VALUES ('54', '::1', '/api/share/cycle', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '分享期数查询失败', '2019-01-12 14:19:17', '2019-01-12 14:19:17', null);
+INSERT INTO `visit_log` VALUES ('55', '::1', '/api/share/cycle', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '分享期数查询失败', '2019-01-12 14:19:19', '2019-01-12 14:19:19', null);
+INSERT INTO `visit_log` VALUES ('56', '::1', '/api/share/cycle', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '分享期数查询失败', '2019-01-12 14:20:20', '2019-01-12 14:20:20', null);
+INSERT INTO `visit_log` VALUES ('57', '::1', '/api/share/cycle', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '分享期数查询成功', '2019-01-12 14:20:23', '2019-01-12 14:20:23', null);
+INSERT INTO `visit_log` VALUES ('58', '::1', '/api/share/cycle', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '分享期数查询成功', '2019-01-12 14:24:59', '2019-01-12 14:24:59', null);
+INSERT INTO `visit_log` VALUES ('59', '127.0.0.1', '/api/share/query?pageNo=1&pageSize=15', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '0', '查询分享失败', '2019-01-12 14:39:03', '2019-01-12 14:39:03', null);
+INSERT INTO `visit_log` VALUES ('60', '127.0.0.1', '/api/share/query?pageNo=1&pageSize=15', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '0', '查询分享失败', '2019-01-12 14:40:24', '2019-01-12 14:40:24', null);
+INSERT INTO `visit_log` VALUES ('61', '127.0.0.1', '/api/share/query?pageNo=1&pageSize=15', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '0', '查询分享失败', '2019-01-12 14:41:21', '2019-01-12 14:41:21', null);
+INSERT INTO `visit_log` VALUES ('62', '127.0.0.1', '/api/share/query?pageNo=1&pageSize=15', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询分享成功', '2019-01-12 14:44:01', '2019-01-12 14:44:01', null);
+INSERT INTO `visit_log` VALUES ('63', '127.0.0.1', '/api/share/query?pageNo=1&pageSize=15', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询分享成功', '2019-01-12 14:44:25', '2019-01-12 14:44:25', null);
+INSERT INTO `visit_log` VALUES ('64', '127.0.0.1', '/api/share/query?pageNo=1&pageSize=15', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询分享成功', '2019-01-12 15:15:34', '2019-01-12 15:15:34', null);
+INSERT INTO `visit_log` VALUES ('65', '127.0.0.1', '/api/share/query?pageNo=1&pageSize=15', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询分享成功', '2019-01-12 15:18:27', '2019-01-12 15:18:27', null);
+INSERT INTO `visit_log` VALUES ('66', '127.0.0.1', '/api/share/query?pageNo=1&pageSize=15', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询分享成功', '2019-01-12 15:19:04', '2019-01-12 15:19:04', null);
+INSERT INTO `visit_log` VALUES ('67', '127.0.0.1', '/api/share/query?pageNo=1&pageSize=15', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询分享成功', '2019-01-12 15:21:00', '2019-01-12 15:21:00', null);
+INSERT INTO `visit_log` VALUES ('68', '127.0.0.1', '/api/share/query?pageNo=1&pageSize=15', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询分享成功', '2019-01-12 15:28:30', '2019-01-12 15:28:30', null);
+INSERT INTO `visit_log` VALUES ('69', '127.0.0.1', '/api/share/remove', 'DELETE', '', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '404', '0', 'fail create', '2019-01-12 15:33:34', '2019-01-12 15:33:34', null);
+INSERT INTO `visit_log` VALUES ('70', '127.0.0.1', '/api/share/query?pageNo=1&pageSize=15', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询分享成功', '2019-01-12 15:33:46', '2019-01-12 15:33:46', null);
+INSERT INTO `visit_log` VALUES ('71', '127.0.0.1', '/api/share/remove', 'DELETE', '', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '404', '0', 'fail create', '2019-01-12 15:33:49', '2019-01-12 15:33:49', null);
+INSERT INTO `visit_log` VALUES ('72', '127.0.0.1', '/api/share/remove', 'DELETE', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '删除分享成功', '2019-01-12 15:34:35', '2019-01-12 15:34:35', null);
+INSERT INTO `visit_log` VALUES ('73', '127.0.0.1', '/api/share/query?pageNo=1&pageSize=15', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询分享成功', '2019-01-12 15:34:37', '2019-01-12 15:34:37', null);
+INSERT INTO `visit_log` VALUES ('74', '::1', '/api/share/query', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '查询分享成功', '2019-01-12 15:40:16', '2019-01-12 15:40:16', null);
+INSERT INTO `visit_log` VALUES ('75', '127.0.0.1', '/api/share/query?pageNo=1&pageSize=10', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询分享成功', '2019-01-12 15:46:53', '2019-01-12 15:46:53', null);
+INSERT INTO `visit_log` VALUES ('76', '127.0.0.1', '/api/share/query?pageNo=1&pageSize=10', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询分享成功', '2019-01-12 15:47:04', '2019-01-12 15:47:04', null);
+INSERT INTO `visit_log` VALUES ('77', '127.0.0.1', '/api/share/query?pageNo=1&pageSize=10', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询分享成功', '2019-01-12 15:47:13', '2019-01-12 15:47:13', null);
+INSERT INTO `visit_log` VALUES ('78', '::1', '/api/share/cycle', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '分享期数查询成功', '2019-01-12 15:49:00', '2019-01-12 15:49:00', null);
+INSERT INTO `visit_log` VALUES ('79', '127.0.0.1', '/api/share/query?pageNo=1&pageSize=10', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询分享成功', '2019-01-12 15:49:34', '2019-01-12 15:49:34', null);
+INSERT INTO `visit_log` VALUES ('80', '::1', '/api/share/cycle', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '分享期数查询成功', '2019-01-12 15:50:32', '2019-01-12 15:50:32', null);
+INSERT INTO `visit_log` VALUES ('81', '::1', '/api/share/cycle', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '分享期数查询成功', '2019-01-12 15:50:37', '2019-01-12 15:50:37', null);
+INSERT INTO `visit_log` VALUES ('82', '::1', '/api/share/cycle', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '分享期数查询成功', '2019-01-12 15:51:34', '2019-01-12 15:51:34', null);
+INSERT INTO `visit_log` VALUES ('83', '::1', '/api/share/cycle', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '分享期数查询成功', '2019-01-12 15:51:37', '2019-01-12 15:51:37', null);
+INSERT INTO `visit_log` VALUES ('84', '::1', '/api/share/cycle', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '分享期数查询失败', '2019-01-12 15:53:45', '2019-01-12 15:53:45', null);
+INSERT INTO `visit_log` VALUES ('85', '::1', '/api/share/cycle', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '分享期数查询失败', '2019-01-12 15:54:00', '2019-01-12 15:54:00', null);
+INSERT INTO `visit_log` VALUES ('86', '::1', '/api/share/cycle', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '分享期数查询成功', '2019-01-12 15:54:03', '2019-01-12 15:54:03', null);
+INSERT INTO `visit_log` VALUES ('87', '::1', '/api/share/cycle', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '分享期数查询成功', '2019-01-12 15:57:08', '2019-01-12 15:57:08', null);
+INSERT INTO `visit_log` VALUES ('88', '::1', '/api/share/cycle', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '分享期数查询成功', '2019-01-12 15:57:09', '2019-01-12 15:57:09', null);
+INSERT INTO `visit_log` VALUES ('89', '127.0.0.1', '/api/share/cycle', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '分享期数查询成功', '2019-01-12 15:58:12', '2019-01-12 15:58:12', null);
+INSERT INTO `visit_log` VALUES ('90', '::1', '/api/share/cycle', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '分享期数查询成功', '2019-01-12 15:58:39', '2019-01-12 15:58:39', null);
+INSERT INTO `visit_log` VALUES ('91', '::1', '/api/share/cycle', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '分享期数查询成功', '2019-01-12 15:58:41', '2019-01-12 15:58:41', null);
+INSERT INTO `visit_log` VALUES ('92', '::1', '/api/share/cycle', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '分享期数查询成功', '2019-01-12 15:58:44', '2019-01-12 15:58:44', null);
+INSERT INTO `visit_log` VALUES ('93', '::1', '/api/share/cycle', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '分享期数查询成功', '2019-01-12 15:59:11', '2019-01-12 15:59:11', null);
+INSERT INTO `visit_log` VALUES ('94', '::1', '/api/share/cycle', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '分享期数查询成功', '2019-01-12 15:59:12', '2019-01-12 15:59:12', null);
+INSERT INTO `visit_log` VALUES ('95', '::1', '/api/share/cycle', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '分享期数查询成功', '2019-01-12 16:04:46', '2019-01-12 16:04:46', null);
+INSERT INTO `visit_log` VALUES ('96', '127.0.0.1', '/api/share/cycle?pageNo=1&pageSize=10', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '分享期数查询成功', '2019-01-12 16:09:45', '2019-01-12 16:09:45', null);
+INSERT INTO `visit_log` VALUES ('97', '127.0.0.1', '/api/share/cycle', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '分享期数查询成功', '2019-01-12 16:17:59', '2019-01-12 16:17:59', null);
+INSERT INTO `visit_log` VALUES ('98', '127.0.0.1', '/api/share/cycle', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '分享期数查询成功', '2019-01-12 16:18:11', '2019-01-12 16:18:11', null);
+INSERT INTO `visit_log` VALUES ('99', '127.0.0.1', '/api/share/cycle', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '分享期数查询成功', '2019-01-12 16:18:41', '2019-01-12 16:18:41', null);
+INSERT INTO `visit_log` VALUES ('100', '127.0.0.1', '/api/share/cycle', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '分享期数查询成功', '2019-01-12 16:19:14', '2019-01-12 16:19:14', null);
+INSERT INTO `visit_log` VALUES ('101', '127.0.0.1', '/api/share/cycle', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '分享期数查询成功', '2019-01-12 16:19:56', '2019-01-12 16:19:56', null);
+INSERT INTO `visit_log` VALUES ('102', '::1', '/api/share/query', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '查询分享成功', '2019-01-12 16:30:32', '2019-01-12 16:30:32', null);
+INSERT INTO `visit_log` VALUES ('103', '::1', '/api/share/query', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '查询分享成功', '2019-01-12 16:31:43', '2019-01-12 16:31:43', null);
+INSERT INTO `visit_log` VALUES ('104', '::1', '/api/share/query?cycle=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '查询分享成功', '2019-01-12 16:32:05', '2019-01-12 16:32:05', null);
+INSERT INTO `visit_log` VALUES ('105', '127.0.0.1', '/api/share/cycle', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '分享期数查询成功', '2019-01-12 16:33:28', '2019-01-12 16:33:28', null);
+INSERT INTO `visit_log` VALUES ('106', '127.0.0.1', '/api/share/cycle', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '分享期数查询成功', '2019-01-12 16:34:00', '2019-01-12 16:34:00', null);
+INSERT INTO `visit_log` VALUES ('107', '127.0.0.1', '/api/share/cycle', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '分享期数查询成功', '2019-01-12 16:34:24', '2019-01-12 16:34:24', null);
+INSERT INTO `visit_log` VALUES ('108', '127.0.0.1', '/api/share/cycle', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '分享期数查询成功', '2019-01-12 16:35:45', '2019-01-12 16:35:45', null);
+INSERT INTO `visit_log` VALUES ('109', '127.0.0.1', '/api/share/cycle', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '分享期数查询成功', '2019-01-12 16:37:27', '2019-01-12 16:37:27', null);
+INSERT INTO `visit_log` VALUES ('110', '127.0.0.1', '/api/share/query?cycle=1', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询分享成功', '2019-01-12 16:47:08', '2019-01-12 16:47:08', null);
+INSERT INTO `visit_log` VALUES ('111', '127.0.0.1', '/api/share/cycle', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '分享期数查询成功', '2019-01-12 16:47:08', '2019-01-12 16:47:08', null);
+INSERT INTO `visit_log` VALUES ('112', '127.0.0.1', '/api/share/query?cycle=1', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询分享成功', '2019-01-12 16:48:38', '2019-01-12 16:48:38', null);
+INSERT INTO `visit_log` VALUES ('113', '127.0.0.1', '/api/share/cycle', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '分享期数查询成功', '2019-01-12 16:48:38', '2019-01-12 16:48:38', null);
+INSERT INTO `visit_log` VALUES ('114', '127.0.0.1', '/api/share/cycle', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '分享期数查询成功', '2019-01-12 16:50:31', '2019-01-12 16:50:31', null);
+INSERT INTO `visit_log` VALUES ('115', '127.0.0.1', '/api/share/cycle', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '分享期数查询成功', '2019-01-12 17:03:14', '2019-01-12 17:03:14', null);
+INSERT INTO `visit_log` VALUES ('116', '127.0.0.1', '/api/share/query?cycle=2', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询分享成功', '2019-01-12 17:05:45', '2019-01-12 17:05:45', null);
+INSERT INTO `visit_log` VALUES ('117', '127.0.0.1', '/api/share/query?cycle=1', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询分享成功', '2019-01-12 17:05:48', '2019-01-12 17:05:48', null);
