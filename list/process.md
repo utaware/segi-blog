@@ -60,3 +60,9 @@
 ## 标准规范
   * mysql-sequelize 
   * (type-script)[https://blog.csdn.net/Android_yyx/article/details/81385593]
+
+## 前台页面调整
+
+1. 组件调整 => 延后
+2. 页面调整 => 1.添加刷新 条件筛选 分页等 2.store相关数据完善
+3. 请求调整 => (接口公共化, 成功和失败统一化, 成功调整message方法, 失败统一汇总)

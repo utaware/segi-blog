@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-04 19:48:52
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-09 18:30:25
+ * @LastEditTime: 2019-01-12 11:10:16
  */
 
 const Service = require('egg').Service
@@ -33,10 +33,9 @@ class VisitService extends Service {
     data = data.map((row) => {
       let r = []
       row = row.get({plain: true})
-      ctx.log(row.created_at)
       for (let k in row) {
         if (formatTime.includes(k)) {
-          row[k] = moment(row[k]).format('YYYY-MM-DD HH:MM:SS')
+          row[k] = moment(row[k]).format('YYYY-MM-DD HH:mm:ss')
         }
         r.push(row[k])
       }

@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-19 17:52:01
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-09 18:34:35
+ * @LastEditTime: 2019-01-12 11:05:30
  */
 
 module.exports = app => {
@@ -23,7 +23,7 @@ module.exports = app => {
       type: INTEGER,
       comment: '用户关联id'
     },
-    username: {
+    author: {
       type: STRING,
       comment: '用户名'
     },
