@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2019-01-09 17:14:23
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-12 16:31:41
+ * @LastEditTime: 2019-01-17 16:57:11
  */
 
 const Controller = require('egg').Controller;
@@ -49,10 +49,10 @@ class ShareController extends Controller {
    * @returns 
    */
 
-  async index () {
+  async query () {
 
     const { ctx, app } = this
-    const { cycle = 1 } = ctx.request.query
+    const { cycle } = ctx.request.query
     
     try {
       const result = await app.model.Share.findAndCountAll({

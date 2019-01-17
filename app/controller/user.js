@@ -26,7 +26,7 @@ class UserController extends Controller {
 
     // 校验
     try {
-      ctx.validate(app.validator.main(['username', 'password', 'email']),{password, username, email})
+      ctx.validate(app.validator.main(['username', 'password', 'email']), {password, username, email})
     } catch (err) {
       return ctx.end(false, '参数校验未通过', {err})
     }
@@ -66,8 +66,7 @@ class UserController extends Controller {
 
     // 校验
     try {
-      ctx.validate(app.validator.main(['mode']), { mode })
-      ctx.validate(app.validator.main(['password'].concat(mode)), { [mode]: username, password })
+      ctx.validate(app.validator.main(['password', 'mode', mode]), { [mode]: username, password, mode })
     } catch (err) {
       return ctx.end(false, '参数校验未通过', {err})
     }
