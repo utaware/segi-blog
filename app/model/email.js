@@ -4,14 +4,14 @@
  * @Author: utaware
  * @Date: 2018-12-19 18:04:22
  * @LastEditors: utaware
- * @LastEditTime: 2018-12-20 11:07:07
+ * @LastEditTime: 2019-01-18 16:56:05
  */
 
 module.exports = app => {
 
   const { INTEGER, STRING, TEXT } = app.Sequelize;
 
-  const Eamil = app.model.define('Email', {
+  const Eamil = app.model.define('email', {
     id: {
       type: INTEGER,
       autoIncrement: true,

@@ -4,14 +4,14 @@
  * @Author: utaware
  * @Date: 2018-12-19 17:52:01
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-12 11:05:30
+ * @LastEditTime: 2019-01-18 16:55:45
  */
 
 module.exports = app => {
 
   const { INTEGER, STRING, TEXT } = app.Sequelize;
   
-  const Share = app.model.define('Share', {
+  const Share = app.model.define('share', {
     id: {
       type: INTEGER,
       autoIncrement: true,

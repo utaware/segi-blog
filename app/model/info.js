@@ -4,14 +4,14 @@
  * @Author: utaware
  * @Date: 2018-12-19 17:22:48
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-04 16:23:31
+ * @LastEditTime: 2019-01-18 17:11:04
  */
 
 module.exports = app => {
   // 类型获取
   const { INTEGER, STRING, DATE } = app.Sequelize;
 
-  const Info = app.model.define('Info', {
+  const Info = app.model.define('info', {
     // id
     user_id: {
       type: INTEGER,
@@ -53,11 +53,34 @@ module.exports = app => {
     }
   }, {
     tableName: 'user_info',
-    comment: '用户详细信息'
+    comment: '用户详细信息',
+    // 添加钩子
+    hooks: {
+      afterDestroy () {
+        app.log('删除钩子被触发--info')
+      },
+      afterUpdate () {
+        app.log('更新钩子被触发--info')
+      },
+      afterRestore () {
+        app.log('恢复钩子被触发--info')
+      }
+    }
   })
   
+  // 关联关系
   Info.associate = () => {
-    app.model.Info.belongsTo(app.model.User, { foreignKey: 'user_id', targetKey: 'user_id', hooks: true, as: 'i'})
+    app.model.Info.belongsTo(app.model.User, { foreignKey: 'user_id', targetKey: 'user_id', hooks: true, onDelete: 'CASCADE'})
+  }
+
+  // 单个用户详细信息
+  Info.$query = async (user_id, exclude = ['user_id', 'created_at', 'updated_at', 'deleted_at'], paranoid = true) => {
+    const result = await app.model.Info.findOne({
+      attributes: { exclude },
+      where: {user_id},
+      paranoid
+    })
+    return result.get({plain: true})
   }
 
   return Info

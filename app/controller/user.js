@@ -4,13 +4,43 @@
  * @Author: utaware
  * @Date: 2018-11-26 14:07:48
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-07 16:44:25
+ * @LastEditTime: 2019-01-18 17:24:39
  */
 
 // module
 const Controller = require('egg').Controller
 // contoller
 class UserController extends Controller {
+
+  /**
+   * @description get 单个用户详细信息查询
+   * @author utaware
+   * @date 2019-01-18
+   * @returns 
+   */
+
+  async query () {
+
+    const { ctx, app } = this
+    const { user_id } = ctx.state.user
+
+    try {
+      const result = await app.model.User.findOne({
+        where: {user_id},
+        include: [
+          { model: app.model.Info, as: 'i' },
+          { model: app.model.Role, as: 'r'},
+          { model: app.model.Privilege, as: 'p'}
+        ]
+      })
+      return ctx.end(true, '用户信息查询成功', {result})
+    } catch (err) {
+      console.log(err)
+      return ctx.end(false, '信息查询失败', {err})
+    }
+
+  }
+
 
   /**
    * @description 用户注册 post
@@ -33,10 +63,10 @@ class UserController extends Controller {
 
     // 检查用户名是否存在
     try {
-      const usable = await app.model.User.findAll({
+      const isExist = await app.model.User.findAll({
         where: { $or: [ {email}, {username} ]}
       })
-      if (usable.length) {
+      if (isExist.length) {
         return ctx.end(false, '用户名或邮箱已存在')
       }
     } catch (err) {
@@ -50,10 +80,11 @@ class UserController extends Controller {
     } catch (err) {
       return ctx.end(false, {err})
     }
+
   }
 
   /**
-   * @description 用户登陆
+   * @description 用户登陆 post
    * @author utaware
    * @date 2018-12-20
    * @returns 
@@ -75,7 +106,8 @@ class UserController extends Controller {
     let query
     try {
       query = await app.model.User.findOne({
-        where: { [mode]: username }
+        where: { [mode]: username },
+        include: { model: app.model.Info, as: 'i' }
       })
       if (!query) {
         return ctx.end(false, '用户信息不存在')
@@ -97,7 +129,7 @@ class UserController extends Controller {
 
     try {
       await app.model.User.update({ login_time }, { where: {user_id} })
-      return ctx.end(true, '登录成功', { token })
+      return ctx.end(true, '登录成功', { token, user: { username, privilege, role } })
     } catch (err) {
       return ctx.end(false, '登陆时间更新失败', {err})
     }
@@ -277,16 +309,8 @@ class UserController extends Controller {
         ],
         // 嵌套
         include: [
-          { 
-            model: app.model.Role,
-            as: 'r',
-            attributes: []
-          },
-          {
-            model: app.model.Privilege,
-            as: 'p',
-            attributes: []
-          }
+          { model: app.model.Role, as: 'r', attributes: [] },
+          { model: app.model.Privilege, as: 'p', attributes: [] }
         ],
         // 数据格式化
         raw: true, 
@@ -344,7 +368,10 @@ class UserController extends Controller {
     try {
       const result = await app.model.User.destroy({
         where: {user_id},
-        // individualHooks: true
+        // force: true,
+        hooks: false,
+        individualHooks: true,
+        // personalHooks:true
       })
       return ctx.end(true, '账户注销成功', {result})
     } catch (err) {
@@ -397,9 +424,7 @@ class UserController extends Controller {
     try {
       await app.model.User.restore({
         where: {user_id},
-        include: [
-          {model: app.model.Info, as: 'i'}
-        ]
+        individualHooks: true,
       })
       return ctx.end(true, '用户信息恢复成功')
     } catch (err) {

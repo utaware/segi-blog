@@ -34,6 +34,7 @@ module.exports = app => {
   router.delete('/api/user/cancellation', controller.user.cancellation) // 用户账户注销
   router.put('/api/user/recovery', controller.user.recovery) // 用户账户恢复
   router.get('/api/user/getBreifInfo', controller.user.getBreifInfo) // 获取概览信息
+  router.get('/api/user/query', controller.user.query) // 获取单个用户信息
 
   // role => 角色相关
   router.put('/api/role/recovery', controller.role.recovery) // 软删除恢复

@@ -4,14 +4,14 @@
  * @Author: utaware
  * @Date: 2018-12-19 17:52:01
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-09 16:51:07
+ * @LastEditTime: 2019-01-18 16:55:31
  */
 
 module.exports = app => {
 
   const { INTEGER, STRING } = app.Sequelize;
   
-  const Upload = app.model.define('Upload', {
+  const Upload = app.model.define('upload', {
     id: {
       type: INTEGER,
       autoIncrement: true,

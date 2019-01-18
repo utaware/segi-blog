@@ -4,14 +4,14 @@
  * @Author: utaware
  * @Date: 2018-12-19 17:45:38
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-02 15:39:17
+ * @LastEditTime: 2019-01-18 16:57:23
  */
 
 module.exports = app => {
   // 类型获取
   const { INTEGER, STRING, BOOLEAN } = app.Sequelize;
 
-  const Privilege = app.model.define('Privilege', {
+  const Privilege = app.model.define('privilege', {
     id: {
       type: INTEGER,
       autoIncrement: true,
@@ -59,7 +59,7 @@ module.exports = app => {
   })
 
   Privilege.associate = () => {
-    app.model.Privilege.hasMany(app.model.User, { foreignKey: 'privilege', targetKey: 'id', as: 'u'});
+    app.model.Privilege.hasMany(app.model.User, { foreignKey: 'privilege', targetKey: 'id'});
   }
 
   return Privilege;
