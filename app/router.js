@@ -62,6 +62,9 @@ module.exports = app => {
   router.put('/api/info/update', controller.info.update) // 完善用户信息
   router.get('/api/info/show', controller.info.show) // 完善用户信息
 
+  // comment => 评论相关
+  router.get('/api/comment/getAll', controller.comment.index) // 查询所有评论
+
   // database => 数据库相关
   router.delete('/api/database/truncate', controller.database.truncate) // 重置表数据
 };

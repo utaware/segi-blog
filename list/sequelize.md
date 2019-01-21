@@ -120,6 +120,12 @@ User.update({sex:sequelize.literal('`age` +1')}, {where:{number:{$gt:10}}}).then
 
 [sequelize 删除钩子触发](https://github.com/sequelize/sequelize/issues/2547)
 
+添加删除和恢复钩子的时候, 首先触发的会是批量删除和恢复的钩子,即 
+beforeBulkRestore / beforeBulkUpdate / beforeBulkDestroy
+afterBulkRestore / afterBulkUpdate / afterBulkDestroy
+这时候单个实例的destroy和restore钩子并不会触发
+如果希望单个的钩子触发, 需要添加individualHooks: true
+
 ## 从实例中获取干净的数据
 
 ```js
@@ -147,4 +153,34 @@ try {
   await transaction.rollback();
   return ctx.end(false, '用户信息创建失败', {err})
 }
+```
+
+## 
+
+添加钩子的时候存在的两种方式
+
+1. Sequelize.options.define (默认钩子)
+```js
+const sequelize = new Sequelize(..., {
+  define: {
+    hooks: {
+      beforeCreate: () => {
+        // Do stuff
+      }
+    }
+  }
+});
+```
+
+2. Sequelize.addHook（永久挂钩）
+```js
+sequelize.addHook('beforeCreate', () => {
+  // Do stuff
+});
+
+User.beforeCreate(user => {
+  if (user.accessLevel > 10 && user.username !== "Boss") {
+    throw new Error("You can't grant this user an access level above 10!")
+  }
+})
 ```

@@ -4,14 +4,14 @@
  * @Author: utaware
  * @Date: 2018-12-19 17:52:01
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-18 16:55:39
+ * @LastEditTime: 2019-01-21 11:43:18
  */
 
 module.exports = app => {
 
   const { INTEGER, STRING } = app.Sequelize;
   
-  const Total = app.model.define('total', {
+  const Total = app.model.define('Total', {
     id: {
       type: INTEGER,
       autoIncrement: true,

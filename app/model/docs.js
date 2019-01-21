@@ -4,14 +4,14 @@
  * @Author: utaware
  * @Date: 2018-12-19 18:16:01
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-18 16:56:17
+ * @LastEditTime: 2019-01-21 11:44:02
  */
 
 module.exports = app => {
 
   const { INTEGER, STRING, TEXT, ENUM } = app.Sequelize;
 
-  const Docs = app.model.define('docs', {
+  const Docs = app.model.define('Docs', {
     id: {
       type: INTEGER,
       autoIncrement: true,

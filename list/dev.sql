@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80013
 File Encoding         : 65001
 
-Date: 2019-01-18 17:26:55
+Date: 2019-01-21 18:10:15
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -21,10 +21,11 @@ SET FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS `comment_list`;
 CREATE TABLE `comment_list` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `docs_id` int(11) NOT NULL COMMENT '文档关联id',
   `user_id` int(11) NOT NULL COMMENT '发起评论的人',
-  `floor` int(11) NOT NULL DEFAULT '0' COMMENT '评论楼层',
   `replier_id` int(11) NOT NULL COMMENT '回复人',
-  `replier_name` varchar(24) NOT NULL,
+  `replier_name` varchar(24) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `floor` int(11) NOT NULL DEFAULT '0' COMMENT '评论楼层',
   `content` varchar(255) NOT NULL COMMENT '评论内容',
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
@@ -238,7 +239,7 @@ CREATE TABLE `total_list` (
 -- ----------------------------
 -- Records of total_list
 -- ----------------------------
-INSERT INTO `total_list` VALUES ('1', 'user', '11', '用户', '2018-12-29 11:02:03', '2018-12-29 17:01:13', null);
+INSERT INTO `total_list` VALUES ('1', 'user', '6', '用户', '2018-12-29 11:02:03', '2019-01-21 14:51:44', null);
 INSERT INTO `total_list` VALUES ('2', 'share', '0', '分享', '2018-12-29 16:49:06', null, null);
 INSERT INTO `total_list` VALUES ('3', 'comment', '0', '评论', '2018-12-29 16:49:22', null, null);
 INSERT INTO `total_list` VALUES ('4', 'docs', '0', '文档', '2018-12-29 16:50:57', null, null);
@@ -294,16 +295,11 @@ CREATE TABLE `user_info` (
 -- Records of user_info
 -- ----------------------------
 INSERT INTO `user_info` VALUES ('1', 'utaware', '深圳市宝安区金港华庭G-27C', '/public/upload/avatar/d360d02c-4f3b-30a9-b2c4-49a8d970397f.jpg', '18285115398', '2019-01-17', '2018-12-21 15:50:22', '2019-01-09 11:22:55', null);
-INSERT INTO `user_info` VALUES ('11', 'test2', null, null, null, null, '2018-12-25 18:18:40', '2018-12-25 18:18:40', null);
-INSERT INTO `user_info` VALUES ('12', 'test3', null, null, null, null, '2018-12-26 17:54:18', '2018-12-26 17:54:18', null);
-INSERT INTO `user_info` VALUES ('13', 'test4', null, null, null, null, '2018-12-26 18:22:38', '2018-12-26 18:22:38', null);
-INSERT INTO `user_info` VALUES ('14', 'test5', null, null, null, null, '2018-12-29 11:22:55', '2018-12-29 11:22:55', null);
-INSERT INTO `user_info` VALUES ('15', 'test6', null, null, null, null, '2018-12-29 11:25:53', '2018-12-29 11:25:53', null);
-INSERT INTO `user_info` VALUES ('18', 'utaware', null, null, null, null, '2018-12-29 14:39:41', '2018-12-29 14:39:41', null);
 INSERT INTO `user_info` VALUES ('19', 'test7', null, null, null, null, '2018-12-29 15:13:27', '2018-12-29 15:13:27', null);
 INSERT INTO `user_info` VALUES ('21', 'test9', null, null, null, null, '2018-12-29 16:12:18', '2018-12-29 16:12:18', null);
 INSERT INTO `user_info` VALUES ('22', 'test10', null, null, null, null, '2018-12-29 16:16:03', '2018-12-29 16:16:03', null);
 INSERT INTO `user_info` VALUES ('23', 'test11', null, null, null, null, '2018-12-29 17:01:13', '2018-12-29 17:01:13', null);
+INSERT INTO `user_info` VALUES ('24', 'test12', null, null, null, null, '2019-01-21 14:51:44', '2019-01-21 14:51:44', null);
 
 -- ----------------------------
 -- Table structure for user_list
@@ -314,24 +310,24 @@ CREATE TABLE `user_list` (
   `username` char(24) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户名',
   `hash` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'bcrypt加密后的hash值',
   `email` char(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户邮箱',
-  `privilege` int(11) NOT NULL DEFAULT '1',
-  `role` int(11) NOT NULL DEFAULT '1',
+  `privilege` int(11) DEFAULT '1',
+  `role` int(11) DEFAULT '1',
   `login_time` datetime DEFAULT NULL COMMENT '登录时间',
   `created_at` datetime DEFAULT NULL COMMENT '账号创建时间',
   `updated_at` datetime DEFAULT NULL COMMENT '用户信息修改时间',
   `deleted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user_list
 -- ----------------------------
-INSERT INTO `user_list` VALUES ('1', 'akane', '$2b$10$Hep2.syaPqmt6km66yXq0O09kuAm9gZeiZ1GJjEtpDN/4dBLX7mmq', '1264051408@qq.com', '4', '2', '2019-01-18 16:37:09', '2018-12-03 15:42:34', '2019-01-18 16:37:09', null);
+INSERT INTO `user_list` VALUES ('1', 'akane', '$2b$10$Hep2.syaPqmt6km66yXq0O09kuAm9gZeiZ1GJjEtpDN/4dBLX7mmq', '1264051408@qq.com', '4', '2', '2019-01-21 11:55:19', '2018-12-03 15:42:34', '2019-01-21 11:55:19', null);
 INSERT INTO `user_list` VALUES ('19', 'test7', '$2b$10$3YlKm.af6IALbcrg/9WcPeH8CXkZrlzTPps0H82b18m0PGrbh5C0y', 'test7@qq.com', '1', '1', '2018-12-29 15:20:56', '2018-12-29 15:13:27', '2018-12-29 15:20:56', null);
-INSERT INTO `user_list` VALUES ('20', 'test8', '$2b$10$r4a2C4w5pfWSeD1Gh0vRuOa1p6SPqKkrRk/sGmNRCDBS6AI2GxBgy', 'test8@qq.com', '1', '1', null, '2018-12-29 15:27:37', '2018-12-29 15:27:37', null);
 INSERT INTO `user_list` VALUES ('21', 'test9', '$2b$10$3YADH9aj.nPiiscW.if0peZcFeYikEHuaZAWaf.iTOuk8nGP2nInK', 'test9@qq.com', '1', '1', null, '2018-12-29 16:12:18', '2018-12-29 16:12:18', null);
 INSERT INTO `user_list` VALUES ('22', 'test10', '$2b$10$fHJbI0KH/Zj0dmn90Pgofe7Ju05mMTpZPCDRSyKBZX3jW.CPmxWpm', 'test10@qq.com', '1', '1', null, '2018-12-29 16:16:03', '2018-12-29 16:16:03', null);
 INSERT INTO `user_list` VALUES ('23', 'test11', '$2b$10$f7EVrE/vn9phNLx6CErTMOStbwcVYJxs4gHPkyYLGxQ.DyAA7yAlS', 'test11@qq.com', '1', '1', null, '2018-12-29 17:01:13', '2018-12-29 17:01:13', null);
+INSERT INTO `user_list` VALUES ('24', 'test12', '$2b$10$R7103GQFllgYAjCCxDp75OWxO7/5IeHCBifgaOd3CwQjaQ49Jqjxu', 'test12@qq.com', '1', '1', null, '2019-01-21 14:51:44', '2019-01-21 14:51:44', null);
 
 -- ----------------------------
 -- Table structure for visit_log
@@ -353,7 +349,7 @@ CREATE TABLE `visit_log` (
   `updated_at` datetime DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=300 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=366 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of visit_log
@@ -657,3 +653,69 @@ INSERT INTO `visit_log` VALUES ('296', '127.0.0.1', '/api/user/cancellation', 'D
 INSERT INTO `visit_log` VALUES ('297', '127.0.0.1', '/api/user/getAll', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', 'success', '2019-01-18 17:24:10', '2019-01-18 17:24:10', null);
 INSERT INTO `visit_log` VALUES ('298', '127.0.0.1', '/api/user/recovery', 'PUT', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '用户信息恢复成功', '2019-01-18 17:24:45', '2019-01-18 17:24:45', null);
 INSERT INTO `visit_log` VALUES ('299', '127.0.0.1', '/api/user/getAll', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', 'success', '2019-01-18 17:24:48', '2019-01-18 17:24:48', null);
+INSERT INTO `visit_log` VALUES ('300', '127.0.0.1', '/api/user/login', 'POST', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '登录成功', '2019-01-21 10:05:44', '2019-01-21 10:05:44', null);
+INSERT INTO `visit_log` VALUES ('301', '127.0.0.1', '/api/user/login', 'POST', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '登录成功', '2019-01-21 10:05:56', '2019-01-21 10:05:56', null);
+INSERT INTO `visit_log` VALUES ('302', '127.0.0.1', '/api/user/getAll', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', 'success', '2019-01-21 10:22:49', '2019-01-21 10:22:49', null);
+INSERT INTO `visit_log` VALUES ('303', '127.0.0.1', '/api/user/cancellation', 'DELETE', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '账户注销成功', '2019-01-21 10:22:56', '2019-01-21 10:22:56', null);
+INSERT INTO `visit_log` VALUES ('304', '127.0.0.1', '/api/user/getAll', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', 'success', '2019-01-21 10:22:59', '2019-01-21 10:22:59', null);
+INSERT INTO `visit_log` VALUES ('305', '127.0.0.1', '/api/user/recovery', 'PUT', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '用户信息恢复成功', '2019-01-21 10:26:38', '2019-01-21 10:26:38', null);
+INSERT INTO `visit_log` VALUES ('306', '127.0.0.1', '/api/user/getAll', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', 'success', '2019-01-21 10:26:41', '2019-01-21 10:26:41', null);
+INSERT INTO `visit_log` VALUES ('307', '127.0.0.1', '/api/user/cancellation', 'DELETE', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '账户注销成功', '2019-01-21 10:26:50', '2019-01-21 10:26:50', null);
+INSERT INTO `visit_log` VALUES ('308', '127.0.0.1', '/api/user/getAll', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', 'success', '2019-01-21 10:26:53', '2019-01-21 10:26:53', null);
+INSERT INTO `visit_log` VALUES ('309', '127.0.0.1', '/api/user/recovery', 'PUT', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '用户信息恢复成功', '2019-01-21 10:27:53', '2019-01-21 10:27:53', null);
+INSERT INTO `visit_log` VALUES ('310', '127.0.0.1', '/api/user/getAll', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', 'success', '2019-01-21 10:27:57', '2019-01-21 10:27:57', null);
+INSERT INTO `visit_log` VALUES ('311', '127.0.0.1', '/api/user/cancellation', 'DELETE', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '账户注销成功', '2019-01-21 10:28:02', '2019-01-21 10:28:02', null);
+INSERT INTO `visit_log` VALUES ('312', '127.0.0.1', '/api/user/getAll', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', 'success', '2019-01-21 10:28:05', '2019-01-21 10:28:05', null);
+INSERT INTO `visit_log` VALUES ('313', '127.0.0.1', '/api/user/recovery', 'PUT', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '用户信息恢复成功', '2019-01-21 10:31:57', '2019-01-21 10:31:57', null);
+INSERT INTO `visit_log` VALUES ('314', '127.0.0.1', '/api/user/getAll', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', 'success', '2019-01-21 10:32:00', '2019-01-21 10:32:00', null);
+INSERT INTO `visit_log` VALUES ('315', '127.0.0.1', '/api/user/cancellation', 'DELETE', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '账户注销成功', '2019-01-21 10:44:17', '2019-01-21 10:44:17', null);
+INSERT INTO `visit_log` VALUES ('316', '127.0.0.1', '/api/user/getAll', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', 'success', '2019-01-21 10:44:20', '2019-01-21 10:44:20', null);
+INSERT INTO `visit_log` VALUES ('317', '127.0.0.1', '/api/user/recovery', 'PUT', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '用户信息恢复成功', '2019-01-21 10:58:45', '2019-01-21 10:58:45', null);
+INSERT INTO `visit_log` VALUES ('318', '127.0.0.1', '/api/user/getAll', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', 'success', '2019-01-21 10:58:48', '2019-01-21 10:58:48', null);
+INSERT INTO `visit_log` VALUES ('319', '127.0.0.1', '/api/user/cancellation', 'DELETE', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '账户注销成功', '2019-01-21 10:58:55', '2019-01-21 10:58:55', null);
+INSERT INTO `visit_log` VALUES ('320', '127.0.0.1', '/api/user/getAll', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', 'success', '2019-01-21 10:58:58', '2019-01-21 10:58:58', null);
+INSERT INTO `visit_log` VALUES ('321', '127.0.0.1', '/api/user/recovery', 'PUT', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '用户信息恢复成功', '2019-01-21 11:00:57', '2019-01-21 11:00:57', null);
+INSERT INTO `visit_log` VALUES ('322', '127.0.0.1', '/api/user/getAll', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', 'success', '2019-01-21 11:01:00', '2019-01-21 11:01:00', null);
+INSERT INTO `visit_log` VALUES ('323', '127.0.0.1', '/api/user/cancellation', 'DELETE', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '账户注销成功', '2019-01-21 11:01:02', '2019-01-21 11:01:02', null);
+INSERT INTO `visit_log` VALUES ('324', '127.0.0.1', '/api/user/getAll', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', 'success', '2019-01-21 11:01:05', '2019-01-21 11:01:05', null);
+INSERT INTO `visit_log` VALUES ('325', '127.0.0.1', '/api/user/recovery', 'PUT', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '用户信息恢复成功', '2019-01-21 11:06:35', '2019-01-21 11:06:35', null);
+INSERT INTO `visit_log` VALUES ('326', '127.0.0.1', '/api/user/getAll', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', 'success', '2019-01-21 11:06:38', '2019-01-21 11:06:38', null);
+INSERT INTO `visit_log` VALUES ('327', '127.0.0.1', '/api/user/cancellation', 'DELETE', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '账户注销成功', '2019-01-21 11:06:42', '2019-01-21 11:06:42', null);
+INSERT INTO `visit_log` VALUES ('328', '127.0.0.1', '/api/user/getAll', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', 'success', '2019-01-21 11:06:45', '2019-01-21 11:06:45', null);
+INSERT INTO `visit_log` VALUES ('329', '127.0.0.1', '/api/user/cancellation', 'DELETE', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '账户注销成功', '2019-01-21 11:08:13', '2019-01-21 11:08:13', null);
+INSERT INTO `visit_log` VALUES ('330', '127.0.0.1', '/api/user/getAll', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', 'success', '2019-01-21 11:08:17', '2019-01-21 11:08:17', null);
+INSERT INTO `visit_log` VALUES ('331', '127.0.0.1', '/api/user/recovery', 'PUT', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '用户信息恢复成功', '2019-01-21 11:17:13', '2019-01-21 11:17:13', null);
+INSERT INTO `visit_log` VALUES ('332', '127.0.0.1', '/api/user/getAll', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', 'success', '2019-01-21 11:17:16', '2019-01-21 11:17:16', null);
+INSERT INTO `visit_log` VALUES ('333', '127.0.0.1', '/api/user/cancellation', 'DELETE', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '账户注销成功', '2019-01-21 11:17:54', '2019-01-21 11:17:54', null);
+INSERT INTO `visit_log` VALUES ('334', '127.0.0.1', '/api/user/getAll', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', 'success', '2019-01-21 11:17:57', '2019-01-21 11:17:57', null);
+INSERT INTO `visit_log` VALUES ('335', '127.0.0.1', '/api/user/recovery', 'PUT', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '用户信息恢复成功', '2019-01-21 11:18:44', '2019-01-21 11:18:44', null);
+INSERT INTO `visit_log` VALUES ('336', '127.0.0.1', '/api/user/getAll', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', 'success', '2019-01-21 11:18:47', '2019-01-21 11:18:47', null);
+INSERT INTO `visit_log` VALUES ('337', '127.0.0.1', '/api/user/cancellation', 'DELETE', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '账户注销成功', '2019-01-21 11:45:20', '2019-01-21 11:45:20', null);
+INSERT INTO `visit_log` VALUES ('338', '127.0.0.1', '/api/user/getAll', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', 'success', '2019-01-21 11:45:23', '2019-01-21 11:45:23', null);
+INSERT INTO `visit_log` VALUES ('339', '127.0.0.1', '/api/user/login', 'POST', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '登录成功', '2019-01-21 11:55:19', '2019-01-21 11:55:19', null);
+INSERT INTO `visit_log` VALUES ('340', '127.0.0.1', '/api/user/getAll', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', 'success', '2019-01-21 11:55:22', '2019-01-21 11:55:22', null);
+INSERT INTO `visit_log` VALUES ('341', '127.0.0.1', '/api/user/recovery', 'PUT', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '0', '用户信息恢复失败', '2019-01-21 11:55:24', '2019-01-21 11:55:24', null);
+INSERT INTO `visit_log` VALUES ('342', '127.0.0.1', '/api/user/getAll', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', 'success', '2019-01-21 11:55:28', '2019-01-21 11:55:28', null);
+INSERT INTO `visit_log` VALUES ('343', '127.0.0.1', '/api/user/getAll', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', 'success', '2019-01-21 11:55:59', '2019-01-21 11:55:59', null);
+INSERT INTO `visit_log` VALUES ('344', '127.0.0.1', '/api/user/cancellation', 'DELETE', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '0', '账户注销失败', '2019-01-21 11:56:03', '2019-01-21 11:56:03', null);
+INSERT INTO `visit_log` VALUES ('345', '127.0.0.1', '/api/user/getAll', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', 'success', '2019-01-21 11:56:06', '2019-01-21 11:56:06', null);
+INSERT INTO `visit_log` VALUES ('346', '127.0.0.1', '/api/user/recovery', 'PUT', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '0', '用户信息恢复失败', '2019-01-21 11:56:13', '2019-01-21 11:56:13', null);
+INSERT INTO `visit_log` VALUES ('347', '127.0.0.1', '/api/user/getAll', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', 'success', '2019-01-21 11:56:16', '2019-01-21 11:56:16', null);
+INSERT INTO `visit_log` VALUES ('348', '127.0.0.1', '/api/user/cancellation', 'DELETE', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '账户注销成功', '2019-01-21 11:57:06', '2019-01-21 11:57:06', null);
+INSERT INTO `visit_log` VALUES ('349', '127.0.0.1', '/api/user/getAll', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', 'success', '2019-01-21 11:57:09', '2019-01-21 11:57:09', null);
+INSERT INTO `visit_log` VALUES ('350', '127.0.0.1', '/api/user/recovery', 'PUT', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '用户信息恢复成功', '2019-01-21 11:57:20', '2019-01-21 11:57:20', null);
+INSERT INTO `visit_log` VALUES ('351', '127.0.0.1', '/api/user/getAll', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', 'success', '2019-01-21 11:57:23', '2019-01-21 11:57:23', null);
+INSERT INTO `visit_log` VALUES ('352', '::1', '/api/user/register', 'POST', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '用户信息创建失败', '2019-01-21 14:45:59', '2019-01-21 14:45:59', null);
+INSERT INTO `visit_log` VALUES ('353', '::1', '/api/user/register', 'POST', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '用户信息创建失败', '2019-01-21 14:50:46', '2019-01-21 14:50:46', null);
+INSERT INTO `visit_log` VALUES ('354', '::1', '/api/user/register', 'POST', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '用户信息创建成功', '2019-01-21 14:51:44', '2019-01-21 14:51:44', null);
+INSERT INTO `visit_log` VALUES ('355', '::1', '/api/user/register', 'POST', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '用户信息创建成功', '2019-01-21 14:52:12', '2019-01-21 14:52:12', null);
+INSERT INTO `visit_log` VALUES ('356', '::1', '/api/user/register', 'POST', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '用户信息创建成功', '2019-01-21 14:53:16', '2019-01-21 14:53:16', null);
+INSERT INTO `visit_log` VALUES ('357', '::1', '/api/user/register', 'POST', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '用户名或邮箱已存在', '2019-01-21 14:53:27', '2019-01-21 14:53:27', null);
+INSERT INTO `visit_log` VALUES ('358', '127.0.0.1', '/api/user/getAll', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', 'success', '2019-01-21 16:04:37', '2019-01-21 16:04:37', null);
+INSERT INTO `visit_log` VALUES ('359', '127.0.0.1', '/api/user/getAll', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', 'success', '2019-01-21 16:44:55', '2019-01-21 16:44:55', null);
+INSERT INTO `visit_log` VALUES ('360', '::1', '/api/comment/getAll?pageNo=1&pageSize=10', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询所有评论失败', '2019-01-21 18:06:22', '2019-01-21 18:06:22', null);
+INSERT INTO `visit_log` VALUES ('361', '::1', '/api/comment/getAll?pageNo=1&pageSize=10', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询所有评论失败', '2019-01-21 18:06:48', '2019-01-21 18:06:48', null);
+INSERT INTO `visit_log` VALUES ('362', '::1', '/api/comment/getAll?pageNo=1&pageSize=10', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询所有评论失败', '2019-01-21 18:07:04', '2019-01-21 18:07:04', null);
+INSERT INTO `visit_log` VALUES ('363', '::1', '/api/comment/getAll?pageNo=1&pageSize=10', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询所有评论失败', '2019-01-21 18:07:31', '2019-01-21 18:07:31', null);
+INSERT INTO `visit_log` VALUES ('364', '::1', '/api/comment/getAll?pageNo=1&pageSize=10', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询所有评论失败', '2019-01-21 18:08:30', '2019-01-21 18:08:30', null);
+INSERT INTO `visit_log` VALUES ('365', '::1', '/api/comment/getAll?pageNo=1&pageSize=10', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询所有评论成功', '2019-01-21 18:09:42', '2019-01-21 18:09:42', null);

@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-11-26 14:07:48
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-18 17:24:39
+ * @LastEditTime: 2019-01-21 14:53:57
  */
 
 // module
@@ -35,7 +35,6 @@ class UserController extends Controller {
       })
       return ctx.end(true, '用户信息查询成功', {result})
     } catch (err) {
-      console.log(err)
       return ctx.end(false, '信息查询失败', {err})
     }
 
@@ -61,24 +60,22 @@ class UserController extends Controller {
       return ctx.end(false, '参数校验未通过', {err})
     }
 
-    // 检查用户名是否存在
+    // 查看对应用户是否存在
+    // 1. 存在 => 提示已存在相关用户
+    // 2. 不存在 => 创建相关用户信息
     try {
-      const isExist = await app.model.User.findAll({
-        where: { $or: [ {email}, {username} ]}
-      })
-      if (isExist.length) {
-        return ctx.end(false, '用户名或邮箱已存在')
-      }
-    } catch (err) {
-      return ctx.end(false, '用户查询错误', {err})
-    }
 
-    // 增加用户事务
-    try {
-      await ctx.service.user.createUser({ username, password, email })
-      return ctx.end(true, '用户信息创建成功')
+      const result = await app.model.User.findOrCreate({
+        where: { $or: [{email}, {username}]},
+        defaults: {username, hash: password, email}
+      }).spread((u, i) => i)
+
+      return result ? ctx.end(true, '用户信息创建成功') : ctx.end(false, '用户名或邮箱已存在')
+
     } catch (err) {
-      return ctx.end(false, {err})
+
+      return ctx.end(false, '用户信息创建失败', {err} )
+
     }
 
   }
@@ -368,10 +365,7 @@ class UserController extends Controller {
     try {
       const result = await app.model.User.destroy({
         where: {user_id},
-        // force: true,
-        hooks: false,
-        individualHooks: true,
-        // personalHooks:true
+        individualHooks: true
       })
       return ctx.end(true, '账户注销成功', {result})
     } catch (err) {
@@ -500,7 +494,7 @@ class UserController extends Controller {
 
     // 增加用户事务
     try {
-      await ctx.service.user.createUser({username, password, email, privilege, role})
+      await app.model.User.create({username, hash: password, email, privilege, role})
       return ctx.end(true, '用户信息创建成功')
     } catch (err) {
       return ctx.end(false, {err})

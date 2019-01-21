@@ -4,11 +4,22 @@
  * @Author: utaware
  * @Date: 2018-12-03 17:59:09
  * @LastEditors: utaware
- * @LastEditTime: 2018-12-19 10:28:00
+ * @LastEditTime: 2019-01-21 16:04:30
  */
 
 module.exports = {
   
+  /**
+   * @description 类型判断
+   * @author utaware
+   * @date 2019-01-21
+   * @param {any} o
+   * @returns {string} 类型
+   */
+
+  typeCheck (o) {
+    return Object.prototype.toString.apply(o).slice(8, -1)
+  },
   /**
    * @description 对于response做数据整理
    * @author utaware
@@ -17,33 +28,29 @@ module.exports = {
    * @returns object 返回所需的ctx.response对象
    */
   mergeRes (...args) {
-    // 类型检查
-    let typeCheck = o => Object.prototype.toString.apply(o).slice(8, -1)
     // 包装器
     let container = {}
-    // 类型匹配
-    let match = {
-        'Number': { name: 'status', merge: false },
-        'String': { name: 'message', merge: false },
-        'Object': { name: 'data', merge: true },
-        'Boolean': { name: 'code', merge: false, format: v => Number(v) }
-    }
-    // 简要模式判断
-    let simple = args.some(v => typeCheck(v) === 'Boolean')
     // 循环遍历
     args.forEach((v) => {
-        let type = typeCheck(v)
-        let extend = match[type].name
-        let merge = match[type].merge
-        let format = match[type].format
-        container[extend] = merge ? Object.assign({}, container[extend], v) : v
-        container[extend] = format ? format(container[extend]) : v
+        const type = this.typeCheck(v)
+        switch (type) {
+          case 'Number': container.status = v
+            break
+          case 'String': container.message = v
+            break
+          case 'Boolean': container.code = Number(v)
+            break
+          case 'Error': container.stack = v
+            break
+          default: container.data = v
+            break
+        }
     })
     // 获取simple的值
-    let { code = 1, message = '', data = null, status = 200 } = container
+    let { code = 1, message = '', data = null, status = 200, stack = '' } = container
     message = message || (code ? 'success' : 'fail')
     // 返回response
-    return { status, body : { message, code, data } }
+    return { status, body : { message, code, data, stack } }
   },
 
   /**

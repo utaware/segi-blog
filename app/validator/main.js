@@ -2,10 +2,11 @@
  * @Description: user 相关接口格式校验
  * @Author: HasebeAya
  * @Date: 2018-12-19 23:57:30
- * @LastEditTime: 2019-01-17 17:37:33
+ * @LastEditTime: 2019-01-21 17:33:28
  */ 
 
 // https://github.com/hapijs/joi/blob/v14.3.0/API.md
+// https://blog.csdn.net/u013707249/article/details/79034138
 
 module.exports = app => {
 
@@ -17,11 +18,13 @@ module.exports = app => {
     password: Joi.string().regex(/^[a-zA-Z0-9]{6,16}$/),
     mode: Joi.any().valid(['username', 'email']),
     checkCode: Joi.string().regex(/^[a-zA-Z0-9]{4}$/),
-    pageNo: Joi.number().min(1),
-    pageSize: Joi.number().min(10).max(100),
     id: Joi.number().min(1),
     privilege: Joi.number().min(1),
-    role: Joi.number().min(1)
+    role: Joi.number().min(1),
+    page: Joi.object().keys({
+      pageNo: Joi.number().min(1),
+      pageSize: Joi.number().min(10).max(100)
+    })
   }
 
   return (order, required = true) => {

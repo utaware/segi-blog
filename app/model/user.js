@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-19 10:43:43
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-18 17:07:33
+ * @LastEditTime: 2019-01-21 14:51:40
  */
 
 // https://github.com/caiya/vuejs-admin-server/blob/master/app/model/user.js
@@ -20,8 +20,9 @@ module.exports = app => {
   // 类型获取
   const Sql = app.Sequelize
   const { INTEGER, STRING, DATE } = Sql
+  const { Info, Total, Role, Privilege, Docs } = app.model.models
   // define
-  const User = app.model.define('user', {
+  const User = app.model.define('User', {
     // 表结构
     user_id: {
       type: INTEGER,
@@ -64,14 +65,16 @@ module.exports = app => {
     },
     privilege: {
       type: INTEGER,
-      allowNull: false,
+      defaultValue: 1,
+      allowNull: true,
       min: 1,
       max: 13,
       comment: '用户权限'
     },
     role: {
       type: INTEGER,
-      allowNull: false,
+      defaultValue: 1,
+      allowNull: true,
       min: 1,
       max: 4,
       comment: '用户角色'
@@ -90,19 +93,27 @@ module.exports = app => {
     // 额外获取
     getterMethods: {},
     // 额外设置
-    setterMethods: {},
-    // 钩子
-    hooks: {
-      afterDestroy () {
-        app.log('删除钩子被触发--user')
-      },
-      afterUpdate () {
-        app.log('更新钩子被触发--user')
-      },
-      afterRestore () {
-        app.log('恢复钩子被触发--user')
-      }
-    }
+    setterMethods: {}
+  })
+
+  // 钩子相关
+  User.afterDestroy(async (u) => {
+    // 删除对应用户信息
+    await Info.destroy({where: {user_id: u.user_id}})
+    // 用户数量自减
+    await Total.decrement(['total'], {where: {category: 'user'}})
+  })
+  User.afterRestore(async (u) => {
+    // 恢复对应用户信息
+    await Info.restore({where: {user_id: u.user_id}})
+    // 用户数量自减
+    await Total.increment(['total'], {where: {category: 'user'}})
+  })
+  User.afterCreate(async (u) => {
+    // 创建用户信息
+    await app.model.Info.create({ alias: u.username, user_id: u.user_id})
+    // 用户数量自增
+    await Total.increment(['total'], {where: {category: 'user'}})
   })
 
   // 校验密码与hash匹配是否正确
@@ -115,10 +126,10 @@ module.exports = app => {
 
   // 关联关系
   User.associate = () => {
-    app.model.User.hasOne(app.model.Info, { foreignKey: 'user_id', targetKey: 'user_id', onDelete: 'CASCADE', as: 'i'});
-    app.model.User.hasMany(app.model.Docs, { foreignKey: 'user_id', targetKey: 'user_id', as: 'UserDocs' })
-    app.model.User.belongsTo(app.model.Role, { foreignKey: 'role', targetKey: 'id', as: 'r'});
-    app.model.User.belongsTo(app.model.Privilege, { foreignKey: 'privilege', targetKey: 'id', as: 'p'});
+    User.hasOne(Info, { foreignKey: 'user_id', targetKey: 'user_id', as: 'i', hooks: true}); //  hooks: true, onDelete: 'cascade'
+    User.hasMany(Docs, { foreignKey: 'user_id', targetKey: 'user_id', as: 'UserDocs' })
+    User.belongsTo(Role, { foreignKey: 'role', targetKey: 'id', as: 'r'});
+    User.belongsTo(Privilege, { foreignKey: 'privilege', targetKey: 'id', as: 'p'});
   }
 
   return User

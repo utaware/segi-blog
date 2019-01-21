@@ -4,14 +4,14 @@
  * @Author: utaware
  * @Date: 2018-12-19 17:52:01
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-18 16:55:16
+ * @LastEditTime: 2019-01-21 11:43:06
  */
 
 module.exports = app => {
 
   const { INTEGER, STRING, BOOLEAN } = app.Sequelize;
   
-  const Visit = app.model.define('visit', {
+  const Visit = app.model.define('Visit', {
     id: {
       type: INTEGER,
       autoIncrement: true,

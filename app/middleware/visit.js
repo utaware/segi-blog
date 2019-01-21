@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2019-01-09 10:15:28
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-09 17:55:38
+ * @LastEditTime: 2019-01-21 14:44:02
  */
 
 module.exports = options => {
@@ -14,9 +14,11 @@ module.exports = options => {
       await ctx.service.visit.create()
     } catch (err) {
       ctx.response.status = err.statusCode || err.status || 500;
+
       ctx.response.body = {
         code: -1,
-        message: err.message || 'server error'
+        message: err.message || 'server error',
+        stack: err.stack
       }
     }
   }

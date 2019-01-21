@@ -4,14 +4,14 @@
  * @Author: utaware
  * @Date: 2018-12-19 17:22:48
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-18 17:11:04
+ * @LastEditTime: 2019-01-21 11:43:42
  */
 
 module.exports = app => {
   // 类型获取
   const { INTEGER, STRING, DATE } = app.Sequelize;
 
-  const Info = app.model.define('info', {
+  const Info = app.model.define('Info', {
     // id
     user_id: {
       type: INTEGER,
@@ -70,7 +70,7 @@ module.exports = app => {
   
   // 关联关系
   Info.associate = () => {
-    app.model.Info.belongsTo(app.model.User, { foreignKey: 'user_id', targetKey: 'user_id', hooks: true, onDelete: 'CASCADE'})
+    app.model.Info.belongsTo(app.model.User, { foreignKey: 'user_id', targetKey: 'user_id', hooks: true, onDelete: 'cascade'})
   }
 
   // 单个用户详细信息
