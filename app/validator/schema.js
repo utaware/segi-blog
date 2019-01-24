@@ -2,7 +2,7 @@
  * @Description: user 相关接口格式校验
  * @Author: HasebeAya
  * @Date: 2018-12-19 23:57:30
- * @LastEditTime: 2019-01-21 17:33:28
+ * @LastEditTime: 2019-01-24 17:37:13
  */ 
 
 // https://github.com/hapijs/joi/blob/v14.3.0/API.md
@@ -13,6 +13,7 @@ module.exports = app => {
   const Joi = app.Joi;
 
   const rules = {
+    // 相关
     username: Joi.string().alphanum().min(4).max(12),
     email: Joi.string().email(),
     password: Joi.string().regex(/^[a-zA-Z0-9]{6,16}$/),
@@ -22,9 +23,10 @@ module.exports = app => {
     privilege: Joi.number().min(1),
     role: Joi.number().min(1),
     page: Joi.object().keys({
-      pageNo: Joi.number().min(1),
-      pageSize: Joi.number().min(10).max(100)
-    })
+      no: Joi.number().min(1),
+      size: Joi.number().min(10).max(100)
+    }),
+    content: Joi.string()
   }
 
   return (order, required = true) => {

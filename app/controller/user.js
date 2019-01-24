@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-11-26 14:07:48
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-21 14:53:57
+ * @LastEditTime: 2019-01-24 18:29:22
  */
 
 // module
@@ -55,7 +55,7 @@ class UserController extends Controller {
 
     // 校验
     try {
-      ctx.validate(app.validator.main(['username', 'password', 'email']), {password, username, email})
+      ctx.validate(app.validator.schema(['username', 'password', 'email']), {password, username, email})
     } catch (err) {
       return ctx.end(false, '参数校验未通过', {err})
     }
@@ -94,7 +94,7 @@ class UserController extends Controller {
 
     // 校验
     try {
-      ctx.validate(app.validator.main(['password', 'mode', mode]), { [mode]: username, password, mode })
+      ctx.validate(app.validator.schema(['password', 'mode', mode]), { [mode]: username, password, mode })
     } catch (err) {
       return ctx.end(false, '参数校验未通过', {err})
     }
@@ -146,7 +146,7 @@ class UserController extends Controller {
     const { oldPass, newPass } = ctx.request.body
 
     try {
-      ctx.validate(app.validator.main(['password']), { password: oldPass })
+      ctx.validate(app.validator.schema(['password']), { password: oldPass })
     } catch (err) {
       return ctx.end(false, '原密码格式校验不符', {err})
     }
@@ -167,7 +167,7 @@ class UserController extends Controller {
     }
 
     try {
-      ctx.validate(app.validator.main(['password']), { password: newPass })
+      ctx.validate(app.validator.schema(['password']), { password: newPass })
     } catch (err) {
       return ctx.end(false, '新密码格式校验不符', {err})
     }
@@ -198,7 +198,7 @@ class UserController extends Controller {
 
     // 参数校验
     try {
-      ctx.validate(app.validator.main(['email', 'checkCode', 'password']), { email, checkCode, password })
+      ctx.validate(app.validator.schema(['email', 'checkCode', 'password']), { email, checkCode, password })
     } catch (err) {
       return ctx.end(false, '参数校验未通过', {err})
     }
@@ -258,7 +258,7 @@ class UserController extends Controller {
     
     // 校验邮箱
     try {
-      ctx.validate(app.validator.main(['email']), email)
+      ctx.validate(app.validator.schema(['email']), email)
     } catch (err) {
       return ctx.end(false, '邮箱格式校验未通过', {err})
     }
@@ -294,6 +294,15 @@ class UserController extends Controller {
     const { ctx, app } = this
     const { pageNo = 1, pageSize = 10 } = ctx.request.body
 
+    const { no, size, offset, limit } = ctx.pageFormat({pageNo, pageSize})
+
+    // 校验
+    try {
+      ctx.validate(app.validator.schema('page'), {no, size})
+    } catch (err) {
+      return ctx.end(false, '参数校验未通过', err)
+    }
+
     // 整合查询
     try {
       const Seq = app.Sequelize
@@ -313,10 +322,10 @@ class UserController extends Controller {
         raw: true, 
         // 对象层级关系转换
         nest: false,
-        orders: [['id', 'desc']],
+        orders: [['user_id', 'desc']],
         paranoid: false,
-        limit: pageSize,
-        offset: pageSize * (pageNo - 1)
+        limit,
+        offset
       })
       return ctx.end({result})
     } catch (err) {

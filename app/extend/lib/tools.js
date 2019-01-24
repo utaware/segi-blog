@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-03 17:59:09
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-21 16:04:30
+ * @LastEditTime: 2019-01-24 17:20:23
  */
 
 module.exports = {
@@ -93,5 +93,20 @@ module.exports = {
       array.includes(keys) ? t[keys] = o[keys] : f[keys] = o[keys]
     }
     return equal ? t : f
+  },
+ 
+  
+  /**
+   * @description 分页统一处理
+   * @author utaware
+   * @date 2019-01-24
+   * @param {object} page
+   * @returns {object}
+   */
+  pageFormat (page) {
+    const { pageNo, pageSize } = page
+    const limit = Number(pageSize)
+    const offset = (Number(pageNo) - 1) * limit
+    return {offset , limit, no: Number(pageNo), size: Number(pageSize)}
   }
 }

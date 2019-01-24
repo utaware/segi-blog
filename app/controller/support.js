@@ -55,7 +55,7 @@ class SupportController extends Controller {
     const { email } = ctx.request.body
     // 校验邮箱
     try {
-      ctx.validate(app.validator.main(['email']), email)
+      ctx.validate(app.validator.schema(['email']), email)
     } catch (err) {
       return ctx.end(false, '邮箱格式校验未通过', {err})
     }

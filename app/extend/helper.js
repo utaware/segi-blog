@@ -25,6 +25,8 @@ module.exports = {
   moment,
   // tools
   tools: require('./lib/tools'),
+  // lodash
+  _: require('lodash'),
   // now获取当前时间
   now: (f = 'YYYY-MM-DD HH:mm:ss') => moment(new Date()).format(f)
 }

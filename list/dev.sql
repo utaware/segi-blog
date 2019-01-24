@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80013
 File Encoding         : 65001
 
-Date: 2019-01-21 18:10:15
+Date: 2019-01-24 18:34:48
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -23,6 +23,7 @@ CREATE TABLE `comment_list` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `docs_id` int(11) NOT NULL COMMENT '文档关联id',
   `user_id` int(11) NOT NULL COMMENT '发起评论的人',
+  `user_name` varchar(24) NOT NULL COMMENT '发布人名字',
   `replier_id` int(11) NOT NULL COMMENT '回复人',
   `replier_name` varchar(24) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `floor` int(11) NOT NULL DEFAULT '0' COMMENT '评论楼层',
@@ -31,11 +32,20 @@ CREATE TABLE `comment_list` (
   `updated_at` datetime DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of comment_list
 -- ----------------------------
+INSERT INTO `comment_list` VALUES ('1', '1', '1', 'akane', '22', 'test10', '1', 'hello test10', '2019-01-24 14:55:53', '2019-01-24 14:55:53', '2019-01-24 18:01:25');
+INSERT INTO `comment_list` VALUES ('2', '1', '1', 'akane', '22', 'test10', '2', 'hello test10', '2019-01-24 14:59:22', '2019-01-24 14:59:22', null);
+INSERT INTO `comment_list` VALUES ('3', '1', '1', 'akane', '22', 'test10', '3', 'hello test10', '2019-01-24 15:10:35', '2019-01-24 15:10:35', null);
+INSERT INTO `comment_list` VALUES ('4', '1', '1', 'akane', '22', 'test10', '4', 'hello test10', '2019-01-24 15:12:07', '2019-01-24 15:12:07', null);
+INSERT INTO `comment_list` VALUES ('5', '1', '1', 'akane', '22', 'test10', '5', '最新的评论', '2019-01-24 17:43:03', '2019-01-24 17:43:03', null);
+INSERT INTO `comment_list` VALUES ('6', '1', '1', 'akane', '22', 'test10', '6', '最新的评论', '2019-01-24 17:55:46', '2019-01-24 17:55:46', null);
+INSERT INTO `comment_list` VALUES ('7', '1', '1', 'akane', '22', 'test10', '7', '最新的评论', '2019-01-24 18:15:47', '2019-01-24 18:15:47', null);
+INSERT INTO `comment_list` VALUES ('8', '1', '1', 'akane', '22', 'test10', '8', '最新的评论', '2019-01-24 18:16:46', '2019-01-24 18:16:46', null);
+INSERT INTO `comment_list` VALUES ('9', '1', '1', 'akane', '22', 'test10', '9', '最新的评论', '2019-01-24 18:16:58', '2019-01-24 18:16:58', null);
 
 -- ----------------------------
 -- Table structure for docs_list
@@ -349,7 +359,7 @@ CREATE TABLE `visit_log` (
   `updated_at` datetime DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=366 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=474 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of visit_log
@@ -719,3 +729,111 @@ INSERT INTO `visit_log` VALUES ('362', '::1', '/api/comment/getAll?pageNo=1&page
 INSERT INTO `visit_log` VALUES ('363', '::1', '/api/comment/getAll?pageNo=1&pageSize=10', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询所有评论失败', '2019-01-21 18:07:31', '2019-01-21 18:07:31', null);
 INSERT INTO `visit_log` VALUES ('364', '::1', '/api/comment/getAll?pageNo=1&pageSize=10', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询所有评论失败', '2019-01-21 18:08:30', '2019-01-21 18:08:30', null);
 INSERT INTO `visit_log` VALUES ('365', '::1', '/api/comment/getAll?pageNo=1&pageSize=10', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询所有评论成功', '2019-01-21 18:09:42', '2019-01-21 18:09:42', null);
+INSERT INTO `visit_log` VALUES ('366', '::1', '/api/comment/getAll?pageNo=1&pageSize=10', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询所有评论成功', '2019-01-24 11:28:37', '2019-01-24 11:28:37', null);
+INSERT INTO `visit_log` VALUES ('367', '::1', '/api/comment/create', 'POST', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '新增评论失败', '2019-01-24 14:50:39', '2019-01-24 14:50:39', null);
+INSERT INTO `visit_log` VALUES ('368', '::1', '/api/comment/create', 'POST', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '新增评论失败', '2019-01-24 14:51:19', '2019-01-24 14:51:19', null);
+INSERT INTO `visit_log` VALUES ('369', '::1', '/api/comment/create', 'POST', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '新增评论失败', '2019-01-24 14:51:22', '2019-01-24 14:51:22', null);
+INSERT INTO `visit_log` VALUES ('370', '::1', '/api/comment/create', 'POST', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '新增评论失败', '2019-01-24 14:52:13', '2019-01-24 14:52:13', null);
+INSERT INTO `visit_log` VALUES ('371', '::1', '/api/comment/create', 'POST', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '新增评论失败', '2019-01-24 14:52:22', '2019-01-24 14:52:22', null);
+INSERT INTO `visit_log` VALUES ('372', '::1', '/api/comment/create', 'POST', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '新增评论失败', '2019-01-24 14:54:29', '2019-01-24 14:54:29', null);
+INSERT INTO `visit_log` VALUES ('373', '::1', '/api/comment/create', 'POST', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '新增评论失败', '2019-01-24 14:54:50', '2019-01-24 14:54:50', null);
+INSERT INTO `visit_log` VALUES ('374', '::1', '/api/comment/create', 'POST', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '新增评论成功', '2019-01-24 14:55:53', '2019-01-24 14:55:53', null);
+INSERT INTO `visit_log` VALUES ('375', '::1', '/api/comment/create', 'POST', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '新增评论失败', '2019-01-24 14:58:33', '2019-01-24 14:58:33', null);
+INSERT INTO `visit_log` VALUES ('376', '::1', '/api/comment/create', 'POST', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '新增评论成功', '2019-01-24 14:59:22', '2019-01-24 14:59:22', null);
+INSERT INTO `visit_log` VALUES ('377', '::1', '/api/comment/create', 'POST', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '新增评论失败', '2019-01-24 15:00:02', '2019-01-24 15:00:02', null);
+INSERT INTO `visit_log` VALUES ('378', '::1', '/api/comment/create', 'POST', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '新增评论失败', '2019-01-24 15:01:09', '2019-01-24 15:01:09', null);
+INSERT INTO `visit_log` VALUES ('379', '::1', '/api/comment/create', 'POST', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '新增评论失败', '2019-01-24 15:02:09', '2019-01-24 15:02:09', null);
+INSERT INTO `visit_log` VALUES ('380', '::1', '/api/comment/create', 'POST', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '新增评论失败', '2019-01-24 15:03:19', '2019-01-24 15:03:19', null);
+INSERT INTO `visit_log` VALUES ('381', '::1', '/api/comment/create', 'POST', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '新增评论失败', '2019-01-24 15:05:37', '2019-01-24 15:05:37', null);
+INSERT INTO `visit_log` VALUES ('382', '::1', '/api/comment/create', 'POST', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '新增评论失败', '2019-01-24 15:06:09', '2019-01-24 15:06:09', null);
+INSERT INTO `visit_log` VALUES ('383', '::1', '/api/comment/create', 'POST', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '新增评论失败', '2019-01-24 15:06:33', '2019-01-24 15:06:33', null);
+INSERT INTO `visit_log` VALUES ('384', '::1', '/api/comment/create', 'POST', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '新增评论失败', '2019-01-24 15:07:52', '2019-01-24 15:07:52', null);
+INSERT INTO `visit_log` VALUES ('385', '::1', '/api/comment/create', 'POST', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '新增评论失败', '2019-01-24 15:08:22', '2019-01-24 15:08:22', null);
+INSERT INTO `visit_log` VALUES ('386', '::1', '/api/comment/create', 'POST', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '新增评论失败', '2019-01-24 15:09:15', '2019-01-24 15:09:15', null);
+INSERT INTO `visit_log` VALUES ('387', '::1', '/api/comment/create', 'POST', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '新增评论成功', '2019-01-24 15:10:35', '2019-01-24 15:10:35', null);
+INSERT INTO `visit_log` VALUES ('388', '::1', '/api/comment/create', 'POST', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '新增评论成功', '2019-01-24 15:12:07', '2019-01-24 15:12:07', null);
+INSERT INTO `visit_log` VALUES ('389', '::1', '/api/comment/getAll', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询所有评论成功', '2019-01-24 15:18:01', '2019-01-24 15:18:01', null);
+INSERT INTO `visit_log` VALUES ('390', '::1', '/api/comment/getAll', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询所有评论成功', '2019-01-24 16:57:11', '2019-01-24 16:57:11', null);
+INSERT INTO `visit_log` VALUES ('391', '::1', '/api/comment/getAll', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 16:58:22', '2019-01-24 16:58:22', null);
+INSERT INTO `visit_log` VALUES ('392', '::1', '/api/comment/getAll', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:00:06', '2019-01-24 17:00:06', null);
+INSERT INTO `visit_log` VALUES ('393', '::1', '/api/comment/getAll', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:00:29', '2019-01-24 17:00:29', null);
+INSERT INTO `visit_log` VALUES ('394', '::1', '/api/comment/getAll', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:05:03', '2019-01-24 17:05:03', null);
+INSERT INTO `visit_log` VALUES ('395', '::1', '/api/comment/getAll', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:05:10', '2019-01-24 17:05:10', null);
+INSERT INTO `visit_log` VALUES ('396', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:06:54', '2019-01-24 17:06:54', null);
+INSERT INTO `visit_log` VALUES ('397', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:07:28', '2019-01-24 17:07:28', null);
+INSERT INTO `visit_log` VALUES ('398', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:08:24', '2019-01-24 17:08:24', null);
+INSERT INTO `visit_log` VALUES ('399', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:08:27', '2019-01-24 17:08:27', null);
+INSERT INTO `visit_log` VALUES ('400', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:08:32', '2019-01-24 17:08:32', null);
+INSERT INTO `visit_log` VALUES ('401', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:09:27', '2019-01-24 17:09:27', null);
+INSERT INTO `visit_log` VALUES ('402', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:09:29', '2019-01-24 17:09:29', null);
+INSERT INTO `visit_log` VALUES ('403', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:09:30', '2019-01-24 17:09:30', null);
+INSERT INTO `visit_log` VALUES ('404', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:09:34', '2019-01-24 17:09:34', null);
+INSERT INTO `visit_log` VALUES ('405', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:09:34', '2019-01-24 17:09:34', null);
+INSERT INTO `visit_log` VALUES ('406', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:09:40', '2019-01-24 17:09:40', null);
+INSERT INTO `visit_log` VALUES ('407', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:09:41', '2019-01-24 17:09:41', null);
+INSERT INTO `visit_log` VALUES ('408', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:09:53', '2019-01-24 17:09:53', null);
+INSERT INTO `visit_log` VALUES ('409', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:10:22', '2019-01-24 17:10:22', null);
+INSERT INTO `visit_log` VALUES ('410', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:10:23', '2019-01-24 17:10:23', null);
+INSERT INTO `visit_log` VALUES ('411', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:10:24', '2019-01-24 17:10:24', null);
+INSERT INTO `visit_log` VALUES ('412', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:10:25', '2019-01-24 17:10:25', null);
+INSERT INTO `visit_log` VALUES ('413', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:10:25', '2019-01-24 17:10:25', null);
+INSERT INTO `visit_log` VALUES ('414', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:10:25', '2019-01-24 17:10:25', null);
+INSERT INTO `visit_log` VALUES ('415', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:10:25', '2019-01-24 17:10:25', null);
+INSERT INTO `visit_log` VALUES ('416', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:16:27', '2019-01-24 17:16:27', null);
+INSERT INTO `visit_log` VALUES ('417', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:16:28', '2019-01-24 17:16:28', null);
+INSERT INTO `visit_log` VALUES ('418', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:16:29', '2019-01-24 17:16:29', null);
+INSERT INTO `visit_log` VALUES ('419', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:16:29', '2019-01-24 17:16:29', null);
+INSERT INTO `visit_log` VALUES ('420', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:16:30', '2019-01-24 17:16:30', null);
+INSERT INTO `visit_log` VALUES ('421', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:16:30', '2019-01-24 17:16:30', null);
+INSERT INTO `visit_log` VALUES ('422', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:16:31', '2019-01-24 17:16:31', null);
+INSERT INTO `visit_log` VALUES ('423', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:16:31', '2019-01-24 17:16:31', null);
+INSERT INTO `visit_log` VALUES ('424', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:16:47', '2019-01-24 17:16:47', null);
+INSERT INTO `visit_log` VALUES ('425', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:19:37', '2019-01-24 17:19:37', null);
+INSERT INTO `visit_log` VALUES ('426', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:19:45', '2019-01-24 17:19:45', null);
+INSERT INTO `visit_log` VALUES ('427', '127.0.0.1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:20:32', '2019-01-24 17:20:32', null);
+INSERT INTO `visit_log` VALUES ('428', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:20:44', '2019-01-24 17:20:44', null);
+INSERT INTO `visit_log` VALUES ('429', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:20:49', '2019-01-24 17:20:49', null);
+INSERT INTO `visit_log` VALUES ('430', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:21:13', '2019-01-24 17:21:13', null);
+INSERT INTO `visit_log` VALUES ('431', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询所有评论成功', '2019-01-24 17:21:30', '2019-01-24 17:21:30', null);
+INSERT INTO `visit_log` VALUES ('432', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:22:25', '2019-01-24 17:22:25', null);
+INSERT INTO `visit_log` VALUES ('433', '::1', '/api/comment/getAll?docs_id=2', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:22:39', '2019-01-24 17:22:39', null);
+INSERT INTO `visit_log` VALUES ('434', '::1', '/api/comment/getAll?docs_id=2', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询所有评论成功', '2019-01-24 17:24:43', '2019-01-24 17:24:43', null);
+INSERT INTO `visit_log` VALUES ('435', '::1', '/api/comment/getAll?docs_id=2', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询所有评论成功', '2019-01-24 17:25:25', '2019-01-24 17:25:25', null);
+INSERT INTO `visit_log` VALUES ('436', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:25:29', '2019-01-24 17:25:29', null);
+INSERT INTO `visit_log` VALUES ('437', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 17:25:59', '2019-01-24 17:25:59', null);
+INSERT INTO `visit_log` VALUES ('438', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询所有评论成功', '2019-01-24 17:26:03', '2019-01-24 17:26:03', null);
+INSERT INTO `visit_log` VALUES ('439', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询所有评论成功', '2019-01-24 17:29:17', '2019-01-24 17:29:17', null);
+INSERT INTO `visit_log` VALUES ('440', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询所有评论成功', '2019-01-24 17:30:09', '2019-01-24 17:30:09', null);
+INSERT INTO `visit_log` VALUES ('441', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询所有评论成功', '2019-01-24 17:30:11', '2019-01-24 17:30:11', null);
+INSERT INTO `visit_log` VALUES ('442', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询所有评论成功', '2019-01-24 17:30:12', '2019-01-24 17:30:12', null);
+INSERT INTO `visit_log` VALUES ('443', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询所有评论成功', '2019-01-24 17:30:12', '2019-01-24 17:30:12', null);
+INSERT INTO `visit_log` VALUES ('444', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询所有评论成功', '2019-01-24 17:30:13', '2019-01-24 17:30:13', null);
+INSERT INTO `visit_log` VALUES ('445', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询所有评论成功', '2019-01-24 17:30:14', '2019-01-24 17:30:14', null);
+INSERT INTO `visit_log` VALUES ('446', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询所有评论成功', '2019-01-24 17:30:38', '2019-01-24 17:30:38', null);
+INSERT INTO `visit_log` VALUES ('447', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询所有评论成功', '2019-01-24 17:30:44', '2019-01-24 17:30:44', null);
+INSERT INTO `visit_log` VALUES ('448', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询所有评论成功', '2019-01-24 17:34:58', '2019-01-24 17:34:58', null);
+INSERT INTO `visit_log` VALUES ('449', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询所有评论成功', '2019-01-24 17:35:30', '2019-01-24 17:35:30', null);
+INSERT INTO `visit_log` VALUES ('450', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询所有评论成功', '2019-01-24 17:35:34', '2019-01-24 17:35:34', null);
+INSERT INTO `visit_log` VALUES ('451', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询所有评论成功', '2019-01-24 17:37:23', '2019-01-24 17:37:23', null);
+INSERT INTO `visit_log` VALUES ('452', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询所有评论成功', '2019-01-24 17:37:35', '2019-01-24 17:37:35', null);
+INSERT INTO `visit_log` VALUES ('453', '::1', '/api/comment/create', 'POST', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '新增评论成功', '2019-01-24 17:43:03', '2019-01-24 17:43:03', null);
+INSERT INTO `visit_log` VALUES ('454', '::1', '/api/comment/create', 'POST', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '新增评论成功', '2019-01-24 17:55:46', '2019-01-24 17:55:46', null);
+INSERT INTO `visit_log` VALUES ('455', '::1', '/api/comment/destory', 'DELETE', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '评论删除失败', '2019-01-24 17:59:47', '2019-01-24 17:59:47', null);
+INSERT INTO `visit_log` VALUES ('456', '::1', '/api/comment/destory', 'DELETE', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '评论删除失败', '2019-01-24 18:00:18', '2019-01-24 18:00:18', null);
+INSERT INTO `visit_log` VALUES ('457', '::1', '/api/comment/destory', 'DELETE', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '评论删除失败', '2019-01-24 18:00:41', '2019-01-24 18:00:41', null);
+INSERT INTO `visit_log` VALUES ('458', '127.0.0.1', '/api/comment/destory', 'DELETE', '', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '404', '0', 'fail create', '2019-01-24 18:01:19', '2019-01-24 18:01:19', null);
+INSERT INTO `visit_log` VALUES ('459', '::1', '/api/comment/destroy', 'DELETE', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '删除评论成功', '2019-01-24 18:01:25', '2019-01-24 18:01:25', null);
+INSERT INTO `visit_log` VALUES ('460', '::1', '/api/comment/create', 'POST', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '新增评论成功', '2019-01-24 18:15:47', '2019-01-24 18:15:47', null);
+INSERT INTO `visit_log` VALUES ('461', '::1', '/api/comment/create', 'POST', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '新增评论成功', '2019-01-24 18:16:46', '2019-01-24 18:16:46', null);
+INSERT INTO `visit_log` VALUES ('462', '::1', '/api/comment/create', 'POST', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '新增评论成功', '2019-01-24 18:16:58', '2019-01-24 18:16:58', null);
+INSERT INTO `visit_log` VALUES ('463', '::1', '/api/comment/getAll', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验未通过', '2019-01-24 18:17:24', '2019-01-24 18:17:24', null);
+INSERT INTO `visit_log` VALUES ('464', '::1', '/api/comment/id', 'GET', '', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '404', '0', 'fail create', '2019-01-24 18:17:33', '2019-01-24 18:17:33', null);
+INSERT INTO `visit_log` VALUES ('465', '::1', '/api/comment?docs_id=1', 'GET', '', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '404', '0', 'fail create', '2019-01-24 18:17:41', '2019-01-24 18:17:41', null);
+INSERT INTO `visit_log` VALUES ('466', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询所有评论成功', '2019-01-24 18:17:48', '2019-01-24 18:17:48', null);
+INSERT INTO `visit_log` VALUES ('467', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询所有评论成功', '2019-01-24 18:20:05', '2019-01-24 18:20:05', null);
+INSERT INTO `visit_log` VALUES ('468', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询所有评论成功', '2019-01-24 18:20:31', '2019-01-24 18:20:31', null);
+INSERT INTO `visit_log` VALUES ('469', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询所有评论成功', '2019-01-24 18:20:33', '2019-01-24 18:20:33', null);
+INSERT INTO `visit_log` VALUES ('470', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询所有评论成功', '2019-01-24 18:25:55', '2019-01-24 18:25:55', null);
+INSERT INTO `visit_log` VALUES ('471', '::1', '/api/comment/getAll?docs_id=1', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '查询所有评论成功', '2019-01-24 18:26:09', '2019-01-24 18:26:09', null);
+INSERT INTO `visit_log` VALUES ('472', '::1', '/api/user/getAll', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', 'success', '2019-01-24 18:28:31', '2019-01-24 18:28:31', null);
+INSERT INTO `visit_log` VALUES ('473', '::1', '/api/user/getAll', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', 'success', '2019-01-24 18:29:31', '2019-01-24 18:29:31', null);

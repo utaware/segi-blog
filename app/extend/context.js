@@ -16,5 +16,7 @@ module.exports = {
     return 
   },
   // 筛选的方法
-  filterData: tools.filterData
+  filterData: tools.filterData,
+  // 分页公共方法
+  pageFormat: tools.pageFormat
 }
