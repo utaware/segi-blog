@@ -57,7 +57,7 @@ module.exports = app => {
       comment: '回复内容'
     }
   }, {
-    tableName: 'comment_list',
+    tableName: 'COMMENT_TABLE',
     comment: '评论相关',
   })
   

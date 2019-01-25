@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-19 18:16:01
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-21 11:43:57
+ * @LastEditTime: 2019-01-25 10:45:58
  */
 
 module.exports = app => {
@@ -35,7 +35,7 @@ module.exports = app => {
       comment: '类别名说明'
     }
   }, {
-    tableName: 'docs_type',
+    tableName: 'DOCS_TYPE',
     comment: '文档类型分类',
   })
 

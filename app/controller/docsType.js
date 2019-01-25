@@ -28,7 +28,7 @@ class DocsTypeController extends Controller {
       return ctx.end(true, '新增文档类别成功', {result})
     } catch (err) {
       ctx.log(Object.keys(app.model))
-      return ctx.end(false, '新增文档类别失败', {err})
+      return ctx.end(false, '新增文档类别失败', err)
     }
   }
 
@@ -49,7 +49,7 @@ class DocsTypeController extends Controller {
       return ctx.end(true, '删除文档类别成功', {result})
     } catch (err) {
       ctx.log(Object.keys(app.model))
-      return ctx.end(false, '删除文档类别失败', {err})
+      return ctx.end(false, '删除文档类别失败', err)
     }
   }
 
@@ -70,7 +70,7 @@ class DocsTypeController extends Controller {
       })
       return ctx.end(true, '查询文档类别成功', {result})
     } catch (err) {
-      return ctx.end(false, '查询文档类别失败', {err})
+      return ctx.end(false, '查询文档类别失败', err)
     }
   }
 
@@ -91,7 +91,7 @@ class DocsTypeController extends Controller {
       const result = await app.model.DocsType.update({value, name, remark}, {where: {id}})
       return ctx.end(true, '更新文档类别成功', {result})
     } catch (err) {
-      return ctx.end(false, '更新文档类别失败', {err})
+      return ctx.end(false, '更新文档类别失败', err)
     }
   }
 
@@ -111,7 +111,7 @@ class DocsTypeController extends Controller {
       const result = await app.model.DocsType.findOne({where: {id}})
       return ctx.end(true, '查询文档类别成功', {result})
     } catch (err) {
-      return ctx.end(false, '查询文档类别失败', {err})
+      return ctx.end(false, '查询文档类别失败', err)
     }
 
   }

@@ -22,12 +22,12 @@ class UserService extends Service {
   async createUser (info) {
 
     const { ctx, app } = this
-    const { username, password, email, privilege = 0, role = 0 } = info
+    const { name, password, email, privilege = 0, role = 0 } = info
     const transaction = await app.model.transaction()
 
     try {
-      const { user_id } = await app.model.User.create({username, hash: password, email, privilege, role}, {transaction})
-      await app.model.Info.create({alias: username, user_id}, {transaction})
+      const { user_id } = await app.model.User.create({name, hash: password, email, privilege, role}, {transaction})
+      await app.model.Info.create({alias: name, user_id}, {transaction})
       await app.model.Total.increment(['total'], {where: {category: 'user'}, transaction})
       await transaction.commit()
     } catch (err) {

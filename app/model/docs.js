@@ -61,7 +61,7 @@ module.exports = app => {
       comment: '文档内容_html'
     }
   }, {
-    tableName: 'docs_list',
+    tableName: 'DOCS_TABLE',
     comment: '文档相关',
   })
 

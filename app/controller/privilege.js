@@ -27,7 +27,7 @@ class PrivilegeController extends Controller {
       const result = await app.model.Privilege.findAll()
       return ctx.end(true, '权限查询成功', { result })
     } catch (err) {
-      return ctx.end(false, '权限查询失败', {err})
+      return ctx.end(false, '权限查询失败', err)
     }
   }
 
@@ -48,7 +48,7 @@ class PrivilegeController extends Controller {
       const result = await app.model.Privilege.create(info)
       return ctx.end(true, '权限新增成功', {result})
     } catch (err) {
-      return ctx.end(false, '权限新增失败', {err})
+      return ctx.end(false, '权限新增失败', err)
     }
   }
   
@@ -68,7 +68,7 @@ class PrivilegeController extends Controller {
       const result = await app.model.Privilege.destroy({ where: {id} })
       return ctx.end(true, '权限删除成功', {result})
     } catch (err) {
-      return ctx.end(false, '权限删除失败', {err})
+      return ctx.end(false, '权限删除失败', err)
     }
   }
 
@@ -90,7 +90,7 @@ class PrivilegeController extends Controller {
       const result = await app.model.Privilege.update(info, {where: {id}})
       return ctx.end(true, '权限更新成功', {result})
     } catch (err) {
-      return ctx.end(false, '权限更新失败', {err})
+      return ctx.end(false, '权限更新失败', err)
     }
   }
 
@@ -110,7 +110,7 @@ class PrivilegeController extends Controller {
       const result = await app.model.Privilege.findOne({ where: {id}})
       return ctx.end(true, '权限查询成功', {result})
     } catch (err) {
-      return ctx.end(false, '权限查询失败', {err})
+      return ctx.end(false, '权限查询失败', err)
     }
   }
 
@@ -130,7 +130,7 @@ class PrivilegeController extends Controller {
       const result = await app.model.Privilege.restore({ where: {id}})
       return ctx.end(true, '权限恢复成功', {result})
     } catch (err) {
-      return ctx.end(false, '权限恢复失败', {err})
+      return ctx.end(false, '权限恢复失败', err)
     }
   }
 

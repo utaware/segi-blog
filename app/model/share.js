@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-19 17:52:01
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-21 11:43:24
+ * @LastEditTime: 2019-01-25 10:42:40
  */
 
 module.exports = app => {
@@ -48,7 +48,7 @@ module.exports = app => {
       comment: '分享描述'
     }
   }, {
-    tableName: 'share_list',
+    tableName: 'SHARE_TABLE',
     comment: '分享信息表',
   })
 

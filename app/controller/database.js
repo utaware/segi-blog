@@ -24,7 +24,7 @@ class DatabaseController extends Controller {
       })
       return ctx.end(true, '重置表成功', {result})
     } catch (err) {
-      return ctx.end(false, '重置表失败', {err})
+      return ctx.end(false, '重置表失败', err)
     }
   }
 

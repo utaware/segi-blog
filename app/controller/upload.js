@@ -24,7 +24,7 @@ class UploadController extends Controller {
       const { src, id } = upload
       return ctx.end(true, '头像上传成功', {src, id})
     } catch (err) {
-      return ctx.end(ctx.status, false, '头像上传失败', {err})
+      return ctx.end(ctx.status, false, '头像上传失败', err)
     }
   }
 
@@ -42,7 +42,7 @@ class UploadController extends Controller {
       return ctx.end(true, '分享成功', {src, id})
     } catch (err) {
       ctx.log(err)
-      return ctx.end(ctx.status, false, '分享失败', {err})
+      return ctx.end(ctx.status, false, '分享失败', err)
     }
   }
 

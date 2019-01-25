@@ -32,14 +32,14 @@ class InfoController extends Controller {
         return ctx.end(false, '您没有查询用户信息的权限')
       }
     } catch (err) {
-      return ctx.end(false, {err})
+      return ctx.end(false, err)
     }
     
     try {
       const result = await app.model.Info.findAll()
       return ctx.end(true, '查询角色信息成功', {result})
     } catch (err) {
-      return ctx.end(false, '查询角色信息失败', {err})
+      return ctx.end(false, '查询角色信息失败', err)
     }
   }
 
@@ -60,7 +60,7 @@ class InfoController extends Controller {
       const result = await app.model.Info.update({ alias, address, avatar, phone, birthday }, { where: {user_id} })
       return ctx.end(true, '更新角色成功', {result})
     } catch (err) {
-      return ctx.end(false, '更新角色失败', {err})
+      return ctx.end(false, '更新角色失败', err)
     }
   }
 
@@ -83,7 +83,7 @@ class InfoController extends Controller {
       })
       return ctx.end(true, '查询角色信息成功', {result})
     } catch (err) {
-      return ctx.end(false, '查询用户角色信息失败', {err})
+      return ctx.end(false, '查询用户角色信息失败', err)
     }
 
   }

@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-19 17:52:01
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-21 11:43:14
+ * @LastEditTime: 2019-01-25 10:41:55
  */
 
 module.exports = app => {
@@ -57,7 +57,7 @@ module.exports = app => {
       comment: '相对资源路径'
     }
   }, {
-    tableName: 'upload_list',
+    tableName: 'UPLOAD_TABLE',
     comment: '上传信息',
   })
 

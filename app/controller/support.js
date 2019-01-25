@@ -57,7 +57,7 @@ class SupportController extends Controller {
     try {
       ctx.validate(app.validator.schema(['email']), email)
     } catch (err) {
-      return ctx.end(false, '邮箱格式校验未通过', {err})
+      return ctx.end(false, '邮箱格式校验未通过', err)
     }
     // 查询邮箱是否已被使用
     const queryEmail = await app.model.User.findOne({ where: {email} })
@@ -87,7 +87,7 @@ class SupportController extends Controller {
       await app.model.Email.create(emailInfo)
       return ctx.end(true, '邮件发送成功')
     } catch (err) {
-      return ctx.end(false, '邮件发送失败', {err})
+      return ctx.end(false, '邮件发送失败', err)
     }
   }
 

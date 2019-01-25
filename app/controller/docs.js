@@ -73,14 +73,14 @@ class DocsController extends Controller {
   async create () {
 
     const { ctx, app } = this
-    const { user_id, username } = ctx.state.user
+    const { user_id, name } = ctx.state.user
     const { type, editor, title, md, html } = ctx.request.body
 
     try {
-      const result = await app.model.Docs.create({user_id, type, editor, title, md, html, author: username})
+      const result = await app.model.Docs.create({user_id, type, editor, title, md, html, author: name})
       return ctx.end(true, '新增文档成功', {result})
     } catch (err) {
-      return ctx.end(false, '新增文档失败', {err})
+      return ctx.end(false, '新增文档失败', err)
     }
   }
 
@@ -118,7 +118,7 @@ class DocsController extends Controller {
       pagination = Object.assign(pagination.get({plain: true}), {pageNo, pageSize})
       return ctx.end(true, '文档查询成功', {result, pagination})
     } catch (err) {
-      return ctx.end(false, '文档查询失败', {err})
+      return ctx.end(false, '文档查询失败', err)
     }
   }
 
@@ -150,7 +150,7 @@ class DocsController extends Controller {
       })
       return ctx.end(true, '文档查询成功', {result})
     } catch (err) {
-      return ctx.end(false, '文档查询失败', {err})
+      return ctx.end(false, '文档查询失败', err)
     }
   }
 
@@ -165,16 +165,16 @@ class DocsController extends Controller {
     
     const { ctx, app } = this
     const { id } = ctx.params
-    const { user_id, username } = ctx.state.user
+    const { user_id, name } = ctx.state.user
     const { type, editor, title, md, html } = ctx.request.body
 
     try {
       const result = await app.model.Docs.update(
-        {user_id, type, editor, title, md, html, author: username},
+        {user_id, type, editor, title, md, html, author: name},
         {where: {id}})
       return ctx.end(true, '编辑文档成功', {result})
     } catch (err) {
-      return ctx.end(false, '编辑文档失败', {err})
+      return ctx.end(false, '编辑文档失败', err)
     }
   }
 
@@ -194,7 +194,7 @@ class DocsController extends Controller {
       const result = await app.model.Docs.destroy({where: {id}})
       return ctx.end(true, '删除文档成功', {result})
     } catch (err) {
-      return ctx.end(false, '删除文档失败', {err})
+      return ctx.end(false, '删除文档失败', err)
     }
   }
   
@@ -214,7 +214,7 @@ class DocsController extends Controller {
       const result = await app.model.Docs.restore({where: {id}})
       return ctx.end(true, '恢复文档成功', {result})
     } catch (err) {
-      return ctx.end(false, '恢复文档失败', {err})
+      return ctx.end(false, '恢复文档失败', err)
     }
   }
 }

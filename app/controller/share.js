@@ -37,7 +37,7 @@ class ShareController extends Controller {
       })
       return ctx.end(true, '分享期数查询成功', {result})
     } catch (err) {
-      return ctx.end(false, '分享期数查询失败', {err})
+      return ctx.end(false, '分享期数查询失败', err)
     }
 
   }
@@ -61,7 +61,7 @@ class ShareController extends Controller {
       })
       return ctx.end(true, '查询分享成功', {result})
     } catch (err) {
-      return ctx.end(false, '查询分享失败', {err})
+      return ctx.end(false, '查询分享失败', err)
     }
     
   }
@@ -76,17 +76,17 @@ class ShareController extends Controller {
   async create () {
 
     const { ctx, app } = this
-    const { user_id, username } = ctx.state.user
+    const { user_id, name } = ctx.state.user
     const { file_id, cycle, title, descript } = ctx.request.body
 
     const day = ctx.helper.moment(cycle).format('YYYY/MM/DD')
     const cycle_format = ctx.helper.moment(cycle).format('W')
 
     try {
-      await app.model.Share.create({file_id, cycle: cycle_format, title, descript, user_id, author: username, day})
+      await app.model.Share.create({file_id, cycle: cycle_format, title, descript, user_id, author: name, day})
       return ctx.end(true, '新增成功')
     } catch (err) {
-      return ctx.end(false, '新增失败', {err})
+      return ctx.end(false, '新增失败', err)
     }
 
   }
@@ -109,7 +109,7 @@ class ShareController extends Controller {
       })
       return ctx.end(true, '删除分享成功', {result})
     } catch (err) {
-      return ctx.end(false, '删除分享失败', {err})
+      return ctx.end(false, '删除分享失败', err)
     }
 
   }

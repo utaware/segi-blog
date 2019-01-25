@@ -45,11 +45,8 @@ module.exports = app => {
       comment: '邮件发送验证码'
     }
   }, {
-    freezeTableName: true,
-    timestamps: true,
-    tableName: 'email_list',
+    tableName: 'EMAIL_TABLE',
     comment: '邮件发送记录',
-    underscored: true
   })
 
   return Eamil

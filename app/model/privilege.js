@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-19 17:45:38
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-21 11:43:33
+ * @LastEditTime: 2019-01-25 17:13:28
  */
 
 module.exports = app => {
@@ -51,15 +51,13 @@ module.exports = app => {
       comment: '是否可以获取其他用户信息'
     },
   }, {
-    freezeTableName: true,
-    timestamps: true,
-    tableName: 'privilege_list',
+    tableName: 'PRIVILEGE_TABLE',
     comment: '用户权限',
-    underscored: true
   })
 
+  // 关联关系
   Privilege.associate = () => {
-    app.model.Privilege.hasMany(app.model.User, { foreignKey: 'privilege', targetKey: 'id'});
+    app.model.Privilege.hasMany(app.model.User, { foreignKey: 'privilege_id', targetKey: 'id'});
   }
 
   return Privilege;

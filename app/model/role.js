@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-19 17:52:01
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-21 11:43:01
+ * @LastEditTime: 2019-01-25 11:43:38
  */
 
 module.exports = app => {
@@ -36,17 +36,22 @@ module.exports = app => {
       defaultValue: 1
     }
   }, {
-    freezeTableName: true,
-    timestamps: true,
-    tableName: 'role_list',
+    tableName: 'ROLE_TABLE',
     comment: '用户角色',
-    underscored: true
   })
 
   // 关联关系
   Role.associate = () => {
-    app.model.Role.hasMany(app.model.User, { foreignKey: 'role', targetKey: 'id'});
+    app.model.Role.hasMany(app.model.User, { foreignKey: 'role_id', targetKey: 'id'});
   }
+
+  // 额外方法
+  Role.detail = async (id) => {
+    const result = await Role.findById(id, {
+      attributes: ['type', 'remark', 'group']
+    })
+    return result.get({plian: true})
+  } 
 
   return Role
 }

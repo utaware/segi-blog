@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-19 10:43:43
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-24 17:54:33
+ * @LastEditTime: 2019-01-25 11:41:01
  */
 
 // https://github.com/caiya/vuejs-admin-server/blob/master/app/model/user.js
@@ -31,7 +31,7 @@ module.exports = app => {
       unique: true,
       comment: '用户id'
     },
-    username: {
+    name: {
       type: STRING(24),
       allowNull: false,
       validate: {
@@ -63,21 +63,21 @@ module.exports = app => {
       },
       comment: '用户邮箱'
     },
-    privilege: {
+    privilege_id: {
       type: INTEGER,
       defaultValue: 1,
       allowNull: true,
       min: 1,
       max: 13,
-      comment: '用户权限'
+      comment: '用户权限_id'
     },
-    role: {
+    role_id: {
       type: INTEGER,
       defaultValue: 1,
       allowNull: true,
       min: 1,
       max: 4,
-      comment: '用户角色'
+      comment: '用户角色_id'
     },
     login_time: {
       type: DATE,
@@ -87,7 +87,7 @@ module.exports = app => {
     }
   }, {
     // 表名
-    tableName: 'user_list',
+    tableName: 'USER_TABLE',
     // 注释
     comment: '用户列表',
     // 额外获取
@@ -111,7 +111,7 @@ module.exports = app => {
   })
   User.afterCreate(async (u) => {
     // 创建用户信息
-    await app.model.Info.create({ alias: u.username, user_id: u.user_id})
+    await app.model.Info.create({ alias: u.name, user_id: u.user_id})
     // 用户数量自增
     await Total.increment(['total'], {where: {category: 'user'}})
   })
@@ -128,8 +128,8 @@ module.exports = app => {
   User.associate = () => {
     User.hasOne(Info, { foreignKey: 'user_id', targetKey: 'user_id', as: 'i', hooks: true}); //  hooks: true, onDelete: 'cascade'
     User.hasMany(Docs, { foreignKey: 'user_id', targetKey: 'user_id', as: 'UserDocs' })
-    User.belongsTo(Role, { foreignKey: 'role', targetKey: 'id', as: 'r'});
-    User.belongsTo(Privilege, { foreignKey: 'privilege', targetKey: 'id', as: 'p'});
+    User.belongsTo(Role, { foreignKey: 'role_id', targetKey: 'id', as: 'r'});
+    User.belongsTo(Privilege, { foreignKey: 'privilege_id', targetKey: 'id', as: 'p'});
   }
 
   return User

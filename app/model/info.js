@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-19 17:22:48
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-21 11:43:42
+ * @LastEditTime: 2019-01-25 10:41:01
  */
 
 module.exports = app => {
@@ -52,20 +52,8 @@ module.exports = app => {
       comment: '生日'
     }
   }, {
-    tableName: 'user_info',
-    comment: '用户详细信息',
-    // 添加钩子
-    hooks: {
-      afterDestroy () {
-        app.log('删除钩子被触发--info')
-      },
-      afterUpdate () {
-        app.log('更新钩子被触发--info')
-      },
-      afterRestore () {
-        app.log('恢复钩子被触发--info')
-      }
-    }
+    tableName: 'USER_INFO',
+    comment: '用户详细信息'
   })
   
   // 关联关系

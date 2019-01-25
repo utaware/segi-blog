@@ -60,7 +60,7 @@ module.exports = app => {
       comment: '响应message'
     }
   }, {
-    tableName: 'visit_log',
+    tableName: 'VISIT_TABLE',
     comment: '访问记录表',
   })
 

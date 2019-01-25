@@ -27,7 +27,7 @@ class RoleController extends Controller {
       const result = await app.model.Role.findAll()
       return ctx.end(true, '查询角色成功', { result })
     } catch (err) {
-      return ctx.end(false, '查询角色失败', {err})
+      return ctx.end(false, '查询角色失败', err)
     }
   }
 
@@ -47,7 +47,7 @@ class RoleController extends Controller {
       const result = await app.model.Role.create({ type, remark, group })
       return ctx.end(true, '新增角色成功', {result})
     } catch (err) {
-      return ctx.end(false, '新增角色失败', {err})
+      return ctx.end(false, '新增角色失败', err)
     }
   }
 
@@ -67,7 +67,7 @@ class RoleController extends Controller {
       const result = await app.model.Role.destroy({ where: { id }})
       return ctx.end(true, '删除角色成功', {result}) 
     } catch (err) {
-      return ctx.end(false, '删除角色失败', {err})
+      return ctx.end(false, '删除角色失败', err)
     }
   }
 
@@ -88,7 +88,7 @@ class RoleController extends Controller {
       const result = await app.model.Role.update({ type, remark, group }, { where: {id} })
       return ctx.end(true, '更新角色成功', {result})
     } catch (err) {
-      return ctx.end(false, '更新角色失败', {err})
+      return ctx.end(false, '更新角色失败', err)
     }
   }
 
@@ -108,7 +108,7 @@ class RoleController extends Controller {
       const result = await app.model.Role.findOne({ where: { id }})
       return ctx.end(true, '查询角色成功', {result}) 
     } catch (err) {
-      return ctx.end(false, '查询角色失败', {err})
+      return ctx.end(false, '查询角色失败', err)
     }
   }
 
@@ -128,7 +128,7 @@ class RoleController extends Controller {
       const result = await app.model.Role.restore({ where: { id }})
       return ctx.end(true, '恢复角色成功', {result}) 
     } catch (err) {
-      return ctx.end(false, '恢复角色失败', {err})
+      return ctx.end(false, '恢复角色失败', err)
     }
   }
 }

@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-19 17:52:01
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-21 11:43:18
+ * @LastEditTime: 2019-01-25 10:42:20
  */
 
 module.exports = app => {
@@ -34,7 +34,7 @@ module.exports = app => {
       defaultValue: 0
     }
   }, {
-    tableName: 'total_list',
+    tableName: 'TOTAL_TABLE',
     comment: '用户角色',
   })
 

@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-19 18:16:01
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-21 11:43:47
+ * @LastEditTime: 2019-01-25 10:45:05
  */
 
 module.exports = app => {
@@ -52,7 +52,7 @@ module.exports = app => {
   }, {
     freezeTableName: true,
     timestamps: true,
-    tableName: 'image_list',
+    tableName: 'IMAGE_TABLE',
     comment: '用户图片上传',
     underscored: true
   })
