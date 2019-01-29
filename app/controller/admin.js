@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2019-01-21 15:56:41
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-25 17:39:59
+ * @LastEditTime: 2019-01-29 15:35:18
  */
 
 const Controller = require('egg').Controller;
@@ -42,7 +42,7 @@ class AdminController extends Controller {
       
       const Seq = app.Sequelize
       
-      const result = await app.model.User.findAll({
+      const result = await app.model.User.findAndCount({
         // 字段
         attributes: [
           'user_id', 'name', 'email', 'created_at', 'login_time', 'role_id', 'privilege_id', 'deleted_at',
@@ -61,11 +61,11 @@ class AdminController extends Controller {
         offset
       })
 
-      return ctx.end({result})
+      return ctx.end(true, '查询用户列表信息成功', result)
     
     } catch (err) {
     
-      return ctx.end(false, '查询错误', err)
+      return ctx.end(false, '查询用户列表信息失败', err)
     
     }
   
@@ -169,9 +169,9 @@ class AdminController extends Controller {
 
     try {
       
-      const result = await app.model.User.destroy({ where: {user_id}, individualHooks: true })
+      await app.model.User.destroy({ where: {user_id}, individualHooks: true })
       
-      return ctx.end(true, '账户注销成功', result)
+      return ctx.end(true, '账户注销成功')
     
     } catch (err) {
     
@@ -200,7 +200,7 @@ class AdminController extends Controller {
     
     try {
       
-      const user = await app.model.User.findOne({where: {user_id}})
+      const user = await app.model.User.findOne({where: {user_id}, paranoid: false})
 
       if (!user) { return ctx.end(false, '操作用户不存在') }
 

@@ -2,7 +2,8 @@ module.exports = (app) => {
 
   const { router, controller } = app
 
-  // docsType => 文档类型
-  router.resources('docsType', '/api/docsType', controller.docsType)
+  // privilege => 权限相关
+  router.put('/api/privilege/recovery', controller.privilege.recovery)
+  router.resources('privilege', '/api/privilege', controller.privilege)
   
 }

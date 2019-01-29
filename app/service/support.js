@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-11-13 09:21:52
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-09 10:46:02
+ * @LastEditTime: 2019-01-29 10:35:21
  */
 
 // egg-service
@@ -33,6 +33,7 @@ class SupportService extends Service {
   }
   // 生成svg验证码
   async svgCheckCode () {
+
     return svg.create({
       size: 4,
       ignoreChars: '0o1i',
@@ -40,7 +41,9 @@ class SupportService extends Service {
       color: true,
       background: '#fff'
     })
+
   }
+  
 }
 
 module.exports = SupportService

@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-27 14:18:40
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-10 11:34:19
+ * @LastEditTime: 2019-01-29 16:58:16
  */
 
 const Controller = require('egg').Controller;
@@ -17,15 +17,23 @@ class UploadController extends Controller {
     const { ctx } = this
 
     try {
+
       const upload = await ctx.service.file.uploadOne({
         allowType: ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.webp'],
         transferDir: 'avatar'
       })
+      
       const { src, id } = upload
+      
       return ctx.end(true, '头像上传成功', {src, id})
+    
     } catch (err) {
+    
+      console.log(err)
       return ctx.end(ctx.status, false, '头像上传失败', err)
+    
     }
+  
   }
 
   // 上传分享 => ppt(幻灯片)

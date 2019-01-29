@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-19 10:43:43
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-25 11:41:01
+ * @LastEditTime: 2019-01-29 15:28:20
  */
 
 // https://github.com/caiya/vuejs-admin-server/blob/master/app/model/user.js
@@ -98,20 +98,23 @@ module.exports = app => {
 
   // 钩子相关
   User.afterDestroy(async (u) => {
+    const {user_id} = u
     // 删除对应用户信息
-    await Info.destroy({where: {user_id: u.user_id}})
+    await Info.destroy({where: {user_id}})
     // 用户数量自减
     await Total.decrement(['total'], {where: {category: 'user'}})
   })
   User.afterRestore(async (u) => {
+    const {user_id} = u
     // 恢复对应用户信息
-    await Info.restore({where: {user_id: u.user_id}})
+    await Info.restore({where: {user_id}})
     // 用户数量自减
     await Total.increment(['total'], {where: {category: 'user'}})
   })
   User.afterCreate(async (u) => {
+    const { name, user_id } = u
     // 创建用户信息
-    await app.model.Info.create({ alias: u.name, user_id: u.user_id})
+    await app.model.Info.create({ alias: name, user_id})
     // 用户数量自增
     await Total.increment(['total'], {where: {category: 'user'}})
   })

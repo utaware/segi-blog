@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-17 11:24:36
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-10 11:34:22
+ * @LastEditTime: 2019-01-29 17:23:36
  */
 const { Service } = require('egg')
 const path = require('path')
@@ -23,7 +23,7 @@ class FileService extends Service {
     // transferDir: 转移的文件目录(相对cache) => String
     const { allowType, transferDir } = options
     const { ctx, app } = this
-    const { user_id, name } = ctx.state.user
+    const { user_id } = ctx.state.user
     // 解决cache => upload => transferDir 文件路径映射
     const dirMap = dirname => path.join(this.config.baseDir, 'app', uploadDir, dirname)
     const cacheDir = dirMap('cache')

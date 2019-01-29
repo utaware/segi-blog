@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-11-26 14:07:48
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-25 14:59:42
+ * @LastEditTime: 2019-01-29 14:20:15
  */
 
 const { Controller } = require('egg')
@@ -150,7 +150,7 @@ class UserController extends Controller {
 
     try {
 
-      const user = await app.model.User.findOne({where: {user_id}})
+      const user = await app.model.User.findOne({where: { user_id }})
 
       if (!find_user) { return ctx.end(false, '用户不存在') }
 
@@ -246,7 +246,7 @@ class UserController extends Controller {
     if (!find_email) { return ctx.end(false, '请先发送邮箱验证码') }
     
     // 对比
-    if (code !== find_email.code) { return ctx.end(false, '邮箱验证码错误') }
+    if (checkCode !== find_email.code) { return ctx.end(false, '邮箱验证码错误') }
 
     // 存储加密hash和用户信息
     try {
@@ -352,12 +352,6 @@ class UserController extends Controller {
 
     const { ctx, app } = this
 
-    const { ip, url, method, host, protocol } = ctx
-    const { type } = ctx.request
-    const user_agent = ctx.request.header['user-agent']
-    const info = {ip, url, method, type, host, protocol, user_agent}
-    const result = await ctx.model.Visit.create(info)
-
     try {
       // 七天内访问量
       const visit = [10, 52, 200, 334, 390, 330, 220]
@@ -369,16 +363,18 @@ class UserController extends Controller {
       const login = await app.model.User.findAll({
         attributes: ['name', 'login_time'],
         where: {
-          login_time: {
-            $ne: null
-          }
+          login_time: { $ne: null }
         },
         order: [['login_time', 'desc']],
         limit: 10
       })
+    
       return ctx.end({login, total, visit})
+    
     } catch (err) {
+    
       return ctx.end(false, err)
+    
     }
 
   }

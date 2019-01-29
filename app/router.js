@@ -19,6 +19,7 @@ module.exports = app => {
   require('./router/privilege')(app)
   require('./router/docsType')(app)
   require('./router/support')(app)
+  require('./router/admin')(app)
 
   // database => 数据库相关
   router.delete('/api/database/truncate', controller.database.truncate) // 重置表数据
