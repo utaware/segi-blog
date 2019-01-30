@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-17 11:24:36
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-29 17:23:36
+ * @LastEditTime: 2019-01-30 18:06:48
  */
 const { Service } = require('egg')
 const path = require('path')
@@ -57,9 +57,7 @@ class FileService extends Service {
       let data
       // 如果已存在就直接查询
       if (isExist) {
-        data = await app.model.Upload.findOne({
-          where: {resource}
-        })
+        data = await app.model.Upload.findOne({ where: {resource} })
       } else {
         await fs.move(target, resource)
         const src = `${uploadDir}/${transferDir}/${relname}`
@@ -70,10 +68,8 @@ class FileService extends Service {
       return data.get({plain: true})
     } catch (err) {
       // 消费流避免持续读取浏览器卡死
-      ctx.status = 500
-      ctx.log(err)
       await sendToWormhole(stream)
-      return ctx.throw(500, '文件操作错误', {err})
+      return ctx.throw(500, '文件操作错误', err)
     }
   }
 
@@ -88,7 +84,7 @@ class FileService extends Service {
     try {
       await fs.remove(path)
     } catch (err) {
-      return ctx.throw(500, '文件删除错误', {err})
+      return ctx.throw(500, '文件删除错误', err)
     }
 
   }

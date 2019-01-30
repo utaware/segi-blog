@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-11-26 14:07:48
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-29 14:20:15
+ * @LastEditTime: 2019-01-30 15:03:59
  */
 
 const { Controller } = require('egg')
@@ -152,7 +152,7 @@ class UserController extends Controller {
 
       const user = await app.model.User.findOne({where: { user_id }})
 
-      if (!find_user) { return ctx.end(false, '用户不存在') }
+      if (!user) { return ctx.end(false, '用户不存在') }
 
       const { hash } = user
 
@@ -162,7 +162,7 @@ class UserController extends Controller {
     
     } catch (err) {
     
-      return ctx.end(false, '用户查询错误')
+      return ctx.end(false, '用户查询错误', err)
     
     }
 
