@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-19 10:43:43
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-29 15:28:20
+ * @LastEditTime: 2019-01-31 17:50:15
  */
 
 // https://github.com/caiya/vuejs-admin-server/blob/master/app/model/user.js
@@ -131,8 +131,8 @@ module.exports = app => {
   User.associate = () => {
     User.hasOne(Info, { foreignKey: 'user_id', targetKey: 'user_id', as: 'i', hooks: true}); //  hooks: true, onDelete: 'cascade'
     User.hasMany(Docs, { foreignKey: 'user_id', targetKey: 'user_id', as: 'UserDocs' })
-    User.belongsTo(Role, { foreignKey: 'role_id', targetKey: 'id', as: 'r'});
-    User.belongsTo(Privilege, { foreignKey: 'privilege_id', targetKey: 'id', as: 'p'});
+    User.belongsTo(Role, { foreignKey: 'role_id', targetKey: 'role_id', as: 'r'});
+    User.belongsTo(Privilege, { foreignKey: 'privilege_id', targetKey: 'privilege_id', as: 'p'});
   }
 
   return User

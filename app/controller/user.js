@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-11-26 14:07:48
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-30 15:03:59
+ * @LastEditTime: 2019-01-31 10:39:06
  */
 
 const { Controller } = require('egg')
@@ -22,17 +22,34 @@ class UserController extends Controller {
     
     const { ctx, app } = this
     
-    const { password, name, email } = ctx.request.body
+    const { password, name, email, checkCode } = ctx.request.body
+
+    const Sql = app.Sequelize
 
     // 校验
     try {
     
-      ctx.validate(app.validator.schema(['name', 'password', 'email']), {password, name, email})
+      ctx.validate(app.validator.schema(['name', 'password', 'email', 'checkCode']), {password, name, email, checkCode})
     
     } catch (err) {
 
       return ctx.end(false, '参数校验未通过', err)
     
+    }
+
+    // 查询验证码邮件是否发送 -- 15分钟有效期
+    try {
+      
+      const Verificate = await app.model.Email.findOne({
+        where: { $and: [{receiver: email}, {code: checkCode}, Sql.where(Sql.fn('DATE_SUB', Sql.fn('NOW'), Sql.literal('INTERVAL 15 MINUTE')), '<=', Sql.col('created_at'))] }
+      })
+      
+      if (!Verificate) { return ctx.end(false, '请先发送验证码')}
+
+    } catch (err) {
+
+      return ctx.end(false, '邮件查询失败', err)
+
     }
 
     // 查看对应用户是否存在

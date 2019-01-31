@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-19 17:52:01
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-25 11:43:38
+ * @LastEditTime: 2019-01-31 17:55:41
  */
 
 module.exports = app => {
@@ -12,24 +12,24 @@ module.exports = app => {
   const { INTEGER, STRING } = app.Sequelize;
   
   const Role = app.model.define('Role', {
-    id: {
+    role_id: {
       type: INTEGER,
       autoIncrement: true,
       primaryKey: true,
       unique: true,
       comment: 'id'
     },
-    type: {
+    role_type: {
       type: STRING(24),
       unique: true,
       comment: '角色分类'
     },
-    remark: {
+    role_remark: {
       type: STRING(24),
       unique: true,
       comment: '详细说明'
     },
-    group: {
+    group_id: {
       type: INTEGER,
       min: 1,
       max: 4,
@@ -42,7 +42,8 @@ module.exports = app => {
 
   // 关联关系
   Role.associate = () => {
-    app.model.Role.hasMany(app.model.User, { foreignKey: 'role_id', targetKey: 'id'});
+    app.model.Role.hasMany(app.model.User, { foreignKey: 'role_id', targetKey: 'role_id'});
+    app.model.Role.belongsTo(app.model.RoleGroup, { foreignKey: 'group_id', targetKey: 'group_id', as: 'rg'});
   }
 
   // 额外方法

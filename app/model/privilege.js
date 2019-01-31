@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-19 17:45:38
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-25 17:13:28
+ * @LastEditTime: 2019-01-31 17:51:35
  */
 
 module.exports = app => {
@@ -12,24 +12,24 @@ module.exports = app => {
   const { INTEGER, STRING, BOOLEAN } = app.Sequelize;
 
   const Privilege = app.model.define('Privilege', {
-    id: {
+    privilege_id: {
       type: INTEGER,
       autoIncrement: true,
       primaryKey: true,
       unique: true,
       comment: 'id'
     },
-    type: {
+    privilege_type: {
       type: STRING(24),
       unique: true,
       comment: '角色'
     },
-    remark: {
+    privilege_remark: {
       type: STRING(24),
       unique: true,
       comment: '详细说明'
     },
-    level: {
+    privilege_level: {
       type: INTEGER,
       unique: true,
       comment: '权限等级'
@@ -57,7 +57,7 @@ module.exports = app => {
 
   // 关联关系
   Privilege.associate = () => {
-    app.model.Privilege.hasMany(app.model.User, { foreignKey: 'privilege_id', targetKey: 'id'});
+    app.model.Privilege.hasMany(app.model.User, { foreignKey: 'privilege_id', targetKey: 'privilege_id'});
   }
 
   return Privilege;

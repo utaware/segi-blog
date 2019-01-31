@@ -20,6 +20,7 @@ module.exports = app => {
   require('./router/docsType')(app)
   require('./router/support')(app)
   require('./router/admin')(app)
+  require('./router/roleGroup')(app)
 
   // database => 数据库相关
   router.delete('/api/database/truncate', controller.database.truncate) // 重置表数据
