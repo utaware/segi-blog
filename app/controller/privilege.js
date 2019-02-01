@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-18 11:44:14
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-03 16:26:13
+ * @LastEditTime: 2019-02-01 18:22:15
  */
 
 // egg-controller
@@ -19,16 +19,22 @@ class PrivilegeController extends Controller {
    * @returns 
    */
 
-  async index () {
+  async getAll () {
 
     const { ctx, app } = this
 
     try {
-      const result = await app.model.Privilege.findAll()
-      return ctx.end(true, '权限查询成功', { result })
+
+      const result = await app.model.Privilege.findAll({attributes: {exclude: ['created_at', 'updated_at', 'deleted_at'] }})
+     
+      return ctx.end(true, '权限查询成功', result)
+    
     } catch (err) {
+    
       return ctx.end(false, '权限查询失败', err)
+   
     }
+  
   }
 
   /**
@@ -41,15 +47,21 @@ class PrivilegeController extends Controller {
   async create () {
 
     const { ctx, app } = this
-    const { type, remark, level } = ctx.request.body
-    const info = { type, remark, level }
+
+    const { privilege_type, privilege_remark, privilege_level } = ctx.request.body
 
     try {
-      const result = await app.model.Privilege.create(info)
-      return ctx.end(true, '权限新增成功', {result})
+      
+      const result = await app.model.Privilege.create({ privilege_type, privilege_remark, privilege_level })
+      
+      return ctx.end(true, '权限新增成功', result)
+    
     } catch (err) {
+    
       return ctx.end(false, '权限新增失败', err)
+   
     }
+  
   }
   
   /** 删除职位类型 delete
@@ -62,14 +74,21 @@ class PrivilegeController extends Controller {
   async destroy () {
 
     const { ctx, app } = this
-    const { id } = ctx.params
+    
+    const { privilege_id } = ctx.request.body
 
     try {
-      const result = await app.model.Privilege.destroy({ where: {id} })
-      return ctx.end(true, '权限删除成功', {result})
+      
+      await app.model.Privilege.destroy({ where: {privilege_id} })
+      
+      return ctx.end(true, '权限删除成功')
+    
     } catch (err) {
+    
       return ctx.end(false, '权限删除失败', err)
+    
     }
+  
   }
 
   /**
@@ -82,16 +101,37 @@ class PrivilegeController extends Controller {
    async update () {
 
     const { ctx, app } = this
-    const { id } = ctx.params
-    const { type, remark, level } = ctx.request.body
-    const info = { type, remark, level }
+    
+    const { privilege_type, privilege_remark, privilege_level, privilege_id } = ctx.request.body
+    
+    ctx.log(privilege_id)
 
     try {
-      const result = await app.model.Privilege.update(info, {where: {id}})
-      return ctx.end(true, '权限更新成功', {result})
+      
+      const schema = ['id', 'type', 'remark', 'level']
+
+      const validate = { id: privilege_id,  type: privilege_type, remark: privilege_remark, level: privilege_level }
+
+      ctx.validate(app.validator.schema(schema), validate)
+    
     } catch (err) {
-      return ctx.end(false, '权限更新失败', err)
+
+      return ctx.end(false, '参数校验错误', err)
+
     }
+
+    try {
+    
+      await app.model.Privilege.update({ privilege_type, privilege_remark, privilege_level }, {where: {privilege_id}})
+    
+      return ctx.end(true, '权限更新成功')
+    
+    } catch (err) {
+    
+      return ctx.end(false, '权限更新失败', err)
+   
+    }
+  
   }
 
   /**
@@ -104,14 +144,21 @@ class PrivilegeController extends Controller {
    async show () {
 
     const { ctx, app } = this
-    const { id } = ctx.params
+    
+    const { privilege_id } = ctx.request.body
 
     try {
-      const result = await app.model.Privilege.findOne({ where: {id}})
-      return ctx.end(true, '权限查询成功', {result})
+    
+      const result = await app.model.Privilege.findOne({ where: {privilege_id}})
+      
+      return ctx.end(true, '权限查询成功', result)
+    
     } catch (err) {
+    
       return ctx.end(false, '权限查询失败', err)
+   
     }
+  
   }
 
   /**
@@ -124,14 +171,21 @@ class PrivilegeController extends Controller {
   async recovery () {
     
     const { ctx, app } = this
-    const { id } = ctx.request.body
+
+    const { privilege_id } = ctx.request.body
 
     try {
-      const result = await app.model.Privilege.restore({ where: {id}})
-      return ctx.end(true, '权限恢复成功', {result})
+    
+      await app.model.Privilege.restore({ where: {privilege_id}})
+    
+      return ctx.end(true, '权限恢复成功')
+   
     } catch (err) {
+   
       return ctx.end(false, '权限恢复失败', err)
+   
     }
+  
   }
 
 }

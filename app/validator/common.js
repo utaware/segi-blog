@@ -9,8 +9,6 @@ module.exports = app => {
     email: Joi.string().email(),
     // 密码
     password: Joi.string().regex(/^[a-zA-Z0-9]{6,16}$/),
-    // 登录方式
-    mode: Joi.any().valid(['name', 'email']),
     // 验证码
     checkCode: Joi.string().regex(/^[a-zA-Z0-9]{4}$/),
     // id
@@ -21,7 +19,13 @@ module.exports = app => {
       size: Joi.number().min(10).max(100)
     }),
     // 内容
-    content: Joi.string()
+    content: Joi.string(),
+    // 备注
+    remark: Joi.string(),
+    // 类型
+    type: Joi.string(),
+    // 等级
+    level: Joi.number()
   }
 
 }

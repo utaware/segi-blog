@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-18 11:44:14
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-31 18:16:31
+ * @LastEditTime: 2019-02-01 15:12:50
  */
 
 // egg-controller
@@ -19,7 +19,7 @@ class RoleController extends Controller {
    * @returns 
    */
 
-  async index () {
+  async getAll () {
 
     const { ctx, app } = this
 
@@ -82,14 +82,21 @@ class RoleController extends Controller {
   async destroy () {
     
     const { ctx, app } = this
-    const { role_id } = ctx.params
+
+    const { role_id } = ctx.request.body
 
     try {
-      const result = await app.model.Role.destroy({ where: { role_id }})
+      
+      const result = await app.model.Role.destroy({ where: { role_id }, force: true})
+      
       return ctx.end(true, '删除角色成功', {result}) 
+    
     } catch (err) {
+    
       return ctx.end(false, '删除角色失败', err)
+   
     }
+  
   }
 
   /**
@@ -103,9 +110,7 @@ class RoleController extends Controller {
 
     const { ctx, app } = this
     
-    const { role_id } = ctx.params
-    
-    const { role_type, role_remark, group_id } = ctx.request.body
+    const { role_id, role_type, role_remark, group_id } = ctx.request.body
     
     try {
     
@@ -122,7 +127,7 @@ class RoleController extends Controller {
   }
 
   /**
-   * @description 查询单个岗位 get /:id
+   * @description 查询单个岗位 get
    * @author utaware
    * @date 2018-12-25
    * @returns 
@@ -132,7 +137,7 @@ class RoleController extends Controller {
 
     const { ctx, app } = this
     
-    const { role_id } = ctx.params
+    const { role_id } = ctx.request.query
 
     try {
       

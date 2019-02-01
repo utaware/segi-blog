@@ -2,7 +2,7 @@
  * @Description: user 相关接口格式校验
  * @Author: HasebeAya
  * @Date: 2018-12-19 23:57:30
- * @LastEditTime: 2019-01-25 17:40:54
+ * @LastEditTime: 2019-02-01 18:12:39
  */ 
 
 // https://github.com/hapijs/joi/blob/v14.3.0/API.md
