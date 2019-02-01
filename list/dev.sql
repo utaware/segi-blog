@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80013
 File Encoding         : 65001
 
-Date: 2019-01-31 18:31:20
+Date: 2019-02-01 18:31:47
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -164,7 +164,7 @@ CREATE TABLE `privilege_table` (
   `updated_at` datetime DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`privilege_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of privilege_table
@@ -174,6 +174,7 @@ INSERT INTO `privilege_table` VALUES ('2', 'ordinary', '普通成员', '1', '0',
 INSERT INTO `privilege_table` VALUES ('3', 'chargeman', '组长', '2', '1', '1', '0', '0', '2018-12-18 18:26:42', null, null);
 INSERT INTO `privilege_table` VALUES ('4', 'headman', '负责人', '3', '1', '1', '1', '1', '2018-12-18 18:27:27', null, null);
 INSERT INTO `privilege_table` VALUES ('5', 'root', '管理员', '4', '1', '1', '1', '1', '2018-12-18 18:27:42', null, null);
+INSERT INTO `privilege_table` VALUES ('8', 'testsdsd', '测试123123', '2', '0', '0', '0', '0', '2019-02-01 17:11:45', '2019-02-01 18:22:10', null);
 
 -- ----------------------------
 -- Table structure for role_group
@@ -205,29 +206,29 @@ CREATE TABLE `role_table` (
   `role_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '岗位类型id',
   `role_type` varchar(24) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `role_remark` varchar(24) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `group_id` enum('0','1','2','3','4') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0' COMMENT '0-待分组 1-前端开发 2-后端开发 3-非开发人员 4-管理人员',
+  `group_id` int(11) NOT NULL DEFAULT '0' COMMENT '0-待分组 1-前端开发 2-后端开发 3-非开发人员 4-管理人员',
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`role_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of role_table
 -- ----------------------------
-INSERT INTO `role_table` VALUES ('1', 'tourist', '游客', '1', '2018-12-18 18:40:26', null, null);
-INSERT INTO `role_table` VALUES ('2', 'web', 'web前端开发', '2', '2018-12-18 16:01:25', null, null);
-INSERT INTO `role_table` VALUES ('3', 'java', 'java后端开发', '3', '2018-12-18 16:02:45', null, null);
-INSERT INTO `role_table` VALUES ('4', 'ios', 'ios开发', '2', '2018-12-18 16:03:16', null, null);
-INSERT INTO `role_table` VALUES ('5', 'android', 'android开发', '2', '2018-12-18 16:03:27', null, null);
-INSERT INTO `role_table` VALUES ('6', 'test', '测试', '4', '2018-12-18 16:04:18', null, null);
-INSERT INTO `role_table` VALUES ('7', 'product', '产品', '4', '2018-12-18 16:05:26', null, null);
-INSERT INTO `role_table` VALUES ('8', 'operator', '运营', '4', '2018-12-18 16:07:46', '2019-01-03 16:10:36', null);
-INSERT INTO `role_table` VALUES ('9', 'UI', 'UI设计', '4', '2018-12-18 16:07:59', null, null);
-INSERT INTO `role_table` VALUES ('10', 'finance', '财务', '4', '2018-12-18 16:08:15', null, null);
-INSERT INTO `role_table` VALUES ('11', 'spread', '推广', '4', '2018-12-18 16:09:09', null, null);
-INSERT INTO `role_table` VALUES ('12', 'C_plus', 'C++开发', '3', '2018-12-18 16:09:35', null, null);
-INSERT INTO `role_table` VALUES ('13', 'manage', '负责人', '4', '2018-12-18 16:09:59', null, null);
+INSERT INTO `role_table` VALUES ('1', 'tourist', '游客', '2', '2018-12-18 18:40:26', null, null);
+INSERT INTO `role_table` VALUES ('2', 'web', 'web前端开发', '3', '2018-12-18 16:01:25', null, null);
+INSERT INTO `role_table` VALUES ('3', 'java', 'java后端开发', '4', '2018-12-18 16:02:45', null, null);
+INSERT INTO `role_table` VALUES ('4', 'ios', 'ios开发', '3', '2018-12-18 16:03:16', null, null);
+INSERT INTO `role_table` VALUES ('5', 'android', 'android开发', '3', '2018-12-18 16:03:27', null, null);
+INSERT INTO `role_table` VALUES ('6', 'test', '测试', '5', '2018-12-18 16:04:18', null, null);
+INSERT INTO `role_table` VALUES ('7', 'product', '产品', '5', '2018-12-18 16:05:26', null, null);
+INSERT INTO `role_table` VALUES ('8', 'operator', '运营', '5', '2018-12-18 16:07:46', '2019-01-03 16:10:36', null);
+INSERT INTO `role_table` VALUES ('9', 'UI', 'UI设计', '5', '2018-12-18 16:07:59', null, null);
+INSERT INTO `role_table` VALUES ('10', 'finance', '财务', '5', '2018-12-18 16:08:15', null, null);
+INSERT INTO `role_table` VALUES ('11', 'spread', '推广', '5', '2018-12-18 16:09:09', null, null);
+INSERT INTO `role_table` VALUES ('12', 'C_plus', 'C++开发', '4', '2018-12-18 16:09:35', null, null);
+INSERT INTO `role_table` VALUES ('13', 'manage', '负责人', '5', '2018-12-18 16:09:59', null, null);
 
 -- ----------------------------
 -- Table structure for share_table
@@ -361,7 +362,7 @@ CREATE TABLE `user_table` (
 -- ----------------------------
 -- Records of user_table
 -- ----------------------------
-INSERT INTO `user_table` VALUES ('1', 'akane', '$2b$10$Y4ZQzUx5FK/I08HY/jMVTu6X31vy8GGUb6NNAyFq2MdFWRC2.bz9y', '1175272135@qq.com', '4', '2', '2019-01-31 11:18:44', '2018-12-03 15:42:34', '2019-01-31 11:18:44', null);
+INSERT INTO `user_table` VALUES ('1', 'akane', '$2b$10$Y4ZQzUx5FK/I08HY/jMVTu6X31vy8GGUb6NNAyFq2MdFWRC2.bz9y', '1175272135@qq.com', '4', '2', '2019-02-01 10:51:26', '2018-12-03 15:42:34', '2019-02-01 10:51:26', null);
 INSERT INTO `user_table` VALUES ('19', 'test7', '$2b$10$3YlKm.af6IALbcrg/9WcPeH8CXkZrlzTPps0H82b18m0PGrbh5C0y', 'test7@qq.com', '1', '1', '2018-12-29 15:20:56', '2018-12-29 15:13:27', '2018-12-29 15:20:56', null);
 INSERT INTO `user_table` VALUES ('21', 'test9', '$2b$10$3YADH9aj.nPiiscW.if0peZcFeYikEHuaZAWaf.iTOuk8nGP2nInK', 'test9@qq.com', '1', '1', null, '2018-12-29 16:12:18', '2018-12-29 16:12:18', null);
 INSERT INTO `user_table` VALUES ('22', 'test10', '$2b$10$fHJbI0KH/Zj0dmn90Pgofe7Ju05mMTpZPCDRSyKBZX3jW.CPmxWpm', 'test10@qq.com', '1', '1', null, '2018-12-29 16:16:03', '2018-12-29 16:16:03', null);
@@ -392,7 +393,7 @@ CREATE TABLE `visit_table` (
   `updated_at` datetime DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=760 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=829 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of visit_table
@@ -1156,3 +1157,72 @@ INSERT INTO `visit_table` VALUES ('756', '127.0.0.1', '/api/privilege', 'GET', '
 INSERT INTO `visit_table` VALUES ('757', '127.0.0.1', '/api/privilege', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '权限查询成功', '2019-01-31 18:22:09', '2019-01-31 18:22:09', null);
 INSERT INTO `visit_table` VALUES ('758', '127.0.0.1', '/api/privilege', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '权限查询成功', '2019-01-31 18:23:11', '2019-01-31 18:23:11', null);
 INSERT INTO `visit_table` VALUES ('759', '127.0.0.1', '/api/privilege', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '权限查询成功', '2019-01-31 18:25:04', '2019-01-31 18:25:04', null);
+INSERT INTO `visit_table` VALUES ('760', '127.0.0.1', '/api/user/login', 'POST', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '登录成功', '2019-02-01 10:51:26', '2019-02-01 10:51:26', null);
+INSERT INTO `visit_table` VALUES ('761', '127.0.0.1', '/api/roleGroup', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询角色分组列表成功', '2019-02-01 10:52:30', '2019-02-01 10:52:30', null);
+INSERT INTO `visit_table` VALUES ('762', '127.0.0.1', '/api/privilege', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '权限查询成功', '2019-02-01 10:52:32', '2019-02-01 10:52:32', null);
+INSERT INTO `visit_table` VALUES ('763', '127.0.0.1', '/api/role', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询角色成功', '2019-02-01 10:52:33', '2019-02-01 10:52:33', null);
+INSERT INTO `visit_table` VALUES ('764', '127.0.0.1', '/api/privilege', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '权限查询成功', '2019-02-01 10:55:09', '2019-02-01 10:55:09', null);
+INSERT INTO `visit_table` VALUES ('765', '127.0.0.1', '/api/role', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询角色成功', '2019-02-01 11:15:09', '2019-02-01 11:15:09', null);
+INSERT INTO `visit_table` VALUES ('766', '127.0.0.1', '/api/role/', 'POST', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '0', '新增角色失败', '2019-02-01 11:15:23', '2019-02-01 11:15:23', null);
+INSERT INTO `visit_table` VALUES ('767', '127.0.0.1', '/api/roleGroup', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询角色分组列表成功', '2019-02-01 11:41:56', '2019-02-01 11:41:56', null);
+INSERT INTO `visit_table` VALUES ('768', '127.0.0.1', '/api/roleGroup', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询角色分组列表成功', '2019-02-01 11:47:21', '2019-02-01 11:47:21', null);
+INSERT INTO `visit_table` VALUES ('769', '127.0.0.1', '/api/roleGroup', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询角色分组列表成功', '2019-02-01 11:47:32', '2019-02-01 11:47:32', null);
+INSERT INTO `visit_table` VALUES ('770', '127.0.0.1', '/api/roleGroup', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询角色分组列表成功', '2019-02-01 11:49:36', '2019-02-01 11:49:36', null);
+INSERT INTO `visit_table` VALUES ('771', '127.0.0.1', '/api/roleGroup', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询角色分组列表成功', '2019-02-01 11:51:44', '2019-02-01 11:51:44', null);
+INSERT INTO `visit_table` VALUES ('772', '127.0.0.1', '/api/roleGroup', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询角色分组列表成功', '2019-02-01 11:51:44', '2019-02-01 11:51:44', null);
+INSERT INTO `visit_table` VALUES ('773', '127.0.0.1', '/api/roleGroup', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询角色分组列表成功', '2019-02-01 11:51:50', '2019-02-01 11:51:50', null);
+INSERT INTO `visit_table` VALUES ('774', '127.0.0.1', '/api/roleGroup', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询角色分组列表成功', '2019-02-01 13:53:38', '2019-02-01 13:53:38', null);
+INSERT INTO `visit_table` VALUES ('775', '127.0.0.1', '/api/roleGroup', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询角色分组列表成功', '2019-02-01 14:07:52', '2019-02-01 14:07:52', null);
+INSERT INTO `visit_table` VALUES ('776', '127.0.0.1', '/api/role', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询角色成功', '2019-02-01 14:21:21', '2019-02-01 14:21:21', null);
+INSERT INTO `visit_table` VALUES ('777', '127.0.0.1', '/api/role', 'POST', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '新增角色成功', '2019-02-01 14:21:29', '2019-02-01 14:21:29', null);
+INSERT INTO `visit_table` VALUES ('778', '127.0.0.1', '/api/role', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询角色成功', '2019-02-01 14:21:30', '2019-02-01 14:21:30', null);
+INSERT INTO `visit_table` VALUES ('779', '127.0.0.1', '/api/roleGroup', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询角色分组列表成功', '2019-02-01 14:22:36', '2019-02-01 14:22:36', null);
+INSERT INTO `visit_table` VALUES ('780', '127.0.0.1', '/api/role', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询角色成功', '2019-02-01 14:22:44', '2019-02-01 14:22:44', null);
+INSERT INTO `visit_table` VALUES ('781', '127.0.0.1', '/api/roleGroup', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询角色分组列表成功', '2019-02-01 14:34:34', '2019-02-01 14:34:34', null);
+INSERT INTO `visit_table` VALUES ('782', '127.0.0.1', '/api/role', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询角色成功', '2019-02-01 14:35:07', '2019-02-01 14:35:07', null);
+INSERT INTO `visit_table` VALUES ('783', '127.0.0.1', '/api/roleGroup', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询角色分组列表成功', '2019-02-01 14:35:30', '2019-02-01 14:35:30', null);
+INSERT INTO `visit_table` VALUES ('784', '127.0.0.1', '/api/roleGroup', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询角色分组列表成功', '2019-02-01 14:35:37', '2019-02-01 14:35:37', null);
+INSERT INTO `visit_table` VALUES ('785', '127.0.0.1', '/api/role', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询角色成功', '2019-02-01 14:35:38', '2019-02-01 14:35:38', null);
+INSERT INTO `visit_table` VALUES ('786', '127.0.0.1', '/api/role', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询角色成功', '2019-02-01 14:35:54', '2019-02-01 14:35:54', null);
+INSERT INTO `visit_table` VALUES ('787', '127.0.0.1', '/api/role', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询角色成功', '2019-02-01 14:36:06', '2019-02-01 14:36:06', null);
+INSERT INTO `visit_table` VALUES ('788', '127.0.0.1', '/api/role', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询角色成功', '2019-02-01 14:41:34', '2019-02-01 14:41:34', null);
+INSERT INTO `visit_table` VALUES ('789', '127.0.0.1', '/api/role', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询角色成功', '2019-02-01 14:42:12', '2019-02-01 14:42:12', null);
+INSERT INTO `visit_table` VALUES ('790', '127.0.0.1', '/api/role', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询角色成功', '2019-02-01 14:49:21', '2019-02-01 14:49:21', null);
+INSERT INTO `visit_table` VALUES ('791', '127.0.0.1', '/api/role', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询角色成功', '2019-02-01 14:50:17', '2019-02-01 14:50:17', null);
+INSERT INTO `visit_table` VALUES ('792', '127.0.0.1', '/api/role', 'PUT', '', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '404', '0', 'fail create', '2019-02-01 14:50:24', '2019-02-01 14:50:24', null);
+INSERT INTO `visit_table` VALUES ('793', '127.0.0.1', '/api/role/getAll', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询角色成功', '2019-02-01 15:11:11', '2019-02-01 15:11:11', null);
+INSERT INTO `visit_table` VALUES ('794', '127.0.0.1', '/api/role/update', 'PUT', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '更新角色成功', '2019-02-01 15:11:25', '2019-02-01 15:11:25', null);
+INSERT INTO `visit_table` VALUES ('795', '127.0.0.1', '/api/role/getAll', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询角色成功', '2019-02-01 15:11:55', '2019-02-01 15:11:55', null);
+INSERT INTO `visit_table` VALUES ('796', '127.0.0.1', '/api/role/update', 'PUT', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '更新角色成功', '2019-02-01 15:12:05', '2019-02-01 15:12:05', null);
+INSERT INTO `visit_table` VALUES ('797', '127.0.0.1', '/api/role/destroy', 'DELETE', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '删除角色成功', '2019-02-01 15:12:17', '2019-02-01 15:12:17', null);
+INSERT INTO `visit_table` VALUES ('798', '127.0.0.1', '/api/role/getAll', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询角色成功', '2019-02-01 15:12:18', '2019-02-01 15:12:18', null);
+INSERT INTO `visit_table` VALUES ('799', '127.0.0.1', '/api/role/getAll', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询角色成功', '2019-02-01 15:13:41', '2019-02-01 15:13:41', null);
+INSERT INTO `visit_table` VALUES ('800', '127.0.0.1', '/api/role/create', 'POST', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '新增角色成功', '2019-02-01 15:13:59', '2019-02-01 15:13:59', null);
+INSERT INTO `visit_table` VALUES ('801', '127.0.0.1', '/api/role/getAll', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询角色成功', '2019-02-01 15:13:59', '2019-02-01 15:13:59', null);
+INSERT INTO `visit_table` VALUES ('802', '127.0.0.1', '/api/role/getAll', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询角色成功', '2019-02-01 15:15:26', '2019-02-01 15:15:26', null);
+INSERT INTO `visit_table` VALUES ('803', '127.0.0.1', '/api/role/update', 'PUT', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '更新角色成功', '2019-02-01 15:15:37', '2019-02-01 15:15:37', null);
+INSERT INTO `visit_table` VALUES ('804', '127.0.0.1', '/api/role/destroy', 'DELETE', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '删除角色成功', '2019-02-01 15:15:39', '2019-02-01 15:15:39', null);
+INSERT INTO `visit_table` VALUES ('805', '127.0.0.1', '/api/role/getAll', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询角色成功', '2019-02-01 15:15:41', '2019-02-01 15:15:41', null);
+INSERT INTO `visit_table` VALUES ('806', '127.0.0.1', '/api/role/getAll', 'GET', 'application/json', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '200', '1', '查询角色成功', '2019-02-01 16:51:27', '2019-02-01 16:51:27', null);
+INSERT INTO `visit_table` VALUES ('807', '127.0.0.1', '/api/privilege', 'GET', '', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36', '127.0.0.1:3000', 'http', '404', '0', 'fail create', '2019-02-01 16:51:32', '2019-02-01 16:51:32', null);
+INSERT INTO `visit_table` VALUES ('808', '::1', '/api/privilege/getAll', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '权限查询失败', '2019-02-01 16:59:45', '2019-02-01 16:59:45', null);
+INSERT INTO `visit_table` VALUES ('809', '::1', '/api/privilege/getAll', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '权限查询成功', '2019-02-01 17:01:05', '2019-02-01 17:01:05', null);
+INSERT INTO `visit_table` VALUES ('810', '::1', '/api/privilege/getAll', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '权限查询成功', '2019-02-01 17:07:04', '2019-02-01 17:07:04', null);
+INSERT INTO `visit_table` VALUES ('811', '::1', '/api/privilege/getAll', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '权限查询成功', '2019-02-01 17:07:13', '2019-02-01 17:07:13', null);
+INSERT INTO `visit_table` VALUES ('812', '::1', '/api/privilege/getAll', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '权限查询成功', '2019-02-01 17:07:14', '2019-02-01 17:07:14', null);
+INSERT INTO `visit_table` VALUES ('813', '::1', '/api/privilege/getAll', 'GET', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '权限查询成功', '2019-02-01 17:07:15', '2019-02-01 17:07:15', null);
+INSERT INTO `visit_table` VALUES ('814', '::1', '/api/privilege/create', 'POST', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '权限新增成功', '2019-02-01 17:11:45', '2019-02-01 17:11:45', null);
+INSERT INTO `visit_table` VALUES ('815', '::1', '/api/privilege/create', 'PUT', '', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '404', '0', 'fail create', '2019-02-01 17:21:34', '2019-02-01 17:21:34', null);
+INSERT INTO `visit_table` VALUES ('816', '::1', '/api/privilege/update', 'PUT', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '权限更新成功', '2019-02-01 17:21:41', '2019-02-01 17:21:41', null);
+INSERT INTO `visit_table` VALUES ('817', '::1', '/api/privilege/update', 'PUT', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '权限更新成功', '2019-02-01 17:22:15', '2019-02-01 17:22:15', null);
+INSERT INTO `visit_table` VALUES ('818', '::1', '/api/privilege/update', 'PUT', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '权限更新成功', '2019-02-01 17:22:33', '2019-02-01 17:22:33', null);
+INSERT INTO `visit_table` VALUES ('819', '::1', '/api/privilege/update', 'PUT', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '权限更新成功', '2019-02-01 17:23:48', '2019-02-01 17:23:48', null);
+INSERT INTO `visit_table` VALUES ('820', '::1', '/api/privilege/update', 'PUT', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '权限更新成功', '2019-02-01 17:26:07', '2019-02-01 17:26:07', null);
+INSERT INTO `visit_table` VALUES ('821', '::1', '/api/privilege/update', 'PUT', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验错误', '2019-02-01 18:13:18', '2019-02-01 18:13:18', null);
+INSERT INTO `visit_table` VALUES ('822', '::1', '/api/privilege/update', 'PUT', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验错误', '2019-02-01 18:18:38', '2019-02-01 18:18:38', null);
+INSERT INTO `visit_table` VALUES ('823', '::1', '/api/privilege/update', 'PUT', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验错误', '2019-02-01 18:19:14', '2019-02-01 18:19:14', null);
+INSERT INTO `visit_table` VALUES ('824', '::1', '/api/privilege/update', 'PUT', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验错误', '2019-02-01 18:19:22', '2019-02-01 18:19:22', null);
+INSERT INTO `visit_table` VALUES ('825', '::1', '/api/privilege/update', 'PUT', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验错误', '2019-02-01 18:19:35', '2019-02-01 18:19:35', null);
+INSERT INTO `visit_table` VALUES ('826', '::1', '/api/privilege/update', 'PUT', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验错误', '2019-02-01 18:19:45', '2019-02-01 18:19:45', null);
+INSERT INTO `visit_table` VALUES ('827', '::1', '/api/privilege/update', 'PUT', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '0', '参数校验错误', '2019-02-01 18:20:32', '2019-02-01 18:20:32', null);
+INSERT INTO `visit_table` VALUES ('828', '::1', '/api/privilege/update', 'PUT', 'application/json', 'PostmanRuntime/3.0.9', 'localhost:3000', 'http', '200', '1', '权限更新成功', '2019-02-01 18:22:10', '2019-02-01 18:22:10', null);
