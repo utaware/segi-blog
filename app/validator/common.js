@@ -1,8 +1,9 @@
-module.exports = app => {
+// 引入Joi
 
-  const Joi = app.Joi;
+const Joi = require('joi')
 
-  return {
+module.exports = {
+
     // 用户名
     name: Joi.string().alphanum().min(4).max(12),
     // 邮箱
@@ -13,19 +14,15 @@ module.exports = app => {
     checkCode: Joi.string().regex(/^[a-zA-Z0-9]{4}$/),
     // id
     id: Joi.number().min(1),
-    // 分页
-    page: Joi.object().keys({
-      no: Joi.number().min(1),
-      size: Joi.number().min(10).max(100)
-    }),
-    // 内容
-    content: Joi.string(),
-    // 备注
-    remark: Joi.string(),
-    // 类型
-    type: Joi.string(),
-    // 等级
-    level: Joi.number()
-  }
+    // 页数
+    pageNo: Joi.number().min(1),
+    // 单页限制
+    pageLimit: Joi.number().min(10).max(100),
+    // 文本字符串
+    text: Joi.string(),
+    // 权限等级
+    level: Joi.number(),
+    // 组合生成
+    group: (data) => Joi.object().keys(data)
 
 }

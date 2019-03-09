@@ -5,10 +5,6 @@ module.exports = app => {
   // home => test
   router.get('/api/home', controller.home.index)
 
-  // md => md相关
-  router.get('/api/support/md/github', controller.support.github)
-  router.get('/api/support/md/vuepress', controller.support.vuepress)
-
   require('./router/user')(app)
   require('./router/share')(app)
   require('./router/upload')(app)

@@ -4,8 +4,10 @@
  * @Author: utaware
  * @Date: 2018-12-03 17:59:09
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-24 17:20:23
+ * @LastEditTime: 2019-03-09 16:00:29
  */
+
+const _ = require('lodash')
 
 module.exports = {
   
@@ -20,6 +22,7 @@ module.exports = {
   typeCheck (o) {
     return Object.prototype.toString.apply(o).slice(8, -1)
   },
+
   /**
    * @description 对于response做数据整理
    * @author utaware
@@ -27,6 +30,7 @@ module.exports = {
    * @param {number, boolean, object, string} args
    * @returns object 返回所需的ctx.response对象
    */
+  
   mergeRes (...args) {
     // 包装器
     let container = {}
@@ -108,5 +112,16 @@ module.exports = {
     const limit = Number(pageSize)
     const offset = (Number(pageNo) - 1) * limit
     return {offset , limit, no: Number(pageNo), size: Number(pageSize)}
+  },
+
+  // 参数校验方法
+  paramsCheck (ctx, name, data) {
+
+    const { app } = ctx
+    // 生成joi相关校验规则
+    const [ schema ] = _.at(app.validator, [ name ])
+    // 执行校验
+    return ctx.validate(schema, data)
+
   }
 }

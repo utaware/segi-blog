@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-11-26 14:07:48
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-31 10:39:06
+ * @LastEditTime: 2019-03-09 17:37:06
  */
 
 const { Controller } = require('egg')
@@ -18,18 +18,17 @@ class UserController extends Controller {
    * @returns 
    */
 
+  // 用户注册 -- 用户名, 密码, 验证码, 邮箱 
   async register () {
     
     const { ctx, app } = this
     
     const { password, name, email, checkCode } = ctx.request.body
 
-    const Sql = app.Sequelize
-
-    // 校验
+    // 参数校验
     try {
     
-      ctx.validate(app.validator.schema(['name', 'password', 'email', 'checkCode']), {password, name, email, checkCode})
+      ctx.paramsCheck('user.register', {password, name, email, checkCode})
     
     } catch (err) {
 
@@ -40,11 +39,17 @@ class UserController extends Controller {
     // 查询验证码邮件是否发送 -- 15分钟有效期
     try {
       
-      const Verificate = await app.model.Email.findOne({
-        where: { $and: [{receiver: email}, {code: checkCode}, Sql.where(Sql.fn('DATE_SUB', Sql.fn('NOW'), Sql.literal('INTERVAL 15 MINUTE')), '<=', Sql.col('created_at'))] }
-      })
+      const send_email = await app.model.Email.findLastestEmail(email)
       
-      if (!Verificate) { return ctx.end(false, '请先发送验证码')}
+      // 1.超过15分钟失效 2.没有发送过 => 需要先发送邮件
+      if (!send_email) { 
+        return ctx.end(false, '请先发送验证码')
+      }
+      
+      // 验证码不匹配 => 错误
+      if (send_email.code !== checkCode) {
+        return ctx.end(false, '验证码错误')
+      }
 
     } catch (err) {
 
@@ -84,7 +89,7 @@ class UserController extends Controller {
 
     try {
      
-      ctx.validate(app.validator.schema(['password', 'name']), {name, password})
+      ctx.paramsCheck('user.login', {name, password})
     
     } catch (err) {
     
@@ -92,13 +97,17 @@ class UserController extends Controller {
     
     }
 
-    let user
+    let user = null
 
     try {
       
-      user = await app.model.User.findOne({ where: {name} })
+      user = await app.model.User.findOne({ where: { name } })
 
-      if (!user) { return ctx.end(false, '用户信息不存在') }
+      if (!user) { 
+
+        return ctx.end(false, '用户信息不存在') 
+      
+      }
     
     } catch (err) {
     
@@ -107,10 +116,15 @@ class UserController extends Controller {
     }
     
     const { role_id, privilege_id, email, user_id, hash } = user
+
     // 密码是否正确
     const result = await ctx.service.bcrypt.compare(password, hash)
 
-    if (!result) { return ctx.end(false, '密码错误') }
+    if (!result) { 
+      
+      return ctx.end(false, '密码错误') 
+    
+    }
 
     // jwt token相关信息处理
     const filter = {attributes: {exclude: ['created_at', 'updated_at', 'deleted_at', 'user_id']}}

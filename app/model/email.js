@@ -4,14 +4,15 @@
  * @Author: utaware
  * @Date: 2018-12-19 18:04:22
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-21 11:43:52
+ * @LastEditTime: 2019-03-09 17:24:10
  */
 
 module.exports = app => {
 
+  const Sql = app.Sequelize
   const { INTEGER, STRING, TEXT } = app.Sequelize;
 
-  const Eamil = app.model.define('Email', {
+  const Email = app.model.define('Email', {
     id: {
       type: INTEGER,
       autoIncrement: true,
@@ -49,5 +50,29 @@ module.exports = app => {
     comment: '邮件发送记录',
   })
 
-  return Eamil
+  // 查询距离现在时间段最新发送的邮件
+  Email.findLastestEmail = async (receiver, time = '15 MINUTE') => {
+    
+    return await Email.findOne({ 
+
+      where: { $and: [ { receiver }, Sql.where(Sql.fn('DATE_SUB', Sql.fn('NOW'), Sql.literal(`INTERVAL ${time}`)), '<=', Sql.col('created_at')) ] }
+   
+    })
+  
+  }
+
+  // 查询短期内邮件发送数量
+  Email.countSendEmailNumber = async (receiver, time = '1 DAY') => {
+    
+    const { count } = await Email.findAndCount({ 
+
+      where: { $and: [ { receiver }, Sql.where(Sql.fn('DATE_SUB', Sql.fn('NOW'), Sql.literal(`INTERVAL ${time}`)), '<=', Sql.col('created_at')) ] }
+   
+    })
+
+    return count
+  
+  }
+
+  return Email
 }

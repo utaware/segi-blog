@@ -13,10 +13,14 @@ module.exports = {
     // 返回结果
     this.status = status
     this.body = body
-    return 
+    return false
   },
   // 筛选的方法
   filterData: tools.filterData,
   // 分页公共方法
-  pageFormat: tools.pageFormat
+  pageFormat: tools.pageFormat,
+  // 请求参数校验
+  paramsCheck (name, data) {
+    tools.paramsCheck(this, name, data)
+  }
 }
