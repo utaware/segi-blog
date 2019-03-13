@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-18 11:44:14
  * @LastEditors: utaware
- * @LastEditTime: 2019-02-01 18:22:15
+ * @LastEditTime: 2019-03-13 16:14:49
  */
 
 // egg-controller
@@ -22,6 +22,8 @@ class PrivilegeController extends Controller {
   async getAll () {
 
     const { ctx, app } = this
+
+    // 查询所有权限列表
 
     try {
 
@@ -50,9 +52,25 @@ class PrivilegeController extends Controller {
 
     const { privilege_type, privilege_remark, privilege_level } = ctx.request.body
 
+    const params = { privilege_type, privilege_remark, privilege_level }
+
+    // 参数校验
+
+    try {
+
+      ctx.paramsCheck('privilege.create', params)
+
+    } catch (err) {
+
+      return ctx.end(false, '参数校验失败', err)
+
+    }
+
+    // 创建新的权限说明
+
     try {
       
-      const result = await app.model.Privilege.create({ privilege_type, privilege_remark, privilege_level })
+      const result = await app.model.Privilege.create(params)
       
       return ctx.end(true, '权限新增成功', result)
     
@@ -64,7 +82,7 @@ class PrivilegeController extends Controller {
   
   }
   
-  /** 删除职位类型 delete
+  /** 删除权限类型 delete
    * @description
    * @author utaware
    * @date 2018-12-25
@@ -77,9 +95,23 @@ class PrivilegeController extends Controller {
     
     const { privilege_id } = ctx.request.body
 
+    // 参数校验
+
+    try {
+
+      ctx.paramsCheck('privilege.destroy', { privilege_id })
+
+    } catch (err) {
+
+      return ctx.end(false, '参数校验失败', err)
+
+    }
+
+    // 删除权限 => 软删除
+
     try {
       
-      await app.model.Privilege.destroy({ where: {privilege_id} })
+      await app.model.Privilege.destroy({ where: { privilege_id } })
       
       return ctx.end(true, '权限删除成功')
     
@@ -103,16 +135,12 @@ class PrivilegeController extends Controller {
     const { ctx, app } = this
     
     const { privilege_type, privilege_remark, privilege_level, privilege_id } = ctx.request.body
-    
-    ctx.log(privilege_id)
+
+    // 参数校验
 
     try {
       
-      const schema = ['id', 'type', 'remark', 'level']
-
-      const validate = { id: privilege_id,  type: privilege_type, remark: privilege_remark, level: privilege_level }
-
-      ctx.validate(app.validator.schema(schema), validate)
+      ctx.paramsCheck('privilege.update', { privilege_type, privilege_remark, privilege_level, privilege_id })
     
     } catch (err) {
 
@@ -120,9 +148,11 @@ class PrivilegeController extends Controller {
 
     }
 
+    // 更新对应对应权限信息
+
     try {
     
-      await app.model.Privilege.update({ privilege_type, privilege_remark, privilege_level }, {where: {privilege_id}})
+      await app.model.Privilege.update({ privilege_type, privilege_remark, privilege_level }, { where: { privilege_id }})
     
       return ctx.end(true, '权限更新成功')
     
@@ -146,6 +176,20 @@ class PrivilegeController extends Controller {
     const { ctx, app } = this
     
     const { privilege_id } = ctx.request.body
+
+    // 参数校验
+
+    try {
+
+      ctx.paramsCheck('privilege.show', { privilege_id })
+
+    } catch (err) {
+
+      return ctx.end(false, '参数校验失败', err)
+
+    }
+
+    // 查询单个权限信息
 
     try {
     
@@ -173,6 +217,20 @@ class PrivilegeController extends Controller {
     const { ctx, app } = this
 
     const { privilege_id } = ctx.request.body
+
+    // 参数校验
+
+    try {
+
+      ctx.paramsCheck('privilege.recovery', { privilege_id })
+
+    } catch (err) {
+
+      return ctx.end(false, '参数校验失败', err)
+
+    }
+
+    // 恢复软删除的权限信息
 
     try {
     

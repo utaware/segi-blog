@@ -16,11 +16,10 @@ const fs = require('fs-extra')
 class SupportController extends Controller {
 
   // 发送验证码
+
   async sendCheckCode () {
     
     const { ctx, app } = this
-
-    const Sql = app.Sequelize
 
     const { email } = ctx.request.body
 
@@ -75,6 +74,7 @@ class SupportController extends Controller {
       
       // 发送邮件
       const sendEmail = await ctx.service.email.send(config)
+
       // 保存至数据库格式
       const emailInfo = {
         messageId: sendEmail.messageId,

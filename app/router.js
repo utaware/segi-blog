@@ -2,9 +2,6 @@ module.exports = app => {
 
   const { router, controller } = app;
 
-  // home => test
-  router.get('/api/home', controller.home.index)
-
   require('./router/user')(app)
   require('./router/share')(app)
   require('./router/upload')(app)

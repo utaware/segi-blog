@@ -58,9 +58,21 @@ class RoleController extends Controller {
     
     const { role_type, role_remark, group_id } = ctx.request.body
 
+    const params = { role_type, role_remark, group_id }
+
+    try {
+
+      ctx.paramsCheck('role.create', params)
+
+    } catch (err) {
+
+      return ctx.end(false, '参数校验失败', err)
+
+    }
+
     try {
       
-      const result = await app.model.Role.create({ role_type, role_remark, group_id })
+      const result = await app.model.Role.create(params)
       
       return ctx.end(true, '新增角色成功', result)
     
@@ -84,6 +96,18 @@ class RoleController extends Controller {
     const { ctx, app } = this
 
     const { role_id } = ctx.request.body
+
+
+    try {
+
+      ctx.paramsCheck('role.destroy', { role_id })
+
+    } catch (err) {
+
+      return ctx.end(false, '参数校验失败', err)
+
+    }
+
 
     try {
       
@@ -111,6 +135,16 @@ class RoleController extends Controller {
     const { ctx, app } = this
     
     const { role_id, role_type, role_remark, group_id } = ctx.request.body
+
+    try {
+
+      ctx.paramsCheck('role.update', { role_id, role_type, role_remark, group_id })
+
+    } catch (err) {
+
+      return ctx.end(false, '参数校验失败', err)
+
+    }
     
     try {
     
@@ -140,6 +174,16 @@ class RoleController extends Controller {
     const { role_id } = ctx.request.query
 
     try {
+
+      ctx.paramsCheck('role.show', { role_id })
+
+    } catch (err) {
+
+      return ctx.end(false, '参数校验失败', err)
+
+    }
+
+    try {
       
       const result = await app.model.Role.findOne({ where: { role_id }})
       
@@ -165,6 +209,16 @@ class RoleController extends Controller {
     const { ctx, app } = this
     
     const { role_id } = ctx.request.body
+
+    try {
+
+      ctx.paramsCheck('role.recovery', { role_id })
+
+    } catch (err) {
+
+      return ctx.end(false, '参数校验失败', err)
+
+    }
 
     try {
       

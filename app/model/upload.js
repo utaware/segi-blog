@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-19 17:52:01
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-25 10:41:55
+ * @LastEditTime: 2019-03-13 16:29:12
  */
 
 module.exports = app => {
@@ -12,7 +12,7 @@ module.exports = app => {
   const { INTEGER, STRING } = app.Sequelize;
   
   const Upload = app.model.define('Upload', {
-    id: {
+    file_id: {
       type: INTEGER,
       autoIncrement: true,
       primaryKey: true,

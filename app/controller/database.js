@@ -7,25 +7,34 @@
  * @LastEditTime: 2019-01-09 18:24:23
  */
 
-const Controller = require('egg').Controller;
+const { Controller } = require('egg');
+
 // https://itbilu.com/nodejs/npm/V1PExztfb.html#api-upsert 相关参数
+
 class DatabaseController extends Controller {
 
   // 重置visit表
   async truncate () {
   
     const { ctx, app } = this
+    
     const { tableModle } = ctx.request.body
 
     try {
+    
       const result = await app.model[tableModle].destroy({
         truncate: true,
         force: true
       })
+    
       return ctx.end(true, '重置表成功', {result})
+    
     } catch (err) {
+    
       return ctx.end(false, '重置表失败', err)
+    
     }
+  
   }
 
 }

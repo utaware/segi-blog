@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-11-26 14:07:48
  * @LastEditors: utaware
- * @LastEditTime: 2019-03-09 17:37:06
+ * @LastEditTime: 2019-03-13 15:50:41
  */
 
 const { Controller } = require('egg')
@@ -28,7 +28,7 @@ class UserController extends Controller {
     // 参数校验
     try {
     
-      ctx.paramsCheck('user.register', {password, name, email, checkCode})
+      ctx.paramsCheck('user.register', { password, name, email, checkCode })
     
     } catch (err) {
 
@@ -39,16 +39,20 @@ class UserController extends Controller {
     // 查询验证码邮件是否发送 -- 15分钟有效期
     try {
       
-      const send_email = await app.model.Email.findLastestEmail(email)
+      const lastestSendEmail = await app.model.Email.findLastestEmail(email)
       
       // 1.超过15分钟失效 2.没有发送过 => 需要先发送邮件
-      if (!send_email) { 
+      if (!lastestSendEmail) { 
+        
         return ctx.end(false, '请先发送验证码')
+      
       }
       
       // 验证码不匹配 => 错误
-      if (send_email.code !== checkCode) {
+      if (lastestSendEmail.code !== checkCode) {
+      
         return ctx.end(false, '验证码错误')
+      
       }
 
     } catch (err) {
@@ -97,13 +101,13 @@ class UserController extends Controller {
     
     }
 
-    let user = null
+    let userInfo = null
 
     try {
       
-      user = await app.model.User.findOne({ where: { name } })
+      userInfo = await app.model.User.findOne({ where: { name } })
 
-      if (!user) { 
+      if (!userInfo) { 
 
         return ctx.end(false, '用户信息不存在') 
       
@@ -115,12 +119,12 @@ class UserController extends Controller {
     
     }
     
-    const { role_id, privilege_id, email, user_id, hash } = user
+    const { role_id, privilege_id, email, user_id, hash } = userInfo
 
     // 密码是否正确
-    const result = await ctx.service.bcrypt.compare(password, hash)
+    const passwordIsCorrect = await ctx.service.bcrypt.compare(password, hash)
 
-    if (!result) { 
+    if (!passwordIsCorrect) { 
       
       return ctx.end(false, '密码错误') 
     
@@ -155,7 +159,7 @@ class UserController extends Controller {
   }
 
   /**
-   * @description 用户密码修改 put
+   * @description 用户密码修改 put => 登录情况下
    * @author utaware
    * @date 2018-12-20
    * @returns 
@@ -169,45 +173,55 @@ class UserController extends Controller {
 
     const { oldPass, newPass } = ctx.request.body
 
+    // 校验新旧密码格式
+
     try {
     
-      ctx.validate(app.validator.schema('password'), oldPass)
+      ctx.paramsCheck('user.modify', { oldPass, newPass })
     
     } catch (err) {
     
-      return ctx.end(false, '原密码格式校验不符', err)
+      return ctx.end(false, '密码格式校验不符', err)
     
     }
 
+    // 新旧密码比对
+
+    if (oldPass === newPass) { return ctx.end(false, '新密码不能与原密码相同') }
+
+    // 校验用户
+
     try {
+
+      // 校验用户是否存在
 
       const user = await app.model.User.findOne({where: { user_id }})
 
-      if (!user) { return ctx.end(false, '用户不存在') }
+      if (!user) { 
+        
+        return ctx.end(false, '用户不存在')
+      
+      }
+
+      // 获取密码hash值和旧密码比对
 
       const { hash } = user
 
-      const result = await ctx.service.bcrypt.compare(oldPass, hash)
+      const passwordIsCorrect = await ctx.service.bcrypt.compare(oldPass, hash)
       
-      if (!result) { return ctx.end(false, '原密码错误') }
+      if (!passwordIsCorrect) { 
+        
+        return ctx.end(false, '原密码错误')
+      
+      }
     
     } catch (err) {
     
-      return ctx.end(false, '用户查询错误', err)
+      return ctx.end(false, '密码修改错误', err)
     
     }
 
-    try {
-
-      ctx.validate(app.validator.schema('password'), newPass)
-    
-    } catch (err) {
-    
-      return ctx.end(false, '新密码格式校验不符', err)
-    
-    }
-
-    if (oldPass === newPass) { return ctx.end(false, '新密码不能与原密码相同') }
+    // 讲新密码hash写入数据库
 
     try {
       
@@ -239,7 +253,7 @@ class UserController extends Controller {
     // 参数校验
     try {
     
-      ctx.validate(app.validator.schema(['email', 'checkCode', 'password']), { email, checkCode, password })
+      ctx.paramsCheck('user.forget', { email, checkCode, password })
     
     } catch (err) {
     
@@ -250,9 +264,13 @@ class UserController extends Controller {
     // 查找该邮箱是否有注册的账户
     try {
       
-      const find_user = await app.model.User.findOne({ where: { email } })
+      const userInfo = await app.model.User.findOne({ where: { email } })
       
-      if (!find_user) { return ctx.end(false, '此邮箱未被用户绑定') }
+      if (!userInfo) { 
+        
+        return ctx.end(false, '此邮箱未被用户绑定')
+      
+      }
     
     } catch (err) {
     
@@ -260,26 +278,38 @@ class UserController extends Controller {
     
     }
 
-    // 邮箱查询出对应的发送得最早的邮件 => 过期的时间条件增加
-    let find_email
+    // 邮件查询 --> 1. 是否有发送对应邮件 2. 验证码是否正确
+
+    let lastestSendEmail
 
     try {
     
-      find_email = await app.model.Email.findOne({ where: { receiver: email }, order: [['created_at', 'DESC']], attributes: ['id', 'code', 'receiver', 'sender'] })
+      lastestSendEmail = await app.model.Email.findLastestEmail(email)
+
+      // 没有查到15分钟内丢应的邮件信息
+
+      if (!lastestSendEmail) { 
+        
+        return ctx.end(false, '请先发送邮箱验证码') 
+      
+      }
+
+      // 邮件验证码对比
+
+      if (checkCode !== lastestSendEmail.code) { 
+        
+        return ctx.end(false, '邮箱验证码错误')
+      
+      }
 
     } catch (err) {
       
-      return ctx.end(false, '邮件查询失败', err)
+      return ctx.end(false, '请先发送验证码', err)
     
     }
 
-    // 确认邮箱记录中存在发送记录
-    if (!find_email) { return ctx.end(false, '请先发送邮箱验证码') }
-    
-    // 对比
-    if (checkCode !== find_email.code) { return ctx.end(false, '邮箱验证码错误') }
+    // 更新密码hash值 => 修改密码
 
-    // 存储加密hash和用户信息
     try {
       
       await app.model.User.update({ hash: password }, { where: { email } })
@@ -295,7 +325,7 @@ class UserController extends Controller {
   }
 
   /**
-   * @description 换绑邮箱
+   * @description 换绑邮箱 -- put
    * @author utaware
    * @date 2018-12-20
    * @returns 
@@ -308,10 +338,12 @@ class UserController extends Controller {
     const { user_id } = ctx.state.user
    
     const { email } = ctx.request.body
+
+    // 参数校验
     
     try {
 
-      ctx.validate(app.validator.schema('email'), email)
+      ctx.paramsCheck('user.bindEmail', { email })
     
     } catch (err) {
     
@@ -319,17 +351,25 @@ class UserController extends Controller {
     
     }
 
+    // 查询邮箱是否已被绑定 => 邮箱地址唯一性
+
     try {
 
-      const find_user = await app.model.User.findOne({ where: { email } })
+      const userInfo = await app.model.User.findOne({ where: { email } })
       
-      if (find_user) { return ctx.end(false, '该邮箱已被其他用户绑定') }
+      if (userInfo) { 
+        
+        return ctx.end(false, '该邮箱已被其他用户绑定')
+      
+      }
 
     } catch (err) {
       
       return ctx.end(false, '用户查询失败', err)
     
     }
+
+    // 更新用户信息
 
     try {
       
@@ -384,12 +424,15 @@ class UserController extends Controller {
     const { ctx, app } = this
 
     try {
+
       // 七天内访问量
       const visit = [10, 52, 200, 334, 390, 330, 220]
+      
       // 统计信息
       const total = await app.model.Total.findAll({
         attributes: ['category', 'total', 'remark']
       })
+      
       // 最后登录信息
       const login = await app.model.User.findAll({
         attributes: ['name', 'login_time'],

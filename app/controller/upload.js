@@ -4,7 +4,7 @@
  * @Author: utaware
  * @Date: 2018-12-27 14:18:40
  * @LastEditors: utaware
- * @LastEditTime: 2019-01-29 16:58:16
+ * @LastEditTime: 2019-03-13 16:32:34
  */
 
 const Controller = require('egg').Controller;
@@ -12,6 +12,7 @@ const Controller = require('egg').Controller;
 class UploadController extends Controller {
 
   // 上传头像 => 图片
+
   async avatar () {
 
     const { ctx } = this
@@ -23,9 +24,9 @@ class UploadController extends Controller {
         transferDir: 'avatar'
       })
       
-      const { src, id } = upload
+      const { src, file_id } = upload
       
-      return ctx.end(true, '头像上传成功', {src, id})
+      return ctx.end(true, '头像上传成功', {src, file_id})
     
     } catch (err) {
     
@@ -37,51 +38,73 @@ class UploadController extends Controller {
   }
 
   // 上传分享 => ppt(幻灯片)
+
   async share () {
 
     const { ctx } = this
 
     try {
+
       const upload = await ctx.service.file.uploadOne({
         allowType: ['.txt', '.md', '.ppt', '.rar', '.zip', '.doc'],
         transferDir: 'share'
       })
-      const { src, id } = upload
-      return ctx.end(true, '分享成功', {src, id})
+     
+      const { src, file_id } = upload
+     
+      return ctx.end(true, '分享成功', {src, file_id})
+    
     } catch (err) {
-      ctx.log(err)
+    
       return ctx.end(ctx.status, false, '分享失败', err)
+
     }
+
   }
 
   // 删除某个上传的文件
+
   async deleteOne () {
 
     const { ctx, app } = this
-    const { user_id } = ctx.state.user
-    const { id } = ctx.request.body
 
-    // 先做查询
-    let query
+    const { user_id } = ctx.state.user
+
+    const { file_id } = ctx.request.body
+
+    // 查询上传文件
+    let uploadFile
+
     try {
-      query = await app.model.Upload.findOne({
-        where: {id, user_id}
-      })
-      if (!query) {
-        return ctx.end(false, '未查找到您所上传对应的文件信息')
+
+      uploadFile = await app.model.Upload.findOne({ where: { file_id, user_id } })
+
+      if (!uploadFile) {
+        
+        return ctx.end(false, '对应上传的文件信息不存在')
+      
       }
+    
     } catch (err) {
+    
       return ctx.end(false, '文件查询失败')
+    
     }
 
     // 确认查询结果存在
+
     const { resource } = query
 
     try {
+      
       await ctx.service.file.deleteOne(resource)
+     
       return ctx.end(true, '文件删除成功')
+    
     } catch (err) {
+    
       return ctx.end(false, '文件删除失败')
+    
     }
 
   }
